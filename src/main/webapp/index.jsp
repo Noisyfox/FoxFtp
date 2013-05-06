@@ -107,6 +107,7 @@ body,div,p,ul,li,form,h1,h2 {
 		<a class=downlist id=ftp_more onMouseOver="MM_safe_mousein(1)"
 			onmouseout="MM_safe_mouseout(this,event,1)">FTP相关板块 </a>|<a
 			class=head id=ftp_more href="./management/">FTP管理</a>
+	</p>
 	<div id=s_related_menu class=s_menu
 		style="visibility: hidden; right: 59px; + *right: 57px; _right: 56px;"
 		onMouseOver="MM_safe_mousein(1)"
