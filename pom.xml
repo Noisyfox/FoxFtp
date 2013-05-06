@@ -35,6 +35,11 @@
 			<artifactId>lucene-queryparser</artifactId>
 			<version>4.2.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.wltea.analyzer.lucene</groupId>
+			<artifactId>IKAnalyzer</artifactId>
+			<version>2012FF_u1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>fox</finalName>

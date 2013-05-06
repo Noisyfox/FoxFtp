@@ -54,9 +54,9 @@ public class SearchFtp extends HttpServlet {
 			}
 		}
 
-		String inputStr = completedFormFields.getProperty("textbox");
+		String inputStr = completedFormFields.getProperty("textbox", "").trim();
 		String str = "";
-		if (inputStr != null && !inputStr.replace(" ", "").isEmpty()) {
+		if (!inputStr.isEmpty()) {
 			str = "喵呜~你刚刚输入的文字是：" + inputStr;
 		}
 		request.setAttribute("results", str);

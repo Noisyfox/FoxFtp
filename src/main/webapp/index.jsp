@@ -8,7 +8,7 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>计算中心FTP搜索</title>
+<title>计算中心FTP搜索 powered by FoxFtp</title>
 <link rel="icon" href="images/ftp_icon.ico" type="image/x-icon" />
 <link rel="shortcut icon" href="images/ftp_icon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="css/menu.css" />
@@ -126,8 +126,8 @@ body,div,p,ul,li,form,h1,h2 {
 	<%
 		//载入之前的内容
 		String lInput = request.getParameter("textbox");
-		if (lInput == null || lInput.replace(" ", "").isEmpty())
-			lInput = "";
+		if(lInput != null)lInput = lInput.trim();
+		else lInput = "";
 	%>
 	<div align="center">
 		<form name="inputform" id="form1" action="./SearchFtp" method="post">
@@ -171,7 +171,7 @@ body,div,p,ul,li,form,h1,h2 {
 				href="http://my.nuaa.edu.cn/space-uid-171410.html">忆一段往事</a>&nbsp;&amp;&nbsp;<a
 				href="http://my.nuaa.edu.cn/space-uid-339947.html">Noisyfox</a>
 		</p>
-		<p class="author">WebMaster&nbsp;:&nbsp;jnccftp@nuaa.edu.cn</p>
+		<p class="author">站长邮箱&nbsp;:&nbsp;<a href="mailto://jnccftp@nuaa.edu.cn">jnccftp@nuaa.edu.cn</a></p>
 	</div>
 
 </body>
