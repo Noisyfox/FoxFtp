@@ -1,10 +1,11 @@
-package FTPSaercher;
+package FTPSearcher;
 
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Properties;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,10 +27,21 @@ public class SearchFtp extends HttpServlet {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+		try {
+			
+		} catch (Exception e) {
+			throw new ServletException("Error loading query template", e);
+		}
+	}
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
+	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");// 汉字转码
@@ -69,6 +81,7 @@ public class SearchFtp extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
+	@Override
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
