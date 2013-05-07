@@ -97,7 +97,8 @@ public class AdminSrv extends HttpServlet {
 			}
 		} else if (adminRequest.equals(ADMIN_REQUEST_REINDEX)) {
 			// 重建索引
-			String result = FileIndexer.reIndex(getServletContext());
+			FileIndexer fi = new FileIndexer(getServletContext());
+			String result = fi.reIndex();
 			if (!result.isEmpty()) {
 				msg(out, false, "重建索引失败！" + result);
 				return;

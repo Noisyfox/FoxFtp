@@ -131,4 +131,22 @@ public class Util {
 		}
 		return flag;
 	}
+
+	public static final String getRelativePath(String prefix,
+			String absolutePath) {
+		if (!absolutePath.startsWith(prefix)) {
+			return null;
+		} else {
+			absolutePath = absolutePath.substring(prefix.length());
+			if (absolutePath.startsWith(File.pathSeparator)) {
+				absolutePath = absolutePath.substring(File.pathSeparator
+						.length());
+			}
+			if (absolutePath.endsWith(File.pathSeparator)) {
+				absolutePath = absolutePath.substring(0, absolutePath.length()
+						- File.pathSeparator.length());
+			}
+			return absolutePath;
+		}
+	}
 }
