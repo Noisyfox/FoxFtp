@@ -96,7 +96,12 @@ public class AdminSrv extends HttpServlet {
 						ServiceStatuesUtil.STATUES_INDEX_PATH, path);
 			}
 		} else if (adminRequest.equals(ADMIN_REQUEST_REINDEX)) {
-
+			// 重建索引
+			String result = FileIndexer.reIndex(getServletContext());
+			if (!result.isEmpty()) {
+				msg(out, false, "重建索引失败！" + result);
+				return;
+			}
 		} else {
 			msg(out, false, "未知的请求：" + adminRequest);
 			return;

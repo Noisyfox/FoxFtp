@@ -65,10 +65,12 @@ java.util.Properties
 
 	function reindex() {
 		if (confirm("在更新索引的时候将会使搜索服务暂时中断，建议选择一个用户较少的时间段进行本操作。你确定要重新建立搜索索引吗？")) {
+			showTopMessage(true, true, "正在重建索引...");
 			requestAdmin({
 				request : 'reindex'
 			}, function(result) {
-				//window.location.reload();
+				addCookie("requireStatus", result, -1);
+				window.location.reload();
 			});
 		}
 	}
