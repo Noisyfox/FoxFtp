@@ -1,11 +1,21 @@
 package FTPSearcher;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
+import java.util.StringTokenizer;
 
 import javax.servlet.ServletContext;
 
@@ -19,6 +29,7 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.IOUtils;
 import org.apache.lucene.util.Version;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
@@ -31,6 +42,9 @@ public class FileIndexer {
 	long _fileCount = 0;
 	long _dirCount = 0;
 
+	OutputStream os = null;
+	PrintWriter pw = null;
+
 	public FileIndexer(ServletContext context) {
 		_context = context;
 		Properties serviceStatues = ServiceStatuesUtil
@@ -41,6 +55,29 @@ public class FileIndexer {
 				ServiceStatuesUtil.STATUES_INDEX_PATH, "");
 		_ftpPath = new File(_ftpPath).getAbsolutePath();
 		_indexPath = new File(_indexPath).getAbsolutePath();
+
+		try {
+			os = new BufferedOutputStream(new FileOutputStream("/usr/foxlog"));
+			pw = new PrintWriter(os);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		pw.flush();
+		pw.close();
+
+		try {
+			if (os != null) {
+				os.close();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		super.finalize();
 	}
 
 	public final String reIndex() {
@@ -126,6 +163,8 @@ public class FileIndexer {
 		System.out.println("Indexing to directory '" + _indexPath + "'...");
 		Directory indexDir = null;
 		IndexWriter iwriter = null;
+		InputStream dataIn = null;
+		BufferedReader br = null;
 		try {
 			indexDir = FSDirectory.open(new File(_indexPath));
 			Analyzer analyzer = new IKAnalyzer();
@@ -135,10 +174,36 @@ public class FileIndexer {
 			iwc.setRAMBufferSizeMB(256.0);
 			iwriter = new IndexWriter(indexDir, iwc);
 
-			indexFiles(iwriter, new File(_ftpPath));
+			// 准备调用python
+			String pyPath = _context.getRealPath(Util.pathConnect(new String[] {
+					"WEB-INF", "classes", "lsAllfiles.py" }));
+			Process process = Runtime.getRuntime().exec(
+					new String[] { "python", pyPath, _ftpPath, _indexPath,
+							"fileList" });
+			process.waitFor();
+
+			// 读取临时文件
+			dataIn = new FileInputStream(Util.pathConnect(new String[] {
+					_indexPath, "fileList" }));
+			br = new BufferedReader(new InputStreamReader(dataIn,
+					IOUtils.CHARSET_UTF_8));
+			String line = br.readLine();
+			while (line != null) {
+				line = line.trim();
+				if (!line.isEmpty()) {
+					addEntry(iwriter, line);
+				}
+				line = br.readLine();
+			}
+
+			iwriter.forceMerge(1);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			return e.getMessage();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} finally {
 			if (iwriter != null) {
 				try {
@@ -156,26 +221,50 @@ public class FileIndexer {
 					e.printStackTrace();
 				}
 			}
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if (dataIn != null) {
+				try {
+					dataIn.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			// 删除临时文件
+			new File(Util.pathConnect(new String[] { _indexPath, "fileList" }))
+					.delete();
 		}
 		return "";
 	}
 
-	private boolean addEntry(IndexWriter writer, File file) {
+	private boolean addEntry(IndexWriter writer, String fileDisc) {
 		Document doc = new Document();
-		String fileName = file.getName();
-		if (fileName.isEmpty())
-			return false;
+		// parse row and create a document
+		StringTokenizer st = new StringTokenizer(fileDisc, "\t");
+		String filePath = st.nextToken();
+		String fileName = st.nextToken();
+		String fileSize = st.nextToken();
 
-		String recPath = Util.getRelativePath(_ftpPath, file.getAbsolutePath());
+		String recPath = Util.getRelativePath(_ftpPath,
+				new File(filePath).getAbsolutePath());
 		if (recPath == null)
 			return false;
 		if (recPath.trim().isEmpty())
 			return false;
 
 		doc.add(new TextField("fileName", fileName, Field.Store.YES));
-		if (file.isDirectory()) {
+		if (fileSize.equals("-1")) {
+			doc.add(new StringField("fileSize", "0", Field.Store.YES));
 			doc.add(new TextField("isDir", "true", Field.Store.YES));
 		} else {
+			doc.add(new StringField("fileSize", fileSize, Field.Store.YES));
 			doc.add(new TextField("isDir", "false", Field.Store.YES));
 		}
 		doc.add(new StringField("filePath", recPath, Field.Store.YES));
@@ -188,7 +277,7 @@ public class FileIndexer {
 			return false;
 		}
 
-		if (file.isDirectory()) {
+		if (fileSize.equals("-1")) {
 			_dirCount++;
 		} else {
 			_fileCount++;
@@ -197,21 +286,4 @@ public class FileIndexer {
 		return true;
 	}
 
-	private void indexFiles(IndexWriter writer, File file) {
-		if (file.canRead()) {
-			//System.out.println("Add file/dir:" + file.getAbsolutePath());
-			if (file.isDirectory()) {
-				// 记录目录
-				addEntry(writer, file);
-				File[] files = file.listFiles();
-				if (files != null) {
-					for (File f : files) {
-						indexFiles(writer, f);
-					}
-				}
-			} else {
-				addEntry(writer, file);
-			}
-		}
-	}
 }
