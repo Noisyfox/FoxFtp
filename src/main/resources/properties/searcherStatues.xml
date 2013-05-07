@@ -3,10 +3,10 @@
 
 <properties>
 
-	<entry key="STATUES_FILE_TOTAL">1000</entry>
-	<entry key="STATUES_FILE_FILE">900</entry>
-	<entry key="STATUES_FILE_DIR">100</entry>
-	<entry key="STATUES_LAST_DOC_TIME">2013-05-06 19:15:20</entry>
+	<entry key="STATUES_FILE_TOTAL">0</entry>
+	<entry key="STATUES_FILE_FILE">0</entry>
+	<entry key="STATUES_FILE_DIR">0</entry>
+	<entry key="STATUES_LAST_DOC_TIME">0000-00-00 00:00:00</entry>
 	<entry key="STATUES_FTP_PATH">/var/ftp</entry>
 	<entry key="STATUES_INDEX_PATH">/var/ftpindex</entry>
 

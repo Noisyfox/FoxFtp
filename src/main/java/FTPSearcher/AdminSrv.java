@@ -2,6 +2,7 @@ package FTPSearcher;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -75,6 +76,8 @@ public class AdminSrv extends HttpServlet {
 			}
 		}
 
+		String rmsg = "命令成功完成！";
+
 		String adminRequest = completedFormFields.getProperty(
 				ADMIN_ARGUMENT_REQUEST, "").trim();
 		if (adminRequest.isEmpty()) {
@@ -97,18 +100,21 @@ public class AdminSrv extends HttpServlet {
 			}
 		} else if (adminRequest.equals(ADMIN_REQUEST_REINDEX)) {
 			// 重建索引
+			Date start = new Date();
 			FileIndexer fi = new FileIndexer(getServletContext());
 			String result = fi.reIndex();
 			if (!result.isEmpty()) {
 				msg(out, false, "重建索引失败！" + result);
 				return;
 			}
+			Date end = new Date();
+			rmsg += "耗时" + (end.getTime() - start.getTime()) + "毫秒";
 		} else {
 			msg(out, false, "未知的请求：" + adminRequest);
 			return;
 		}
 
-		msg(out, true, "命令成功完成！");
+		msg(out, true, rmsg);
 		return;
 	}
 

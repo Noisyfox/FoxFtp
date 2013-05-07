@@ -142,7 +142,7 @@ public class FileIndexer {
 		} finally {
 			if (iwriter != null) {
 				try {
-					iwriter.close(false);
+					iwriter.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -199,7 +199,7 @@ public class FileIndexer {
 
 	private void indexFiles(IndexWriter writer, File file) {
 		if (file.canRead()) {
-			System.out.println("Add file/dir:" + file.getAbsolutePath());
+			//System.out.println("Add file/dir:" + file.getAbsolutePath());
 			if (file.isDirectory()) {
 				// 记录目录
 				addEntry(writer, file);
