@@ -1,0 +1,101 @@
+package FTPSearcher;
+
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Properties;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet implementation class AdminSrv
+ */
+@WebServlet("/management/AdminSrv")
+public class AdminSrv extends HttpServlet {
+	// public static final String SESSION_ADMIN = "user_admin";
+	private static final long serialVersionUID = 1L;
+
+	public static final String ADMIN_ARGUMENT_REQUEST = "request";
+	public static final String ADMIN_ARGUMENT_FTPDIR = "ftpdir";
+	public static final String ADMIN_ARGUMENT_INDEXDIR = "indexdir";
+	public static final String ADMIN_REQUEST_UPDATESETTINGS = "updsettings";
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public AdminSrv() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");// 汉字转码
+		//  设定内容类型为HTML网页UTF-8编码 
+		response.setContentType("text/html;charset=UTF-8");//  输出页面
+
+		// HttpSession state = ((HttpServletRequest) request).getSession();
+		// String adminSession = (String) state.getAttribute(SESSION_ADMIN);
+		// if (adminSession == null || !adminSession.equals("true")) {
+		// PrintWriter out = response.getWriter();
+		// out.println("<html><head>");
+		// out.println("<title>First Servlet Hello</title>");
+		// out.println("</head><body>");
+		// out.println("坑爹呢！");
+		// out.println("</body></html>");
+		// out.close();
+		// return;
+		// }
+
+		// 处理管理请求
+		// Take all completed form fields and add to a Properties object
+		Properties completedFormFields = new Properties();
+		Enumeration<?> pNames = request.getParameterNames();
+		while (pNames.hasMoreElements()) {
+			String propName = (String) pNames.nextElement();
+			String value = request.getParameter(propName);
+			if ((value != null) && (value.trim().length() > 0)) {
+				completedFormFields.setProperty(propName, value);
+			}
+		}
+
+		String adminRequest = completedFormFields.getProperty(
+				ADMIN_ARGUMENT_REQUEST, "").trim();
+		if (adminRequest.isEmpty())
+			return;
+
+		if (adminRequest.equals(ADMIN_REQUEST_UPDATESETTINGS)) {
+			String path = completedFormFields.getProperty(
+					ADMIN_ARGUMENT_FTPDIR, "").trim();
+			if (!path.isEmpty()) {
+				ServiceStatuesUtil.saveServiceStatues(getServletContext(),
+						ServiceStatuesUtil.STATUES_FTP_PATH, path);
+			}
+			path = completedFormFields.getProperty(ADMIN_ARGUMENT_INDEXDIR, "")
+					.trim();
+			if (!path.isEmpty()) {
+				ServiceStatuesUtil.saveServiceStatues(getServletContext(),
+						ServiceStatuesUtil.STATUES_INDEX_PATH, path);
+			}
+		}
+
+		return;
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+}

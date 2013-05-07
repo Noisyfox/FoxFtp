@@ -103,7 +103,7 @@ body,div,p,ul,li,form,h1,h2 {
 </head>
 
 <body onLoad="document.forms.inputform.textbox.focus()">
-	<p id=u style="border-bottom: 1px solid #F0F0F0; text-align: right;">
+	<p style="border-bottom: 1px solid #F0F0F0; text-align: right;">
 		<a class=downlist id=ftp_more onMouseOver="MM_safe_mousein(1)"
 			onmouseout="MM_safe_mouseout(this,event,1)">FTP相关板块 </a>|<a
 			class=head id=ftp_more href="./management/">FTP管理</a>
@@ -127,8 +127,10 @@ body,div,p,ul,li,form,h1,h2 {
 	<%
 		//载入之前的内容
 		String lInput = request.getParameter("textbox");
-		if(lInput != null)lInput = lInput.trim();
-		else lInput = "";
+		if(lInput != null)
+			lInput = lInput.trim();
+		else
+			lInput = "";
 	%>
 	<div align="center">
 		<form name="inputform" id="form1" action="./SearchFtp" method="post">
