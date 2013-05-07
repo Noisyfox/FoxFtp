@@ -1,16 +1,11 @@
 package FTPSearcher;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,9 +37,6 @@ public class FileIndexer {
 	long _fileCount = 0;
 	long _dirCount = 0;
 
-	OutputStream os = null;
-	PrintWriter pw = null;
-
 	public FileIndexer(ServletContext context) {
 		_context = context;
 		Properties serviceStatues = ServiceStatuesUtil
@@ -55,29 +47,6 @@ public class FileIndexer {
 				ServiceStatuesUtil.STATUES_INDEX_PATH, "");
 		_ftpPath = new File(_ftpPath).getAbsolutePath();
 		_indexPath = new File(_indexPath).getAbsolutePath();
-
-		try {
-			os = new BufferedOutputStream(new FileOutputStream("/usr/foxlog"));
-			pw = new PrintWriter(os);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	protected void finalize() throws Throwable {
-		pw.flush();
-		pw.close();
-
-		try {
-			if (os != null) {
-				os.close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		super.finalize();
 	}
 
 	public final String reIndex() {
