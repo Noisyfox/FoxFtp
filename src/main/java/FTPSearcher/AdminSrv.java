@@ -1,6 +1,7 @@
 package FTPSearcher;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -22,6 +23,7 @@ public class AdminSrv extends HttpServlet {
 	public static final String ADMIN_ARGUMENT_FTPDIR = "ftpdir";
 	public static final String ADMIN_ARGUMENT_INDEXDIR = "indexdir";
 	public static final String ADMIN_REQUEST_UPDATESETTINGS = "updsettings";
+	public static final String ADMIN_REQUEST_REINDEX = "reindex";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -29,6 +31,12 @@ public class AdminSrv extends HttpServlet {
 	public AdminSrv() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	private void msg(PrintWriter out, boolean success, String message) {
+		String json = "{\"success\":" + (success ? 1 : 0) + ",\"message\":\""
+				+ message + "\"}";
+		out.write(json);
 	}
 
 	/**
@@ -40,6 +48,7 @@ public class AdminSrv extends HttpServlet {
 		request.setCharacterEncoding("utf-8");// 汉字转码
 		//  设定内容类型为HTML网页UTF-8编码 
 		response.setContentType("text/html;charset=UTF-8");//  输出页面
+		PrintWriter out = response.getWriter();
 
 		// HttpSession state = ((HttpServletRequest) request).getSession();
 		// String adminSession = (String) state.getAttribute(SESSION_ADMIN);
@@ -68,8 +77,10 @@ public class AdminSrv extends HttpServlet {
 
 		String adminRequest = completedFormFields.getProperty(
 				ADMIN_ARGUMENT_REQUEST, "").trim();
-		if (adminRequest.isEmpty())
+		if (adminRequest.isEmpty()) {
+			msg(out, false, "请求不能为空！");
 			return;
+		}
 
 		if (adminRequest.equals(ADMIN_REQUEST_UPDATESETTINGS)) {
 			String path = completedFormFields.getProperty(
@@ -84,8 +95,14 @@ public class AdminSrv extends HttpServlet {
 				ServiceStatuesUtil.saveServiceStatues(getServletContext(),
 						ServiceStatuesUtil.STATUES_INDEX_PATH, path);
 			}
+		} else if (adminRequest.equals(ADMIN_REQUEST_REINDEX)) {
+
+		} else {
+			msg(out, false, "未知的请求：" + adminRequest);
+			return;
 		}
 
+		msg(out, true, "命令成功完成！");
 		return;
 	}
 

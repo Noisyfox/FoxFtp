@@ -54,7 +54,7 @@ body,div,p,ul,li,form,h1,h2 {
 	width: 107px;
 	height: 35px;
 	opacity: 0;
-	filter: alpha(opacity =     0);
+	filter: alpha(opacity = 0);
 	cursor: pointer;
 }
 

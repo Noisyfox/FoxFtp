@@ -41,9 +41,7 @@ public class ServiceStatuesUtil {
 			serviceStatues.loadFromXML(pInStream);
 			serviceStatues.list(System.out);
 		} catch (IOException e) {
-
 			e.printStackTrace();
-
 		} finally {
 			if (pInStream != null) {
 				try {
