@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Servlet implementation class AdminSrv
  */
@@ -36,10 +39,18 @@ public class AdminSrv extends HttpServlet {
 	}
 
 	private void msg(PrintWriter out, boolean success, String message) {
-		String json = "{\"success\":" + (success ? 1 : 0) + ",\"message\":\""
-				+ message + "\"}";
-		json = json.replace("\\", "\\\\");
-		out.write(json);
+		JSONObject jsonObj = new JSONObject();
+		try {
+			jsonObj.put("success", success);
+			jsonObj.put("message", message);
+			String json = jsonObj.toString();
+			System.out.println(json);
+			out.write(json);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			out.write("{\"success\":false,\"message\":\"Inner error!\"}");
+		}
 	}
 
 	/**
