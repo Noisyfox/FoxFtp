@@ -31,7 +31,7 @@ public class SearchFtp extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		try {
-			
+
 		} catch (Exception e) {
 			throw new ServletException("Error loading query template", e);
 		}
@@ -44,7 +44,7 @@ public class SearchFtp extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");// 汉字转码
+		request.setCharacterEncoding("ISO-8859-1");// 汉字转码
 		//  设定内容类型为HTML网页UTF-8编码 
 		response.setContentType("text/html;charset=UTF-8");//  输出页面
 		// PrintWriter out = response.getWriter();
@@ -66,7 +66,7 @@ public class SearchFtp extends HttpServlet {
 			}
 		}
 
-		String inputStr = completedFormFields.getProperty("textbox", "").trim();
+		String inputStr = completedFormFields.getProperty("keyword", "").trim();
 		String str = "";
 		if (!inputStr.isEmpty()) {
 			str = "喵呜~你刚刚输入的文字是：" + inputStr;

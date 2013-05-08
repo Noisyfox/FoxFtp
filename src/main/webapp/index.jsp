@@ -126,19 +126,19 @@ body,div,p,ul,li,form,h1,h2 {
 	</div>
 	<%
 		//载入之前的内容
-		String lInput = request.getParameter("textbox");
+		String lInput = request.getParameter("keyword");
 		if(lInput != null)
 			lInput = lInput.trim();
 		else
 			lInput = "";
 	%>
 	<div align="center">
-		<form name="inputform" id="form1" action="./SearchFtp" method="post">
+		<form name="inputform" id="form1" action="./SearchFtp" method="get">
 			<table cellpadding="0" cellspacing="0">
 				<tbody>
 					<tr>
 						<td class="td_head"></td>
-						<td class="td_text"><input class="inputtext" name="textbox"
+						<td class="td_text"><input class="inputtext" name="keyword"
 							value="<%=lInput%>" /></td>
 						<td class="td_search"><button class="td_submit" type="submit">
 								<strong>搜索</strong>
@@ -146,9 +146,6 @@ body,div,p,ul,li,form,h1,h2 {
 					</tr>
 				</tbody>
 			</table>
-
-
-
 		</form>
 	</div>
 	<div>
