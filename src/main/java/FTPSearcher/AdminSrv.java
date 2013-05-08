@@ -39,8 +39,8 @@ public class AdminSrv extends HttpServlet {
 	}
 
 	private void msg(PrintWriter out, boolean success, String message) {
-		JSONObject jsonObj = new JSONObject();
 		try {
+			JSONObject jsonObj = new JSONObject();
 			jsonObj.put("success", success);
 			jsonObj.put("message", message);
 			String json = jsonObj.toString();
