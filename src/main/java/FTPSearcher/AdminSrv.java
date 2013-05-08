@@ -1,5 +1,6 @@
 package FTPSearcher;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
@@ -37,6 +38,7 @@ public class AdminSrv extends HttpServlet {
 	private void msg(PrintWriter out, boolean success, String message) {
 		String json = "{\"success\":" + (success ? 1 : 0) + ",\"message\":\""
 				+ message + "\"}";
+		json = json.replace("\\", "\\\\");
 		out.write(json);
 	}
 
@@ -88,12 +90,14 @@ public class AdminSrv extends HttpServlet {
 		if (adminRequest.equals(ADMIN_REQUEST_UPDATESETTINGS)) {
 			String path = completedFormFields.getProperty(
 					ADMIN_ARGUMENT_FTPDIR, "").trim();
+			path = new File(path).getAbsolutePath();
 			if (!path.isEmpty()) {
 				ServiceStatuesUtil.saveServiceStatues(getServletContext(),
 						ServiceStatuesUtil.STATUES_FTP_PATH, path);
 			}
 			path = completedFormFields.getProperty(ADMIN_ARGUMENT_INDEXDIR, "")
 					.trim();
+			path = new File(path).getAbsolutePath();
 			if (!path.isEmpty()) {
 				ServiceStatuesUtil.saveServiceStatues(getServletContext(),
 						ServiceStatuesUtil.STATUES_INDEX_PATH, path);

@@ -61,7 +61,7 @@ public class FileIndexer {
 			File roots[] = File.listRoots();
 			boolean isRoot = false;
 			for (File root : roots) {
-				if (indexFile.getAbsolutePath().equals(root.getAbsolutePath())) {
+				if (indexFile.equals(root)) {
 					isRoot = true;
 					break;
 				}
