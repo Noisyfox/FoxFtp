@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+	pageEncoding="utf-8"
+	import="FTPSearcher.SearchResult,FTPSearcher.Util,FTPSearcher.SearchFtp
+	,FTPSearcher.ResultDocument"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%
 	request.setCharacterEncoding("utf-8");
@@ -12,6 +14,7 @@
 <link rel="icon" href="images/ftp_icon.ico" type="image/x-icon" />
 <link rel="shortcut icon" href="images/ftp_icon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="css/menu.css" />
+<link rel="stylesheet" href="css/searchresult.css" />
 
 <script type="text/javascript" src="js/jquery-1.6.3.min.js"></script>
 <script type="text/javascript" src="js/search.js"></script>
@@ -54,7 +57,7 @@ body,div,p,ul,li,form,h1,h2 {
 	width: 107px;
 	height: 35px;
 	opacity: 0;
-	filter: alpha(opacity = 0);
+	filter: alpha(opacity =           0);
 	cursor: pointer;
 }
 
@@ -127,8 +130,8 @@ body,div,p,ul,li,form,h1,h2 {
 	<%
 		//载入之前的内容
 		String lInput = request.getParameter("keyword");
-		if(lInput != null)
-			lInput = lInput.trim();
+		if (lInput != null)
+			lInput = Util.packHtmlString(lInput.trim());
 		else
 			lInput = "";
 	%>
@@ -148,17 +151,69 @@ body,div,p,ul,li,form,h1,h2 {
 			</table>
 		</form>
 	</div>
-	<div>
-		<%
-			String results = (String) request.getAttribute("results");
-			if (results != null) {
-		%>
-		<a><%=results%></a>
-		<%
-			}
-		%>
+	<%
+		SearchResult searchResult = (SearchResult) request
+				.getAttribute("searchResult");
+		if (searchResult != null) {
+	%>
+	<div class="resheader"></div>
+	<div class="neck">
+		<div id="resultcounts">
+			<%
+				if (searchResult.totalResults == 0) {
+			%>
+			抱歉，没有找到与<font color="#CC0000"><%=Util.packHtmlString("\"") + lInput
+							+ Util.packHtmlString("\"")%></font>相关的文件。
+			<%
+				} else {
+			%>
+			共找到<font color="#FF0000"><%=searchResult.totalResults%></font>条结果
+			<%
+				}
+			%>
+		</div>
 	</div>
 
+	<div class="content">
+		<table id="result" cellpadding="0" cellspacing="0" width="600">
+			<%
+				for (int i = 0; i < SearchFtp.HIT_PER_PAGE; i++) {
+						ResultDocument rd = null;
+						if (i + searchResult.firstHitNum < SearchResult.CACHED_RESULT_COUNT) {
+							if (i + searchResult.firstHitNum > searchResult.documents_forward
+									.size() - 1)
+								break;
+							rd = searchResult.documents_forward.get(i
+									+ searchResult.firstHitNum);
+						} else if (i + searchResult.firstHitNum < SearchResult.CACHED_RESULT_COUNT * 2) {
+							if (i + searchResult.firstHitNum
+									- SearchResult.CACHED_RESULT_COUNT > searchResult.documents_afterward
+									.size() - 1)
+								break;
+							rd = searchResult.documents_afterward.get(i
+									+ searchResult.firstHitNum
+									- SearchResult.CACHED_RESULT_COUNT);
+						} else
+							break;
+			%><tbody>
+				<tr class="resultsRow" align="left">
+					<td class="td"><%=rd.highlightString%></td>
+					<td>Location</td>
+					<td>Salary</td>
+					<td>Description</td>
+				</tr>
+			</tbody>
+			<%
+				}
+			%>
+		</table>
+	</div>
+	<%
+		}
+	%>
+
+	<br />
+	<br />
 	<br />
 	<br />
 	<br />
@@ -171,7 +226,9 @@ body,div,p,ul,li,form,h1,h2 {
 				href="http://my.nuaa.edu.cn/space-uid-171410.html">忆一段往事</a>&nbsp;&amp;&nbsp;<a
 				href="http://my.nuaa.edu.cn/space-uid-339947.html">Noisyfox</a>
 		</p>
-		<p class="author">站长邮箱&nbsp;:&nbsp;<a href="mailto://jnccftp@nuaa.edu.cn">jnccftp@nuaa.edu.cn</a></p>
+		<p class="author">
+			站长邮箱&nbsp;:&nbsp;<a href="mailto://jnccftp@nuaa.edu.cn">jnccftp@nuaa.edu.cn</a>
+		</p>
 	</div>
 
 </body>

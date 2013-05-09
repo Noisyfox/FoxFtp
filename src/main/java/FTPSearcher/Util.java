@@ -9,6 +9,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Util {
 	public static final String pathConnect(String[] elements) {
 		if (elements == null || elements.length == 0)
@@ -148,5 +151,42 @@ public class Util {
 			}
 			return absolutePath;
 		}
+	}
+
+	public static final String genJSON(boolean success, String message) {
+		String json = null;
+		try {
+			JSONObject jsonObj = new JSONObject();
+			jsonObj.put("success", success);
+			jsonObj.put("message", message);
+			json = jsonObj.toString();
+			System.out.println(json);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			message = message.replace("\\", "\\\\");
+			String _json = "{\"success\":" + (success ? "true" : "false")
+					+ ",\"message\":\"" + message + "\"}";
+			try {
+				new JSONObject(_json);
+				json = _json;
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		return json;
+	}
+
+	/*
+	 * 将一个含有引号的字符串转换为特殊表示形式，可以直接在page中使用的字符串, 目前是将所有的'转换为&#34;，"转换为&#39;
+	 */
+	public static final String packHtmlString(String originStr) {
+		if (originStr == null)
+			return "";
+
+		originStr = originStr.replace("'", "&#39;");
+		originStr = originStr.replace("\"", "&#34;");
+
+		return originStr;
 	}
 }

@@ -30,6 +30,11 @@ import org.wltea.analyzer.lucene.IKAnalyzer;
 
 public class FileIndexer {
 
+	public static final String FIELD_FILENAME = "fileName";
+	public static final String FIELD_FILESIZE = "fileSize";
+	public static final String FIELD_ISDIR = "isDir";
+	public static final String FIELD_PATH = "filePath";
+
 	ServletContext _context = null;
 	String _ftpPath = null;
 	String _indexPath = null;
@@ -228,15 +233,15 @@ public class FileIndexer {
 		if (recPath.trim().isEmpty())
 			return false;
 
-		doc.add(new TextField("fileName", fileName, Field.Store.YES));
+		doc.add(new TextField(FIELD_FILENAME, fileName, Field.Store.YES));
 		if (fileSize.equals("-1")) {
-			doc.add(new StringField("fileSize", "0", Field.Store.YES));
-			doc.add(new TextField("isDir", "true", Field.Store.YES));
+			doc.add(new StringField(FIELD_FILESIZE, "0", Field.Store.YES));
+			doc.add(new TextField(FIELD_ISDIR, "true", Field.Store.YES));
 		} else {
-			doc.add(new StringField("fileSize", fileSize, Field.Store.YES));
-			doc.add(new TextField("isDir", "false", Field.Store.YES));
+			doc.add(new StringField(FIELD_FILESIZE, fileSize, Field.Store.YES));
+			doc.add(new TextField(FIELD_ISDIR, "false", Field.Store.YES));
 		}
-		doc.add(new StringField("filePath", recPath, Field.Store.YES));
+		doc.add(new StringField(FIELD_PATH, recPath, Field.Store.YES));
 
 		try {
 			writer.addDocument(doc);
