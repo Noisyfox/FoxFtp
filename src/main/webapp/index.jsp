@@ -145,10 +145,22 @@
 		</table>
 		<%
 			if (searchResult.totalPages > 1) {
-				int first = searchResult.currentPage - 4;
-				if(first < 1)first = 1;
-				int last = first + 10;
-				if(last > searchResult.totalPages)last = searchResult.totalPages;
+				int first = 0, last = 0;
+				if(searchResult.totalPages <= 10){
+					first = 1;
+					last = searchResult.totalPages;
+				}else{
+					if(searchResult.currentPage <= 4){
+						first = 1;
+						last = 10;
+					}else if(searchResult.totalPages - searchResult.currentPage <= 6){
+						first = searchResult.totalPages - 10;
+						last = searchResult.totalPages;
+					}else{
+						first = searchResult.currentPage - 4;
+						last = first + 10;
+					}
+				}
 		%>
 		<div class="paging">
 		<%if(first != 1){%>
