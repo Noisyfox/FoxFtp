@@ -1,13 +1,13 @@
 .highlight {
 	background: yellow;
-	color: #CC0033; 
+	color: #CC0033;
 }
 
-.resheader{
-width:100%;
-height:35px;
-border-bottom-style:double;
-border-bottom-color:#999999;
+.resheader {
+	width: 100%;
+	height: 35px;
+	border-bottom-style: double;
+	border-bottom-color: #999999;
 }
 
 #resultcounts {
@@ -34,21 +34,20 @@ border-bottom-color:#999999;
 	line-height: 35px;
 	background-color: #DCE2EE
 }
+
 #result td {
 	border-bottom: 1px solid #dedede;
 	border-right: 1px solid #dedede;
 	border-left: 1px solid #dedede;
-	line-height: 35px;
+	line-height: 30px;
 	cursor: pointer;
 }
 
 #result a {
-	color: #333333;
 	text-decoration: none;
 }
 
 #result a:hover {
-	color: #333333;
 	text-decoration: underline;
 }
 
@@ -59,10 +58,65 @@ border-bottom-color:#999999;
 }
 
 .td {
-	width: 558px;
+	width: 680px;
+}
+
+.dir {
+	color: #009933;
+	line-height: 14px;
+	font-size: 12px;
+	font-family: arial, \5b8b\4f53, sans-serif;
 }
 
 .content {
 	position: relative;
 	left: 125px;
+}
+
+.paging {
+	position: relative;
+	left: 170px;
+	width: 560px;
+	height: 25px;
+	top: 10px;
+}
+
+.paging a {
+	border: 1px solid #E5EDF2;
+	padding-bottom: 3px;
+	padding-top: 3px;
+	padding-left: 6px;
+	padding-right: 6px;
+	font-size: 16px;
+	text-align: center;
+	line-height: 16px;
+	text-decoration: none;
+	height: 16px;
+}
+
+.paging b {
+	border: 1px solid #C2D5E3;
+	background-color: #E5EDF2;
+	padding-bottom: 3px;
+	padding-top: 3px;
+	padding-left: 6px;
+	padding-right: 6px;
+	font-size: 12px;
+	text-align: center;
+	line-height: 16px;
+	cursor: default;
+	height: 14px;
+}
+
+.paging .ah {
+	border: 1px solid #C2D5E3;
+	font-size: 12px;
+	text-align: center;
+	line-height: 16px;
+	margin-left: 2px;
+	margin-right: 2px;
+}
+
+.paging a:hover {
+	border: 1px solid #6090c0;
 }

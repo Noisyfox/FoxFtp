@@ -297,6 +297,16 @@ public class Util {
 
 		return map;
 	}
-	
-	
+
+	public static final String[] sizeUnit = { "B", "KB", "MB", "GB", "TB", "PB" };
+
+	public static final String packFileSizeString(long sizeInByte) {
+		int k = 0;
+		double _s = sizeInByte;
+		while (_s > 1024 && k < sizeUnit.length) {
+			k++;
+			_s /= 1024.0;
+		}
+		return String.format("%.1f %s", _s, sizeUnit[k]);
+	}
 }

@@ -46,7 +46,7 @@ import org.wltea.analyzer.lucene.IKAnalyzer;
 public class SearchFtp extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	public static final int HIT_PER_PAGE = 50;
+	public static final int HIT_PER_PAGE = 40;
 
 	Object indexPrepareSync = new Object();
 	File indexFile = null;
@@ -424,7 +424,7 @@ public class SearchFtp extends HttpServlet {
 				if (results.scoreDocs.length != 0)
 					newResult.lastResult = results.scoreDocs[results.scoreDocs.length - 1];
 				newResult.firstHitNum = cHit_first - cache_first;
-
+				newResult.currentPage = targetPage;
 				break;
 			}
 			}
@@ -449,10 +449,16 @@ public class SearchFtp extends HttpServlet {
 			// if (_fs == null)
 			// _fs = "0";
 			rd.fileSize = Long.valueOf(doc.get(FileIndexer.FIELD_FILESIZE));
-			rd.url = Util.packUrlString(doc.get(FileIndexer.FIELD_PATH));
+			rd.displayUrl = doc.get(FileIndexer.FIELD_PATH);
+			rd.displayUrl = rd.displayUrl.replace('\\', '/');
+			rd.url = Util.packUrlString(rd.displayUrl);
 			if (!url_prefix.isEmpty()) {
+				rd.displayUrl = url_prefix + rd.displayUrl;
 				rd.url = url_prefix + rd.url;
 			}
+			rd.displayFatherUrl = rd.displayUrl.substring(0,
+					rd.displayUrl.lastIndexOf(rd.displayName));
+			rd.fatherUrl = Util.packUrlString(rd.displayFatherUrl);
 
 			rd.isDir = Boolean.valueOf(doc.get(FileIndexer.FIELD_ISDIR));
 

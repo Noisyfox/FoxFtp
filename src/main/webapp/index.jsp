@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 	import="FTPSearcher.SearchResult,FTPSearcher.Util,FTPSearcher.SearchFtp
-	,FTPSearcher.ResultDocument"%>
+	,FTPSearcher.ResultDocument,FTPSearcher.SearchRequest"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%
 	request.setCharacterEncoding("utf-8");
@@ -15,17 +15,19 @@
 <link rel="shortcut icon" href="images/ftp_icon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="css/menu.css" />
 <link rel="stylesheet" href="css/searchresult.css" />
-<link rel="stylesheet" href="css/main.css"/>
+<link rel="stylesheet" href="css/main.css" />
 
 <script type="text/javascript" src="js/jquery-1.6.3.min.js"></script>
 <script type="text/javascript" src="js/search.js"></script>
 <script type="text/javascript" src="js/menu.js"></script>
 </head>
-<% 
+<%
 	SearchResult searchResult = (SearchResult) request
-		.getAttribute("searchResult");%>
-		
-<body <%if(searchResult == null || searchResult.totalResults == 0){ %>onLoad="document.forms.inputform.keyword.focus()"<%} %>>
+			.getAttribute("searchResult");
+%>
+
+<body <%if (searchResult == null || searchResult.totalResults == 0) {%>
+	onLoad="document.forms.inputform.keyword.focus()" <%}%>>
 	<p style="border-bottom: 1px solid #F0F0F0; text-align: right;">
 		<a class=downlist id=ftp_more onMouseOver="MM_safe_mousein(1)"
 			onmouseout="MM_safe_mouseout(this,event,1)">FTP相关板块 </a>|<a
@@ -43,14 +45,15 @@
 			href="http://page.renren.com/601428879">人人主页</a>
 
 	</div>
-	<% if (searchResult == null) {
-		for(int i = 0; i < 7; i++){
-				%>
+	<%
+		if (searchResult == null) {
+			for (int i = 0; i < 7; i++) {
+	%>
 	<br />
-				<%
-			}
+	<%
 		}
-		%>
+		}
+	%>
 	<div align="center">
 		<img src="./images/ftp.jpg">
 	</div>
@@ -88,11 +91,13 @@
 				if (searchResult.totalResults == 0) {
 			%>
 			<a>抱歉，没有找到与<font color="#CC0000"><%=Util.packHtmlString("\"") + lInput
-							+ Util.packHtmlString("\"")%></font>相关的文件。</a>
+							+ Util.packHtmlString("\"")%></font>相关的文件。
+			</a>
 			<%
 				} else {
 			%>
-			<a>共找到<font color="#FF0000"><%=searchResult.totalResults%></font>条结果，耗时&nbsp;<%=searchResult.totalMillisecond %>&nbsp;毫秒</a>
+			<a>共找到&nbsp;<font color="#FF0000"><%=searchResult.totalResults%></font>&nbsp;条结果，耗时&nbsp;<%=searchResult.totalMillisecond%>&nbsp;毫秒
+			</a>
 			<%
 				}
 			%>
@@ -102,11 +107,11 @@
 		if (searchResult.totalResults != 0) {
 	%>
 	<div>
-		<table class="content" id="result" cellpadding="0" cellspacing="0" >
+		<table class="content" id="result" cellpadding="0" cellspacing="0">
 			<tr>
-					<th class="resultsHeader">文件名</th>
-					<th class="resultsHeader">大小</th>
-				</tr>
+				<th class="resultsHeader">文件名</th>
+				<th class="resultsHeader">大小</th>
+			</tr>
 			<%
 				for (int i = 0; i < SearchFtp.HIT_PER_PAGE; i++) {
 							ResultDocument rd = null;
@@ -127,30 +132,57 @@
 							} else
 								break;
 			%><tbody>
-				<tr class="resultsRow" align="left">
-					<td class="td">
-						<a href="<%=rd.url%>">
-							<%=rd.highlightString%>
-						</a>
-					</td>
-					<td><%=rd.fileSize + "byte"%></td>
+				<tr class="resultsRow">
+					<td class="td" align="left"><a href="<%=rd.url%>"> <%=rd.highlightString%>
+					</a><br /> <a class="dir" href="<%=rd.fatherUrl%>"> <%="位于:" + rd.displayFatherUrl%>
+					</a></td>
+					<td align="right"><%=Util.packFileSizeString(rd.fileSize)%></td>
 				</tr>
 			</tbody>
 			<%
 				}
 			%>
 		</table>
+		<%
+			if (searchResult.totalPages > 1) {
+				int first = searchResult.currentPage - 4;
+				if(first < 1)first = 1;
+				int last = first + 10;
+				if(last > searchResult.totalPages)last = searchResult.totalPages;
+		%>
+		<div class="paging">
+		<%if(first != 1){%>
+			<a href="<%="SearchFtp?page=1&keyword="+lInput+"&fileType="+SearchRequest.getFileTypeString(searchResult.currentRequest.fileType)%>">首页</a>
+		<%} %>
+		<%
+			for(int i = first; i <= last; i++){
+				if(i == searchResult.currentPage){
+					%>&nbsp;<b><%=i%></b>&nbsp;<%
+				}else{
+					%><a href="<%="SearchFtp?page="+i+"&keyword="+lInput+"&fileType="+SearchRequest.getFileTypeString(searchResult.currentRequest.fileType)%>" class="ah"><%=i%></a><%
+				}
+			}
+		%>
+		<%if(last != searchResult.totalPages){%>
+			<a href="<%="SearchFtp?page="+searchResult.totalPages+"&keyword="+lInput+"&fileType="+SearchRequest.getFileTypeString(searchResult.currentRequest.fileType)%>">尾页</a>
+		<%} %>
+		</div>
+		<%
+			}
+		%>
+
+
 	</div>
 	<%
 		}
 	%>
 	<%
-		}else{
-			for(int i = 0; i < 10; i++){
-				%>
+		} else {
+			for (int i = 0; i < 10; i++) {
+	%>
 	<br />
-				<%
-			}
+	<%
+		}
 		}
 	%>
 
@@ -170,10 +202,7 @@
 		<p class="author">
 			站长邮箱&nbsp;:&nbsp;<a href="mailto://jnccftp@nuaa.edu.cn">jnccftp@nuaa.edu.cn</a>
 		</p>
-		<br />
-		<br />
-		<br />
-		<br />
+		<br /> <br /> <br /> <br />
 	</div>
 
 </body>

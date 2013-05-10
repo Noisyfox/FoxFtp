@@ -4,13 +4,13 @@ body,div,p,ul,li,form,h1,h2 {
 }
 
 .td_head {
-	background: url("./images/search_1.jpg");
+	background: url("../images/search_1.jpg");
 	width: 11px;
 	height: 35px;
 }
 
 .td_text {
-	background: url("./images/search_2.jpg");
+	background: url("../images/search_2.jpg");
 	width: 438px;
 	height: 35px;
 }
@@ -25,7 +25,7 @@ body,div,p,ul,li,form,h1,h2 {
 }
 
 .td_search {
-	background: url("./images/search_3_1.jpg");
+	background: url("../images/search_3_1.jpg");
 	width: 107px;
 	height: 35px;
 }
@@ -46,7 +46,7 @@ body,div,p,ul,li,form,h1,h2 {
 	color: #00C;
 	font-weight: bold;
 	padding-right: 11px;
-	background: url(./images/spis_9762e054.png) no-repeat right -221px
+	background: url(../images/spis_9762e054.png) no-repeat right -221px
 }
 
 .head {

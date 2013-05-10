@@ -9,10 +9,10 @@ public class SearchRequest {
 	public static final int REQUEST_FILETYPE_FILE = 2;
 	public static final int REQUEST_FILETYPE_DIR = 3;
 
-	protected int searchType = REQUEST_SEARCHTYPE_NEW;
-	protected int fileType = REQUEST_FILETYPE_ALL;
-	protected String keyword = "";
-	protected int jumpToPage = 0;
+	public int searchType = REQUEST_SEARCHTYPE_NEW;
+	public int fileType = REQUEST_FILETYPE_ALL;
+	public String keyword = "";
+	public int jumpToPage = 0;
 
 	public SearchRequest() {
 
@@ -25,6 +25,17 @@ public class SearchRequest {
 		fileType = lstRequest.fileType;
 		keyword = lstRequest.keyword;
 		jumpToPage = lstRequest.jumpToPage;
+	}
+
+	public static final String getFileTypeString(int type) {
+		switch (type) {
+		case REQUEST_FILETYPE_DIR:
+			return "dir";
+		case REQUEST_FILETYPE_FILE:
+			return "file";
+		default:
+			return "all";
+		}
 	}
 
 }
