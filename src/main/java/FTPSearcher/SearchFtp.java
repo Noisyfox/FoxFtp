@@ -146,7 +146,10 @@ public class SearchFtp extends HttpServlet {
 
 	@Override
 	public void destroy() {
+		System.out.println("onDestroy");
 		doCleanUp();
+		ServiceStatuesUtil.unregisterDrivers();
+		System.gc();
 		super.destroy();
 	}
 

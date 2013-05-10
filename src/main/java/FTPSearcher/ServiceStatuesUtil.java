@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -75,7 +77,19 @@ public class ServiceStatuesUtil {
 		return properties;
 	}
 
-	public static final Connection getDBConnection(ServletContext context) {
+	public static final void unregisterDrivers() {
+		Enumeration<Driver> d = DriverManager.getDrivers();
+		while (d.hasMoreElements()) {
+			try {
+				DriverManager.deregisterDriver(d.nextElement());
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private static final Connection getDBConnection(ServletContext context) {
 		Properties serviceConfig = getProperties(context, "searcherConfig.xml");
 
 		String driver = "com.mysql.jdbc.Driver";
@@ -114,7 +128,7 @@ public class ServiceStatuesUtil {
 		return null;
 	}
 
-	public static final void createDBifNotExists(ServletContext context,
+	private static final void createDBifNotExists(ServletContext context,
 			Connection connection) {
 		String table = getProperties(context, "searcherConfig.xml")
 				.getProperty(CONFIG_DB_TABLE_FTPSTATUES, "");
@@ -172,9 +186,10 @@ public class ServiceStatuesUtil {
 			int id, Map<String, String> data) {
 		// UPDATE `foxftp`.`ftpstatues` SET `name` = 'kkk' WHERE
 		// `ftpstatues`.`id` = 1
+		Connection conn = null;
 		try {
-			Connection conn = getDBConnection(context);
-			if (conn == null) {
+			conn = getDBConnection(context);
+			if (conn == null || conn.isClosed()) {
 				return false;
 			}
 
@@ -204,15 +219,24 @@ public class ServiceStatuesUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
+		} finally {
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return true;
 	}
 
 	public static final Map<String, String> getServiceStatues_DB(
 			ServletContext context, int id) {
+		Connection conn = null;
 		try {
-			Connection conn = getDBConnection(context);
-			if (conn == null) {
+			conn = getDBConnection(context);
+			if (conn == null || conn.isClosed()) {
 				return null;
 			}
 			createDBifNotExists(context, conn);
@@ -248,6 +272,14 @@ public class ServiceStatuesUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
+		} finally {
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 

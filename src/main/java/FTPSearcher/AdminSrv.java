@@ -35,6 +35,12 @@ public class AdminSrv extends HttpServlet {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	@Override
+	public void destroy() {
+		ServiceStatuesUtil.unregisterDrivers();
+		super.destroy();
+	}
 
 	private void msg(PrintWriter out, boolean success, String message) {
 		String json = Util.genJSON(success, message);

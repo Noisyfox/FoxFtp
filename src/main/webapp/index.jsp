@@ -177,8 +177,8 @@ body,div,p,ul,li,form,h1,h2 {
 	<%
 		if (searchResult.totalResults != 0) {
 	%>
-	<div class="content">
-		<table id="result" cellpadding="0" cellspacing="0" width="600">
+	<div>
+		<table class="content" id="result" cellpadding="0" cellspacing="0" >
 			<tr>
 					<th class="resultsHeader">文件名</th>
 					<th class="resultsHeader">大小</th>
