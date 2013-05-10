@@ -296,14 +296,7 @@ public class SearchFtp extends HttpServlet {
 				&& lastResult == null)
 			return null;
 
-		SearchResult newResult = null;
-		if (lastResult == null) {
-			newResult = new SearchResult(request);
-		} else {
-			newResult = lastResult;
-			newResult.currentRequest = request;
-		}
-
+		// *******************************************************************
 		Query query = null;
 		Query fQuery = null;
 		try {
@@ -344,100 +337,108 @@ public class SearchFtp extends HttpServlet {
 		Highlighter highlighter = new Highlighter(formatter, new QueryScorer(
 				fQuery));
 		highlighter.setTextFragmenter(new SimpleFragmenter(60));
-
-		TopDocs results = null;
+		// *******************************************************************
 		try {
-			// 先搜索一下前10条，以生成全局数据统计
-			results = indexSearcher.search(query, 10);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-		if (results == null) {
-			return null;
-		}
+			SearchResult newResult = null;
+			if (lastResult == null) {
+				newResult = new SearchResult(request);
+			} else {
+				newResult = lastResult;
+				newResult.currentRequest = request;
+			}
 
-		newResult.totalResults = results.totalHits;
-		newResult.totalPages = (int) Math.ceil((double) newResult.totalResults
-				/ HIT_PER_PAGE);
-
-		int targetPage = 1;
-		if (newResult.totalPages < request.jumpToPage) {
-			targetPage = newResult.totalPages;
-		} else {
-			targetPage = request.jumpToPage;
-		}
-
-		// 计算要构建目标页面需要的hit的编号范围
-		int cHit_first = (targetPage - 1) * HIT_PER_PAGE;
-		int cHit_last = cHit_first + HIT_PER_PAGE - 1;
-		// 统计缓存需要的条目数
-		int cache_first = 0;
-		int cache_last = 0;
-		if ((cHit_first % SearchResult.CACHED_RESULT_COUNT) < (SearchResult.CACHED_RESULT_COUNT / 2)) {
-			// 向前缓存
-			cache_first = (cHit_first / SearchResult.CACHED_RESULT_COUNT - 1)
-					* SearchResult.CACHED_RESULT_COUNT;
-		} else {
-			// 向后缓存
-			cache_first = (cHit_first / SearchResult.CACHED_RESULT_COUNT)
-					* SearchResult.CACHED_RESULT_COUNT;
-		}
-		cache_last = cache_first + SearchResult.CACHED_RESULT_COUNT * 2 - 1;
-
-		try {
 			switch (request.searchType) {
 			case SearchRequest.REQUEST_SEARCHTYPE_CONTINUE: {// 继续搜索
 
 				break;
 			}
 			case SearchRequest.REQUEST_SEARCHTYPE_NEW: {// 新建搜索
+				// 计算搜索最大需求的页数
+				int targetPage = request.jumpToPage;
+				// 计算要构建目标页面需要的hit的编号范围
+				int cHit_first = (targetPage - 1) * HIT_PER_PAGE;
+				// int cHit_last = cHit_first + HIT_PER_PAGE - 1;
+				// 统计缓存需要的条目数
+				int cache_first = 0;
+				int cache_last = 0;
+				if ((cHit_first % SearchResult.CACHED_RESULT_COUNT) < (SearchResult.CACHED_RESULT_COUNT / 2)) {
+					// 向前缓存
+					cache_first = (cHit_first
+							/ SearchResult.CACHED_RESULT_COUNT - 1)
+							* SearchResult.CACHED_RESULT_COUNT;
+				} else {
+					// 向后缓存
+					cache_first = (cHit_first / SearchResult.CACHED_RESULT_COUNT)
+							* SearchResult.CACHED_RESULT_COUNT;
+				}
+				cache_last = cache_first + SearchResult.CACHED_RESULT_COUNT * 2
+						- 1;// 即为需要检索到的条目数
+
+				TopDocs results = indexSearcher.search(query, cache_last + 1);// 检索
+				// 验证结果数量
+				newResult.totalResults = results.totalHits;
+				newResult.totalPages = (int) Math
+						.ceil((double) newResult.totalResults / HIT_PER_PAGE);
+				if (newResult.totalPages < request.jumpToPage) {// 请求的页面数小于总数
+					targetPage = newResult.totalPages;
+					// 重新计算缓存页数
+					cHit_first = (targetPage - 1) * HIT_PER_PAGE;
+					if ((cHit_first % SearchResult.CACHED_RESULT_COUNT) < (SearchResult.CACHED_RESULT_COUNT / 2)) {
+						// 向前缓存
+						cache_first = (cHit_first
+								/ SearchResult.CACHED_RESULT_COUNT - 1)
+								* SearchResult.CACHED_RESULT_COUNT;
+					} else {
+						// 向后缓存
+						cache_first = (cHit_first / SearchResult.CACHED_RESULT_COUNT)
+								* SearchResult.CACHED_RESULT_COUNT;
+					}
+					cache_last = cache_first + SearchResult.CACHED_RESULT_COUNT
+							* 2 - 1;
+				}
+				// 验证缓存上下限
+				int cache_offset = 0;
+				if (cache_first < 0) {
+					cache_offset = -cache_first;
+					cache_first = 0;
+				}
+				if (cache_last > newResult.totalResults)
+					cache_last = newResult.totalResults - 1;
+
+				// 清空可能存在的结果
 				newResult.documents_forward.clear();
 				newResult.documents_afterward.clear();
-				results = indexSearcher.search(query, cache_last);
 				// 缓存记录
-				if (cache_first >= 0) {
-					for (int i = 0; i < SearchResult.CACHED_RESULT_COUNT; i++) {
-						if (i + cache_first >= results.scoreDocs.length)
-							break;
-						ResultDocument rd = hit2Result(results.scoreDocs[i
-								+ cache_first], highlighter);
-						if (rd == null) {
-							return null;
-						}
-						newResult.documents_forward.add(rd);
-						newResult.lastResult_hitnum = i + cache_first;
-					}
-				}
-				for (int i = SearchResult.CACHED_RESULT_COUNT; i < SearchResult.CACHED_RESULT_COUNT * 2; i++) {
-					if (i + cache_first >= results.scoreDocs.length)
-						break;
-					ResultDocument rd = hit2Result(results.scoreDocs[i
-							+ cache_first], highlighter);
+				for (int i = cache_first; i <= cache_last; i++) {
+					ResultDocument rd = hit2Result(results.scoreDocs[i],
+							highlighter);
 					if (rd == null) {
 						return null;
 					}
-					newResult.documents_afterward.add(rd);
-					newResult.lastResult_hitnum = i + cache_first;
+					int _pos = i - cache_first + cache_offset;
+					if (_pos >= SearchResult.CACHED_RESULT_COUNT) {
+						newResult.documents_afterward.add(rd);
+					} else {
+						newResult.documents_forward.add(rd);
+					}
 				}
+
+				newResult.lastResult_hitnum = results.scoreDocs.length;
 				if (results.scoreDocs.length != 0)
 					newResult.lastResult = results.scoreDocs[results.scoreDocs.length - 1];
-				newResult.firstHitNum = cHit_first - cache_first;
+				newResult.firstHitNum = cHit_first - cache_first + cache_offset;
 				newResult.currentPage = targetPage;
 				break;
 			}
 			}
+			Date end = new Date();
+			newResult.totalMillisecond = end.getTime() - start.getTime();
+			return newResult;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
 		}
-
-		Date end = new Date();
-		newResult.totalMillisecond = end.getTime() - start.getTime();
-
-		return newResult;
+		return null;
 	}
 
 	public ResultDocument hit2Result(ScoreDoc hit, Highlighter highlighter) {
