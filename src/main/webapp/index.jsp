@@ -126,7 +126,14 @@ body,div,p,ul,li,form,h1,h2 {
 			href="http://page.renren.com/601428879">人人主页</a>
 
 	</div>
-
+	<% if (searchResult == null) {
+		for(int i = 0; i < 7; i++){
+				%>
+	<br />
+				<%
+			}
+		}
+		%>
 	<div align="center">
 		<img src="./images/ftp.jpg">
 	</div>
@@ -168,7 +175,7 @@ body,div,p,ul,li,form,h1,h2 {
 			<%
 				} else {
 			%>
-			<a>共找到<font color="#FF0000"><%=searchResult.totalResults%></font>条结果，耗時&nbsp;<%=searchResult.totalMillisecond %>&nbsp;毫秒</a>
+			<a>共找到<font color="#FF0000"><%=searchResult.totalResults%></font>条结果，耗时&nbsp;<%=searchResult.totalMillisecond %>&nbsp;毫秒</a>
 			<%
 				}
 			%>
@@ -221,10 +228,15 @@ body,div,p,ul,li,form,h1,h2 {
 		}
 	%>
 	<%
+		}else{
+			for(int i = 0; i < 10; i++){
+				%>
+	<br />
+				<%
+			}
 		}
 	%>
 
-	<br />
 	<br />
 	<br />
 	<br />
@@ -241,6 +253,10 @@ body,div,p,ul,li,form,h1,h2 {
 		<p class="author">
 			站长邮箱&nbsp;:&nbsp;<a href="mailto://jnccftp@nuaa.edu.cn">jnccftp@nuaa.edu.cn</a>
 		</p>
+		<br />
+		<br />
+		<br />
+		<br />
 	</div>
 
 </body>

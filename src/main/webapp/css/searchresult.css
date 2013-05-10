@@ -1,14 +1,11 @@
 .highlight {
 	background: yellow;
-	color: #CC0033; {
-	color: black
-}
-
+	color: #CC0033; 
 }
 
 .resheader{
 width:100%;
-height:90px;
+height:35px;
 border-bottom-style:double;
 border-bottom-color:#999999;
 }
