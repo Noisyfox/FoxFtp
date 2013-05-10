@@ -59,6 +59,8 @@ public class SearchFtp extends HttpServlet {
 	QueryParser isDirParser = new QueryParser(Version.LUCENE_42,
 			FileIndexer.FIELD_ISDIR, analyzer);
 
+	String url_prefix = null;
+
 	private void doCleanUp() {
 		synchronized (indexPrepareSync) {
 			if (indexReader != null) {
@@ -94,6 +96,9 @@ public class SearchFtp extends HttpServlet {
 
 			Properties sp = ServiceStatuesUtil
 					.getServiceStatues(getServletContext());
+			url_prefix = sp.getProperty(ServiceStatuesUtil.STATUES_URL_PREFIX,
+					"").trim();
+
 			String indexPath = sp.getProperty(
 					ServiceStatuesUtil.STATUES_INDEX_PATH, "").trim();
 
@@ -310,7 +315,7 @@ public class SearchFtp extends HttpServlet {
 				BooleanQuery bQuery = new BooleanQuery();
 				bQuery.add(fQuery, BooleanClause.Occur.MUST);
 				bQuery.add(tQuery, BooleanClause.Occur.MUST);
-				query = tQuery;
+				query = bQuery;
 				break;
 			}
 			case SearchRequest.REQUEST_FILETYPE_DIR: {
@@ -318,7 +323,7 @@ public class SearchFtp extends HttpServlet {
 				BooleanQuery bQuery = new BooleanQuery();
 				bQuery.add(fQuery, BooleanClause.Occur.MUST);
 				bQuery.add(tQuery, BooleanClause.Occur.MUST);
-				query = tQuery;
+				query = bQuery;
 				break;
 			}
 			}
@@ -391,6 +396,8 @@ public class SearchFtp extends HttpServlet {
 				// 缓存记录
 				if (cache_first >= 0) {
 					for (int i = 0; i < SearchResult.CACHED_RESULT_COUNT; i++) {
+						if (i + cache_first >= results.scoreDocs.length)
+							break;
 						ResultDocument rd = hit2Result(results.scoreDocs[i
 								+ cache_first], highlighter);
 						if (rd == null) {
@@ -439,7 +446,11 @@ public class SearchFtp extends HttpServlet {
 			// if (_fs == null)
 			// _fs = "0";
 			rd.fileSize = Long.valueOf(doc.get(FileIndexer.FIELD_FILESIZE));
-			rd.url = doc.get(FileIndexer.FIELD_PATH);
+			rd.url = Util.packUrlString(doc.get(FileIndexer.FIELD_PATH));
+			if (!url_prefix.isEmpty()) {
+				rd.url = url_prefix + rd.url;
+			}
+
 			rd.isDir = Boolean.valueOf(doc.get(FileIndexer.FIELD_ISDIR));
 
 			TokenStream tokenStream = analyzer.tokenStream(

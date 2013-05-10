@@ -55,7 +55,8 @@ java.util.Properties
 			requestAdmin({
 				request : 'updsettings',
 				ftpdir : $("#ftpdir").val(),
-				indexdir : $("#indexdir").val()
+				indexdir : $("#indexdir").val(),
+				urlprefix : $("#urlprefix").val()
 			}, function(result) {
 				addCookie("requireStatus", result, -1);
 				window.location.reload();
@@ -103,11 +104,14 @@ java.util.Properties
 	<a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上次归档统计时间：<%=serviceStatues.getProperty(
 						ServiceStatuesUtil.STATUES_LAST_DOC_TIME, "NULL")%></a>
 	<br />
-	<a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ftp归档目录：<%=serviceStatues.getProperty(
+	<a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ftp&nbsp;归档目录：<%=serviceStatues.getProperty(
 						ServiceStatuesUtil.STATUES_FTP_PATH, "NULL")%></a>
 	<br />
-	<a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ftp索引目录：<%=serviceStatues.getProperty(
+	<a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ftp&nbsp;索引目录：<%=serviceStatues.getProperty(
 						ServiceStatuesUtil.STATUES_INDEX_PATH, "NULL")%></a>
+	<br />
+	<a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ftp&nbsp;URL前缀：&nbsp;<%=serviceStatues.getProperty(
+						ServiceStatuesUtil.STATUES_URL_PREFIX, "NULL")%></a>
 	<br />
 	<%
 		} else {
@@ -128,6 +132,11 @@ java.util.Properties
 	<input name="indexdir" id="indexdir"
 		value="<%=serviceStatues != null ? serviceStatues.getProperty(
 					ServiceStatuesUtil.STATUES_INDEX_PATH, "") : ""%>" />
+	<br />
+	<a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设置URL前缀：&nbsp;</a>
+	<input name="urlprefix" id="urlprefix"
+		value="<%=serviceStatues != null ? serviceStatues.getProperty(
+					ServiceStatuesUtil.STATUES_URL_PREFIX, "") : ""%>" />
 	<br />
 	<a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<button onclick="updateSettings()">

@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -188,5 +190,75 @@ public class Util {
 		originStr = originStr.replace("\"", "&#34;");
 
 		return originStr;
+	}
+
+	/*
+	 * 将一个含有非ascii字符的url字符串转换为gbk编码
+	 */
+	public static String packUrlString(String s) {
+		// StringBuffer sb = new StringBuffer();
+		// for (int i = 0; i < s.length(); i++) {
+		// char c = s.charAt(i);
+		// if (c >= 0 && c <= 255) {
+		// sb.append(c);
+		// } else {
+		// byte[] b;
+		// try {
+		// b = String.valueOf(c).getBytes("gbk");
+		// } catch (Exception ex) {
+		// System.out.println(ex);
+		// b = new byte[0];
+		// }
+		// for (int j = 0; j < b.length; j++) {
+		// int k = b[j];
+		// if (k < 0)
+		// k += 256;
+		// sb.append("%" + Integer.toHexString(k).toUpperCase());
+		// }
+		// }
+		// }
+		// String _tmp = sb.toString();//.replace("%", "%25");
+		// return _tmp;
+		// StringBuffer sb = new StringBuffer();
+		// int _dd = s.indexOf("//");
+		// String _prefix = "";
+		// if (_dd != -1) {
+		// _prefix = s.substring(0, _dd + 2);
+		// s = s.substring(_dd + 2);
+		// }
+		// sb.append(_prefix);
+		// String eles[] = s.split("/");
+		// try {
+		// for (int i = 0; i < eles.length - 1; i++) {
+		// eles[i] = URLEncoder.encode(eles[i], "gbk");
+		// sb.append(eles[i]);
+		// sb.append("/");
+		// }
+		// eles[eles.length - 1] = URLEncoder.encode(eles[eles.length - 1],
+		// "gbk");
+		// sb.append(eles[eles.length - 1]);
+		// } catch (UnsupportedEncodingException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// String _tmp = sb.toString().replace("+", "%20");
+		// return _tmp;
+
+		try {
+			s = URLEncoder.encode(s, "gbk");
+			s = s.replace("%3a", ":");
+			s = s.replace("%2f", "/");
+			s = s.replace("%3A", ":");
+			s = s.replace("%2F", "/");
+			s = s.replace("%5c", "\\");
+			s = s.replace("%5C", "\\");
+			s = s.replace("+", "%20");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return s;
+
 	}
 }

@@ -57,7 +57,7 @@ body,div,p,ul,li,form,h1,h2 {
 	width: 107px;
 	height: 35px;
 	opacity: 0;
-	filter: alpha(opacity =           0);
+	filter: alpha(opacity =             0);
 	cursor: pointer;
 }
 
@@ -162,45 +162,53 @@ body,div,p,ul,li,form,h1,h2 {
 			<%
 				if (searchResult.totalResults == 0) {
 			%>
-			抱歉，没有找到与<font color="#CC0000"><%=Util.packHtmlString("\"") + lInput
-							+ Util.packHtmlString("\"")%></font>相关的文件。
+			<a>抱歉，没有找到与<font color="#CC0000"><%=Util.packHtmlString("\"") + lInput
+							+ Util.packHtmlString("\"")%></font>相关的文件。</a>
 			<%
 				} else {
 			%>
-			共找到<font color="#FF0000"><%=searchResult.totalResults%></font>条结果
+			<a>共找到<font color="#FF0000"><%=searchResult.totalResults%></font>条结果，耗時&nbsp;<%=searchResult.totalMillisecond %>&nbsp;毫秒</a>
 			<%
 				}
 			%>
 		</div>
 	</div>
-
+	<%
+		if (searchResult.totalResults != 0) {
+	%>
 	<div class="content">
 		<table id="result" cellpadding="0" cellspacing="0" width="600">
+			<tr>
+					<th class="resultsHeader">文件名</th>
+					<th class="resultsHeader">大小</th>
+				</tr>
 			<%
 				for (int i = 0; i < SearchFtp.HIT_PER_PAGE; i++) {
-						ResultDocument rd = null;
-						if (i + searchResult.firstHitNum < SearchResult.CACHED_RESULT_COUNT) {
-							if (i + searchResult.firstHitNum > searchResult.documents_forward
-									.size() - 1)
+							ResultDocument rd = null;
+							if (i + searchResult.firstHitNum < SearchResult.CACHED_RESULT_COUNT) {
+								if (i + searchResult.firstHitNum > searchResult.documents_forward
+										.size() - 1)
+									break;
+								rd = searchResult.documents_forward.get(i
+										+ searchResult.firstHitNum);
+							} else if (i + searchResult.firstHitNum < SearchResult.CACHED_RESULT_COUNT * 2) {
+								if (i + searchResult.firstHitNum
+										- SearchResult.CACHED_RESULT_COUNT > searchResult.documents_afterward
+										.size() - 1)
+									break;
+								rd = searchResult.documents_afterward.get(i
+										+ searchResult.firstHitNum
+										- SearchResult.CACHED_RESULT_COUNT);
+							} else
 								break;
-							rd = searchResult.documents_forward.get(i
-									+ searchResult.firstHitNum);
-						} else if (i + searchResult.firstHitNum < SearchResult.CACHED_RESULT_COUNT * 2) {
-							if (i + searchResult.firstHitNum
-									- SearchResult.CACHED_RESULT_COUNT > searchResult.documents_afterward
-									.size() - 1)
-								break;
-							rd = searchResult.documents_afterward.get(i
-									+ searchResult.firstHitNum
-									- SearchResult.CACHED_RESULT_COUNT);
-						} else
-							break;
 			%><tbody>
 				<tr class="resultsRow" align="left">
-					<td class="td"><%=rd.highlightString%></td>
-					<td>Location</td>
-					<td>Salary</td>
-					<td>Description</td>
+					<td class="td">
+						<a href="<%=rd.url%>">
+							<%=rd.highlightString%>
+						</a>
+					</td>
+					<td><%=rd.fileSize + "byte"%></td>
 				</tr>
 			</tbody>
 			<%
@@ -208,6 +216,9 @@ body,div,p,ul,li,form,h1,h2 {
 			%>
 		</table>
 	</div>
+	<%
+		}
+	%>
 	<%
 		}
 	%>

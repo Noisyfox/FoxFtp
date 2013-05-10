@@ -24,6 +24,7 @@ public class AdminSrv extends HttpServlet {
 	public static final String ADMIN_ARGUMENT_REQUEST = "request";
 	public static final String ADMIN_ARGUMENT_FTPDIR = "ftpdir";
 	public static final String ADMIN_ARGUMENT_INDEXDIR = "indexdir";
+	public static final String ADMIN_ARGUMENT_URLPREFIX = "urlprefix";
 	public static final String ADMIN_REQUEST_UPDATESETTINGS = "updsettings";
 	public static final String ADMIN_REQUEST_REINDEX = "reindex";
 
@@ -103,6 +104,12 @@ public class AdminSrv extends HttpServlet {
 			if (!path.isEmpty()) {
 				ServiceStatuesUtil.saveServiceStatues(getServletContext(),
 						ServiceStatuesUtil.STATUES_INDEX_PATH, path);
+			}
+			path = completedFormFields.getProperty(ADMIN_ARGUMENT_URLPREFIX, "")
+					.trim();
+			if (!path.isEmpty()) {
+				ServiceStatuesUtil.saveServiceStatues(getServletContext(),
+						ServiceStatuesUtil.STATUES_URL_PREFIX, path);
 			}
 		} else if (adminRequest.equals(ADMIN_REQUEST_REINDEX)) {
 			// 重建索引
