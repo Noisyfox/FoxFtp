@@ -10,6 +10,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -260,5 +265,36 @@ public class Util {
 
 		return s;
 
+	}
+
+	public static final Properties map2Properties(Map<String, String> map) {
+		if (map == null)
+			return null;
+		Properties prop = new Properties();
+		Set<Entry<String, String>> dataSet = map.entrySet();
+		for (Entry<String, String> entry : dataSet) {
+			String key = entry.getKey();
+			String value = entry.getValue();
+			if (value == null)
+				continue;
+			prop.setProperty(key, value);
+		}
+		return prop;
+	}
+
+	public static final Map<String, String> properties2Map(Properties prop) {
+		if (prop == null)
+			return null;
+
+		Map<String, String> map = new HashMap<String, String>();
+		Set<String> keys = prop.stringPropertyNames();
+		for (String key : keys) {
+			String value = prop.getProperty(key);
+			if (value == null)
+				continue;
+			map.put(key, value);
+		}
+
+		return map;
 	}
 }

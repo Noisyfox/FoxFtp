@@ -91,26 +91,31 @@ public class AdminSrv extends HttpServlet {
 		}
 
 		if (adminRequest.equals(ADMIN_REQUEST_UPDATESETTINGS)) {
+			Properties currentProp = ServiceStatuesUtil
+					.getServiceStatues(getServletContext());
+
 			String path = completedFormFields.getProperty(
 					ADMIN_ARGUMENT_FTPDIR, "").trim();
 			path = new File(path).getAbsolutePath();
 			if (!path.isEmpty()) {
-				ServiceStatuesUtil.saveServiceStatues(getServletContext(),
-						ServiceStatuesUtil.STATUES_FTP_PATH, path);
+				currentProp.setProperty(ServiceStatuesUtil.STATUES_FTP_PATH,
+						path);
 			}
 			path = completedFormFields.getProperty(ADMIN_ARGUMENT_INDEXDIR, "")
 					.trim();
 			path = new File(path).getAbsolutePath();
 			if (!path.isEmpty()) {
-				ServiceStatuesUtil.saveServiceStatues(getServletContext(),
-						ServiceStatuesUtil.STATUES_INDEX_PATH, path);
+				currentProp.setProperty(ServiceStatuesUtil.STATUES_INDEX_PATH,
+						path);
 			}
-			path = completedFormFields.getProperty(ADMIN_ARGUMENT_URLPREFIX, "")
-					.trim();
+			path = completedFormFields
+					.getProperty(ADMIN_ARGUMENT_URLPREFIX, "").trim();
 			if (!path.isEmpty()) {
-				ServiceStatuesUtil.saveServiceStatues(getServletContext(),
-						ServiceStatuesUtil.STATUES_URL_PREFIX, path);
+				currentProp.setProperty(ServiceStatuesUtil.STATUES_URL_PREFIX,
+						path);
 			}
+			ServiceStatuesUtil.saveServiceStatues(getServletContext(),
+					currentProp);
 		} else if (adminRequest.equals(ADMIN_REQUEST_REINDEX)) {
 			// 重建索引
 			Date start = new Date();

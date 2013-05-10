@@ -3,7 +3,7 @@
 
 <properties>
 
-	<entry key="DB_USERNAME">root</entry>
+	<entry key="DB_USERNAME">foxftp</entry>
 	<entry key="DB_PASSWD"></entry>
 	<entry key="DB_URL">localhost</entry>
 	<entry key="DB_NAME">foxftp</entry>

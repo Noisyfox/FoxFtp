@@ -116,20 +116,22 @@ public class FileIndexer {
 		}
 
 		// 更新服务器状态
-		ServiceStatuesUtil.saveServiceStatues(_context,
-				ServiceStatuesUtil.STATUES_FILE_DIR, String.valueOf(_dirCount));
-		ServiceStatuesUtil.saveServiceStatues(_context,
-				ServiceStatuesUtil.STATUES_FILE_FILE,
+		Properties currentProp = ServiceStatuesUtil.getServiceStatues(_context);
+
+		currentProp.setProperty(ServiceStatuesUtil.STATUES_FILE_DIR,
+				String.valueOf(_dirCount));
+		currentProp.setProperty(ServiceStatuesUtil.STATUES_FILE_FILE,
 				String.valueOf(_fileCount));
-		ServiceStatuesUtil.saveServiceStatues(_context,
-				ServiceStatuesUtil.STATUES_FILE_TOTAL,
+		currentProp.setProperty(ServiceStatuesUtil.STATUES_FILE_TOTAL,
 				String.valueOf(_fileCount + _dirCount));
 
 		DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
-		ServiceStatuesUtil.saveServiceStatues(_context,
-				ServiceStatuesUtil.STATUES_LAST_DOC_TIME,
+		currentProp.setProperty(ServiceStatuesUtil.STATUES_LAST_DOC_TIME,
 				sdf.format(new Date()));
 
+		if (!ServiceStatuesUtil.saveServiceStatues(_context, currentProp)) {
+			return "更新服务器状态失败！";
+		}
 		return "";
 	}
 
