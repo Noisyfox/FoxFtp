@@ -104,8 +104,11 @@ body,div,p,ul,li,form,h1,h2 {
 }
 </style>
 </head>
-
-<body onLoad="document.forms.inputform.textbox.focus()">
+<% 
+	SearchResult searchResult = (SearchResult) request
+		.getAttribute("searchResult");%>
+		
+<body <%if(searchResult == null || searchResult.totalResults == 0){ %>onLoad="document.forms.inputform.keyword.focus()"<%} %>>
 	<p style="border-bottom: 1px solid #F0F0F0; text-align: right;">
 		<a class=downlist id=ftp_more onMouseOver="MM_safe_mousein(1)"
 			onmouseout="MM_safe_mouseout(this,event,1)">FTP相关板块 </a>|<a
@@ -152,8 +155,6 @@ body,div,p,ul,li,form,h1,h2 {
 		</form>
 	</div>
 	<%
-		SearchResult searchResult = (SearchResult) request
-				.getAttribute("searchResult");
 		if (searchResult != null) {
 	%>
 	<div class="resheader"></div>
