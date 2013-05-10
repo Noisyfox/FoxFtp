@@ -167,7 +167,7 @@ public class ServiceStatuesUtil {
 
 			String sql = sb.toString();
 
-			int rs = statement.executeUpdate(sql);
+			statement.executeUpdate(sql);
 
 			// 如果表空则创建空记录
 			ResultSet rs2 = statement.executeQuery("SELECT * FROM `" + table
@@ -213,7 +213,7 @@ public class ServiceStatuesUtil {
 						.append("' WHERE `").append(table).append("`.`id` = ")
 						.append(id);
 				String sql = sb.toString();
-				int rs = statement.executeUpdate(sql);
+				statement.executeUpdate(sql);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

@@ -258,8 +258,11 @@ public class SearchFtp extends HttpServlet {
 		nowRequest.fileType = targetFileType;
 
 		// 开始搜索
+		Date start = new Date();
 		SearchResult searchResult = searchFile(lastResult, nowRequest);
+		Date end = new Date();
 		if (searchResult != null) {
+			searchResult.totalMillisecond = end.getTime() - start.getTime();
 			currentSession.setAttribute("savedResult", searchResult);
 			request.setAttribute("searchResult", searchResult);
 			request.setAttribute("searchMessage",
@@ -286,7 +289,6 @@ public class SearchFtp extends HttpServlet {
 
 	private SearchResult searchFile(SearchResult lastResult,
 			SearchRequest request) {
-		Date start = new Date();
 		if (!getReadyForSearch()) {
 			return null;
 		}
@@ -349,8 +351,73 @@ public class SearchFtp extends HttpServlet {
 
 			switch (request.searchType) {
 			case SearchRequest.REQUEST_SEARCHTYPE_CONTINUE: {// 继续搜索
+				int targetPage = Math.min(request.jumpToPage,
+						newResult.totalPages);
+				newResult.currentPage = targetPage;
+				// 先计算此次请求需要的记录位置
+				int cHit_first = (targetPage - 1) * HIT_PER_PAGE;
+				// 统计缓存需要的条目数
+				int cache_first = 0;
+				int cache_last = 0;
+				if ((cHit_first % SearchResult.CACHED_RESULT_COUNT) < (SearchResult.CACHED_RESULT_COUNT / 2)) {
+					// 向前缓存
+					cache_first = (cHit_first
+							/ SearchResult.CACHED_RESULT_COUNT - 1)
+							* SearchResult.CACHED_RESULT_COUNT;
+				} else {
+					// 向后缓存
+					cache_first = (cHit_first / SearchResult.CACHED_RESULT_COUNT)
+							* SearchResult.CACHED_RESULT_COUNT;
+				}
+				cache_last = cache_first + SearchResult.CACHED_RESULT_COUNT * 2
+						- 1;// 即为需要检索到的条目数
+				// 验证缓存上下限
+				int cache_offset = 0;
+				if (cache_first < 0) {
+					cache_offset = -cache_first;
+					cache_first = 0;
+				}
+				if (cache_last > newResult.totalResults - 1)
+					cache_last = newResult.totalResults - 1;
+				// 验证新的区间是否和老的区间有交叉
+				// if (cache_last < newResult.firstResult_hitnum
+				// || cache_first > newResult.lastResult_hitnum) {
+				// // 没有交集
+				// } else {
+				// // 有交集
+				// // 判断集合是否相等
+				if (cache_first == newResult.firstResult_hitnum
+						&& cache_last == newResult.lastResult_hitnum) {
+					// 计算好偏移量(firstHitNum)直接返回
+					newResult.firstHitNum = cHit_first - cache_first
+							+ cache_offset;
+					return newResult;
+				} // else {
+				// // 不是完全重合，则可以利用一半缓存
+				// List<ResultDocument> _tmp = newResult.documents_afterward;
+				// newResult.documents_afterward = newResult.documents_forward;
+				// newResult.documents_forward = _tmp;
+				// ScoreDoc _tmp2 = newResult.middleResult;
+				// newResult.middleResult = newResult.lastResult;
+				// newResult.lastResult = _tmp2;
+				// if (cache_first < newResult.firstResult_hitnum) {
+				// // 后半部分重合
+				// newResult.documents_forward.clear();
+				// newResult.middleResult = null;
+				// if(newResult.documents_afterward.size() <
+				// SearchResult.CACHED_RESULT_COUNT){
+				// //没有填满，则必然是总量不足
+				// }
+				// if (newResult.firstResult_hitnum == 0) {// 前面没了
+				//
+				// }
+				// } else {
+				// // 前半部分重合
+				// }
+				// }
+				// }
 
-				break;
+				// break;
 			}
 			case SearchRequest.REQUEST_SEARCHTYPE_NEW: {// 新建搜索
 				// 计算搜索最大需求的页数
@@ -402,7 +469,7 @@ public class SearchFtp extends HttpServlet {
 					cache_offset = -cache_first;
 					cache_first = 0;
 				}
-				if (cache_last > newResult.totalResults)
+				if (cache_last > newResult.totalResults - 1)
 					cache_last = newResult.totalResults - 1;
 
 				// 清空可能存在的结果
@@ -423,16 +490,21 @@ public class SearchFtp extends HttpServlet {
 					}
 				}
 
-				newResult.lastResult_hitnum = results.scoreDocs.length;
+				newResult.offset_hitnum = cache_offset;
+				newResult.firstResult_hitnum = cache_first;
+				newResult.lastResult_hitnum = cache_last;
 				if (results.scoreDocs.length != 0)
 					newResult.lastResult = results.scoreDocs[results.scoreDocs.length - 1];
+				if (results.scoreDocs.length >= cache_first - cache_offset
+						+ SearchResult.CACHED_RESULT_COUNT) {
+					newResult.middleResult = results.scoreDocs[cache_first
+							- cache_offset + SearchResult.CACHED_RESULT_COUNT];
+				}
 				newResult.firstHitNum = cHit_first - cache_first + cache_offset;
 				newResult.currentPage = targetPage;
 				break;
 			}
 			}
-			Date end = new Date();
-			newResult.totalMillisecond = end.getTime() - start.getTime();
 			return newResult;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

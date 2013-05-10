@@ -15,7 +15,10 @@ public class SearchResult {
 	public int currentPage = 0;
 	public int firstHitNum = 0;
 
+	public ScoreDoc middleResult = null;
 	public ScoreDoc lastResult = null;
+	public int offset_hitnum = 0;
+	public int firstResult_hitnum = 0;
 	public int lastResult_hitnum = 0;
 	public List<ResultDocument> documents_forward = new LinkedList<ResultDocument>();
 	public List<ResultDocument> documents_afterward = new LinkedList<ResultDocument>();
