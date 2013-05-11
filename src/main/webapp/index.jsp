@@ -142,7 +142,15 @@
 							<%="位于:" + rd.displayFatherUrl%>
 						</a>
 					</td>
-					<td align="right"><%=Util.packFileSizeString(rd.fileSize)%></td>
+					<%if(rd.isDir){ %>
+					<td align="center">
+						--
+					</td>
+					<%}else{ %>
+					<td align="right">
+						<%=Util.packFileSizeString(rd.fileSize)%>
+					</td>
+					<%} %>
 				</tr>
 			</tbody>
 			<%
