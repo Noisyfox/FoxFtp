@@ -55,7 +55,7 @@
 		}
 	%>
 	<div align="center">
-		<img src="./images/ftp.jpg">
+		<img src="./images/ftp.jpg"/>
 	</div>
 	<%
 		//载入之前的内容
@@ -133,9 +133,15 @@
 								break;
 			%><tbody>
 				<tr class="resultsRow">
-					<td class="td" align="left"><a href="<%=rd.url%>"> <%=rd.highlightString%>
-					</a><br /> <a class="dir" href="<%=rd.fatherUrl%>"> <%="位于:" + rd.displayFatherUrl%>
-					</a></td>
+					<td class="td" align="left">
+						<a href="<%=rd.url%>">
+							<img src="<%=rd.isDir?"./images/diritem.gif":"./images/file.gif"%>"/>
+							<%=rd.highlightString%>
+						</a><br />
+						<a class="dir" href="<%=rd.fatherUrl%>">
+							<%="位于:" + rd.displayFatherUrl%>
+						</a>
+					</td>
 					<td align="right"><%=Util.packFileSizeString(rd.fileSize)%></td>
 				</tr>
 			</tbody>
