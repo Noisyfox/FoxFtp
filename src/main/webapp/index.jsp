@@ -8,23 +8,28 @@
 %>
 <html>
 
+<%
+	SearchResult searchResult = (SearchResult) request
+			.getAttribute("searchResult");
+%>
+
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>计算中心FTP搜索 powered by FoxFtp</title>
 <link rel="icon" href="images/ftp_icon.ico" type="image/x-icon" />
 <link rel="shortcut icon" href="images/ftp_icon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="css/menu.css" />
-<link rel="stylesheet" href="css/searchresult.css" />
 <link rel="stylesheet" href="css/main.css" />
 
 <script type="text/javascript" src="js/jquery-1.6.3.min.js"></script>
 <script type="text/javascript" src="js/search.js"></script>
 <script type="text/javascript" src="js/menu.js"></script>
+
+<%if(searchResult!=null){ %>
+	<link rel="stylesheet" href="css/searchresult.css" />
+	<script type="text/javascript" src="js/result.js"></script>
+<%} %>
 </head>
-<%
-	SearchResult searchResult = (SearchResult) request
-			.getAttribute("searchResult");
-%>
 
 <body <%if (searchResult == null || searchResult.totalResults == 0) {%>
 	onLoad="document.forms.inputform.keyword.focus()" <%}%>>
@@ -142,7 +147,7 @@
 					<td class="td" align="left">
 						<a href="<%=rd.url%>">
 							<img src="<%=rd.isDir?"./images/diritem.gif":"./images/file.gif"%>"/>
-							<%=rd.highlightString%>
+							<%=rd.displayName%>
 						</a><br />
 						<a class="dir" href="<%=rd.fatherUrl%>">
 							<%="位于:" + rd.displayFatherUrl%>

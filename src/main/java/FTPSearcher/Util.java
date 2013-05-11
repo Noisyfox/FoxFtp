@@ -307,6 +307,10 @@ public class Util {
 			k++;
 			_s /= 1024.0;
 		}
-		return String.format("%.1f %s", _s, sizeUnit[k]);
+		if (k == 0) {
+			return String.format("%d B", sizeInByte);
+		} else {
+			return String.format("%.1f %s", _s, sizeUnit[k]);
+		}
 	}
 }
