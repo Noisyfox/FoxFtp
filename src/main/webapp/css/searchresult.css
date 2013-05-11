@@ -76,7 +76,7 @@
 .paging {
 	position: relative;
 	left: 170px;
-	width: 560px;
+	width: auto;
 	height: 25px;
 	top: 10px;
 }

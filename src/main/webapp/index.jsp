@@ -173,16 +173,19 @@
 					if(searchResult.currentPage <= 4){
 						first = 1;
 						last = 10;
-					}else if(searchResult.totalPages - searchResult.currentPage <= 6){
-						first = searchResult.totalPages - 10;
+					}else if(searchResult.totalPages - searchResult.currentPage <= 5){
+						first = searchResult.totalPages - 9;
 						last = searchResult.totalPages;
 					}else{
 						first = searchResult.currentPage - 4;
-						last = first + 10;
+						last = first + 9;
 					}
 				}
 		%>
 		<div class="paging">
+		<%if(searchResult.currentPage > 1){ %>
+			<a href="<%="SearchFtp?page="+(searchResult.currentPage-1)+"&keyword="+lInput+"&fileType="+SearchRequest.getFileTypeString(searchResult.currentRequest.fileType)%>">&lt;上一页</a>
+		<%} %>
 		<%if(first != 1){%>
 			<a href="<%="SearchFtp?page=1&keyword="+lInput+"&fileType="+SearchRequest.getFileTypeString(searchResult.currentRequest.fileType)%>">首页</a>
 		<%} %>
@@ -197,6 +200,9 @@
 		%>
 		<%if(last != searchResult.totalPages){%>
 			<a href="<%="SearchFtp?page="+searchResult.totalPages+"&keyword="+lInput+"&fileType="+SearchRequest.getFileTypeString(searchResult.currentRequest.fileType)%>">尾页</a>
+		<%} %>
+		<%if(searchResult.currentPage < searchResult.totalPages){ %>
+			<a href="<%="SearchFtp?page="+(searchResult.currentPage+1)+"&keyword="+lInput+"&fileType="+SearchRequest.getFileTypeString(searchResult.currentRequest.fileType)%>">下一页&gt;</a>
 		<%} %>
 		</div>
 		<%
