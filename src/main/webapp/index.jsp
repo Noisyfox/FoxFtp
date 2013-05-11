@@ -145,11 +145,11 @@
 			%><tbody>
 				<tr class="resultsRow">
 					<td class="td" align="left">
-						<a href="<%=rd.url%>">
+						<a href="<%=rd.url%>" target="_blank">
 							<img src="<%=rd.isDir?"./images/diritem.gif":"./images/file.gif"%>"/>
 							<%=rd.displayName%>
 						</a><br />
-						<a class="dir" href="<%=rd.fatherUrl%>">
+						<a class="dir" href="<%=rd.fatherUrl%>" target="_blank">
 							<%="位于:" + rd.displayFatherUrl%>
 						</a>
 					</td>
