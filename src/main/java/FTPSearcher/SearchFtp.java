@@ -495,7 +495,7 @@ public class SearchFtp extends HttpServlet {
 				newResult.lastResult_hitnum = cache_last;
 				if (results.scoreDocs.length != 0)
 					newResult.lastResult = results.scoreDocs[results.scoreDocs.length - 1];
-				if (results.scoreDocs.length >= cache_first - cache_offset
+				if (results.scoreDocs.length > cache_first - cache_offset
 						+ SearchResult.CACHED_RESULT_COUNT) {
 					newResult.middleResult = results.scoreDocs[cache_first
 							- cache_offset + SearchResult.CACHED_RESULT_COUNT];
