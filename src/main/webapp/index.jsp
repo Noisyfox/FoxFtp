@@ -55,7 +55,13 @@
 		}
 	%>
 	<div align="center">
+		<%
+			if (searchResult == null) {
+		%>
 		<img src="./images/ftp.jpg"/>
+		<%}else{ %>
+		<a href="/"><img src="./images/ftp.jpg" alt="到搜索首页" title="到搜索首页"/></a>
+		<%} %>
 	</div>
 	<%
 		//载入之前的内容
