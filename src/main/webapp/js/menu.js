@@ -55,21 +55,21 @@ function MM_doShowHide(i, arg1, arg2) {
 	}
 }
 
-var iTO = new Array();
+var iTO = [];
 
 function MM_safe_mouseout(obj, e, i) {
 	if (e.currentTarget) {
 		if (e.relatedTarget != obj) {
 			if (obj != e.relatedTarget.parentNode) {
 				iTO[i] = window.setTimeout("MM_doShowHide(" + i
-						+ ", '', 'hide');", "200");
+						+ ", '', 'hide');", 200);
 			}
 		}
 	} else {
 		if (e.toElement != obj) {
 			if (obj != e.toElement.parentNode) {
 				iTO[i] = window.setTimeout("MM_doShowHide(" + i
-						+ ", '', 'hide');", "200");
+						+ ", '', 'hide');", 200);
 			}
 		}
 	}

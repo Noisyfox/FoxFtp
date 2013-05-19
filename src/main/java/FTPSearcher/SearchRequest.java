@@ -27,7 +27,7 @@ public class SearchRequest {
 		jumpToPage = lstRequest.jumpToPage;
 	}
 
-	public static final String getFileTypeString(int type) {
+	public static String getFileTypeString(int type) {
 		switch (type) {
 		case REQUEST_FILETYPE_DIR:
 			return "dir";

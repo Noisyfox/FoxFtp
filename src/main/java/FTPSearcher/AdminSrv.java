@@ -139,8 +139,7 @@ public class AdminSrv extends HttpServlet {
 		}
 
 		msg(out, true, rmsg);
-		return;
-	}
+    }
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse

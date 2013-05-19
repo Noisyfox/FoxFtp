@@ -135,7 +135,7 @@ public class FileIndexer {
 		return "";
 	}
 
-	private final String mkIndex() {
+	private String mkIndex() {
 		System.out.println("Indexing to directory '" + _indexPath + "'...");
 		Directory indexDir = null;
 		IndexWriter iwriter = null;

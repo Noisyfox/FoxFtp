@@ -1,0 +1,27 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="fox:war exploded">
+    <output-path>$PROJECT_DIR$/target/fox</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="fox/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="fox" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: org.apache.geronimo.specs:geronimo-servlet_3.0_spec:1.0" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-core:4.2.1" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-analyzers-common:4.2.1" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-queryparser:4.2.1" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-queries:4.2.1" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-sandbox:4.2.1" />
+          <element id="library" level="project" name="Maven: jakarta-regexp:jakarta-regexp:1.4" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-highlighter:4.2.1" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-memory:4.2.1" />
+          <element id="library" level="project" name="Maven: org.wltea.analyzer.lucene:IKAnalyzer:2012FF_u1" />
+          <element id="library" level="project" name="Maven: org.json:json:20090211" />
+          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.24" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
