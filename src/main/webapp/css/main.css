@@ -54,8 +54,14 @@ body, div, p, ul, li, form, h1, h2 {
     padding-right: 11px;
 }
 
+.footer_r{
+    width:100%;
+    margin-bottom: 0px;
+}
 .footer {
-    font-size: 13px;
+    color: #666666;
+    font-family: arial;
+    font-size: 12px;
     text-align: center;
     position: absolute;
     left: 50%;

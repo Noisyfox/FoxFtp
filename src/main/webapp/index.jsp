@@ -39,7 +39,7 @@
 <p style="border-bottom: 1px solid #F0F0F0; text-align: right;">
     <a class=downlist id=ftp_more onMouseOver="MM_safe_mousein(1)"
        onmouseout="MM_safe_mouseout(this,event,1)">FTP相关板块 </a>|<a
-        class=head href="./management/">FTP管理</a>
+        class=head href="./management/" target="_blank">FTP管理</a>
 </p>
 
 <div id=s_related_menu class=s_menu
@@ -47,11 +47,11 @@
      onMouseOver="MM_safe_mousein(1)"
      onmouseout="MM_safe_mouseout(this,event,1)">
 
-    <a href="http://my.nuaa.edu.cn/forum-206-1.html">FTP讨论区</a> <a
-        href="http://my.nuaa.edu.cn/forum-167-1.html">FTP资源发布区</a> <a
-        href="http://my.nuaa.edu.cn/forum-168-1.html">FTP资源求助区</a> <a
+    <a href="http://my.nuaa.edu.cn/forum-206-1.html" target="_blank">FTP讨论区</a> <a
+        href="http://my.nuaa.edu.cn/forum-167-1.html" target="_blank">FTP资源发布区</a> <a
+        href="http://my.nuaa.edu.cn/forum-168-1.html" target="_blank">FTP资源求助区</a> <a
         class=sep style="overflow: hidden"
-        href="http://page.renren.com/601428879">人人主页</a>
+        href="http://page.renren.com/601428879" target="_blank">人人主页</a>
 
 </div>
 <%
@@ -207,8 +207,8 @@
         <%
             for (int i = first; i <= last; i++) {
                 if (i == searchResult.currentPage) {
-        %>&nbsp;<b><%=i%>
-    </b>&nbsp;<%
+        %>&nbsp;<span style="font-weight: bold;"><%=i%>
+    </span>&nbsp;<%
     } else {
     %><a href="<%="SearchFtp?page="+i+"&keyword="+lInput+"&fileType="+SearchRequest.getFileTypeString(searchResult.currentRequest.fileType)%>"
          class="ah"><%=i%>
@@ -242,24 +242,21 @@
     }
 %>
 
-<br/>
-<br/>
-<br/>
-<br/>
-<hr>
+<div class="footer_r">
+    <br/> <br/><br/>
+    <hr/>
+    <div class="footer">
+        <p>
+            技术支持：<a
+                href="http://my.nuaa.edu.cn/space-uid-171410.html" target="_blank">忆一段往事</a>&nbsp;&amp;&nbsp;<a
+                href="http://my.nuaa.edu.cn/space-uid-339947.html" target="_blank">Noisyfox</a>
+        </p>
 
-<div class="footer">
-    <p class="copy">
-        Copyright&nbsp;@&nbsp;2013&nbsp;<a href="http://jncc.nuaa.edu.cn">计算中心</a>
-        &nbsp;&nbsp;&nbsp;by&nbsp;<a
-            href="http://my.nuaa.edu.cn/space-uid-171410.html">忆一段往事</a>&nbsp;&amp;&nbsp;<a
-            href="http://my.nuaa.edu.cn/space-uid-339947.html">Noisyfox</a>
-    </p>
-
-    <p class="author">
-        站长邮箱&nbsp;:&nbsp;<a href="mailto://jnccftp@nuaa.edu.cn">jnccftp@nuaa.edu.cn</a>
-    </p>
-    <br/> <br/> <br/> <br/>
+        <p>
+            站长邮箱：<a href="mailto://jnccftp@nuaa.edu.cn">jnccftp@nuaa.edu.cn</a>
+        </p>
+        <br/> <br/> <br/> <br/>
+    </div>
 </div>
 
 </body>
