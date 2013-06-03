@@ -125,7 +125,7 @@ public class FileIndexer {
 		currentProp.setProperty(ServiceStatuesUtil.STATUES_FILE_TOTAL,
 				String.valueOf(_fileCount + _dirCount));
 
-		DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
+		DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		currentProp.setProperty(ServiceStatuesUtil.STATUES_LAST_DOC_TIME,
 				sdf.format(new Date()));
 
