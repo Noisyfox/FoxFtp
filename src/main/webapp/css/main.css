@@ -3,6 +3,10 @@ body, div, p, ul, li, form, h1, h2 {
     padding: 0;
 }
 
+img {
+    border: 0;
+}
+
 .td_head {
     background: url("../images/search_1.jpg");
     width: 11px;
@@ -18,6 +22,7 @@ body, div, p, ul, li, form, h1, h2 {
 .inputtext {
     width: 435px;
     border: 1px none;
+    outline-style: none;
 }
 
 .td_search {
@@ -54,10 +59,11 @@ body, div, p, ul, li, form, h1, h2 {
     padding-right: 11px;
 }
 
-.footer_r{
-    width:100%;
+.footer_r {
+    width: 100%;
     margin-bottom: 0px;
 }
+
 .footer {
     color: #666666;
     font-family: arial;

@@ -86,8 +86,8 @@
             <tbody>
             <tr>
                 <td class="td_head"></td>
-                <td class="td_text"><input class="inputtext" name="keyword"
-                                           value="<%=lInput%>"/></td>
+                <td class="td_text"><input type="text" class="inputtext" name="keyword" autocomplete="off"
+                        <%=lInput.isEmpty() ? "" : " value=\"" + lInput + "\" "%>/></td>
                 <td class="td_search">
                     <button class="td_submit" type="submit">
                         <strong>搜索</strong>
