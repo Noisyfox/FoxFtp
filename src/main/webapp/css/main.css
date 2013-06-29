@@ -8,13 +8,13 @@ img {
 }
 
 .td_head {
-    background: url("../images/search_1.jpg");
+    background: url(../images/search_1.png);
     width: 11px;
     height: 35px;
 }
 
 .td_text {
-    background: url("../images/search_2.jpg");
+    background: url(../images/search_2.png);
     width: 438px;
     height: 35px;
 }
@@ -26,7 +26,7 @@ img {
 }
 
 .td_search {
-    background: url("../images/search_3_1.jpg");
+    background: url(../images/search_3_1.png);
     width: 107px;
     height: 35px;
 }

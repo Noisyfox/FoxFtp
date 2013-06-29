@@ -67,9 +67,9 @@
     <%
         if (searchResult == null) {
     %>
-    <img src="./images/ftp.jpg" alt=""/>
+    <img src="./images/ftp.png" alt=""/>
     <%} else { %>
-    <a href="/"><img src="./images/ftp.jpg" alt="到搜索首页" title="到搜索首页"/></a>
+    <a href="/"><img src="./images/ftp.png" alt="到搜索首页" title="到搜索首页"/></a>
     <%} %>
 </div>
 <%
