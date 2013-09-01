@@ -4,7 +4,25 @@
 
 <web-app>
 	<display-name>Fox FTP Searcher</display-name>
-	<welcome-file-list>
+
+    <servlet>
+        <servlet-name>SearchFtp</servlet-name>
+        <servlet-class>FTPSearcher.SearchFtp</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminSrv</servlet-name>
+        <servlet-class>FTPSearcher.AdminSrv</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SearchFtp</servlet-name>
+        <url-pattern>/SearchFtp</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminSrv</servlet-name>
+        <url-pattern>/management/AdminSrv</url-pattern>
+    </servlet-mapping>
+
+    <welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 		<welcome-file>admin.jsp</welcome-file>
 	</welcome-file-list>
@@ -24,5 +42,4 @@
 	<security-role>
 		<description>FTP管理员</description>
 		<role-name>ftp-manager</role-name>
-	</security-role>
-</web-app>
+	</security-role></web-app>

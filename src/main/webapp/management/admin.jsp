@@ -44,7 +44,7 @@
             $.post("AdminSrv", request, callback);
         }
 
-        function updateSettings() {
+        function updateServerSettings() {
             if (confirm("如果你设置了一个错误的路径，那么服务器可能会无法正常工作！你确定要更新服务器设置吗？")) {
                 requestAdmin({
                     request: 'updsettings',
@@ -138,7 +138,7 @@
 					ServiceStatuesUtil.STATUES_URL_PREFIX, "") : ""%>"/>
 <br/>
 <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <button onclick="updateSettings()">
+    <button onclick="updateServerSettings()">
         <strong>保存搜索设置</strong>
     </button>
     &nbsp;&nbsp;
