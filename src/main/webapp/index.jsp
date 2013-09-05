@@ -1,10 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
          pageEncoding="utf-8"
-         import="FTPSearcher.SearchResult,
-                 FTPSearcher.Util,
-                 FTPSearcher.SearchFtp,
-                 FTPSearcher.ResultDocument,
-                 FTPSearcher.SearchRequest" %>
+        %>
+<%@ page import="java.util.Properties" %>
+<%@ page import="FTPSearcher.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%
     request.setCharacterEncoding("utf-8");
@@ -234,7 +232,19 @@
 %>
 <%
 } else {
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 5; i++) {
+%>
+<br/>
+<%
+    }
+    Properties sp = ServiceStatuesUtil
+            .getServiceStatues(getServletContext());
+    String url_prefix = sp.getProperty(ServiceStatuesUtil.STATUES_URL_PREFIX,
+            "").trim();
+%>
+<div align="center"><a href="<%=url_prefix%>">点此进入ftp文件浏览</a> </div>
+<%
+    for (int i = 0; i < 5; i++) {
 %>
 <br/>
 <%
@@ -248,7 +258,6 @@
     <div class="footer">
         <p>
             技术支持：<a
-                href="http://my.nuaa.edu.cn/space-uid-171410.html" target="_blank">忆一段往事</a>&nbsp;&amp;&nbsp;<a
                 href="http://my.nuaa.edu.cn/space-uid-339947.html" target="_blank">Noisyfox</a>
         </p>
 
