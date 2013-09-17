@@ -170,7 +170,7 @@ public class FileIndexer {
             // 准备调用python
             String pyPath = Util.pathConnect(new String[]{
                     ServiceStatuesUtil.CLASS_PATH, "lsAllfiles.py"});
-            System.err.println(pyPath);
+            //System.err.println(pyPath);
             Process process = Runtime.getRuntime().exec(
                     new String[]{"python", pyPath, _ftpPath, _indexPath,
                             "fileList"});

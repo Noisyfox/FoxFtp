@@ -37,6 +37,8 @@ public class ServiceStatuesUtil {
     public static final String CLASS_PATH = Util.pathConnect(new String[]{ServiceStatuesUtil.class.getClassLoader().getResource("/").getPath()});
     public static final String PROPERTIES_DIR = Util.pathConnect(new String[]{CLASS_PATH, "properties"});
 
+    public static final Map<String, Properties> mCachedProperties = new HashMap<String, Properties>();
+
     public static String getPropDir() {
         return PROPERTIES_DIR;
     }
@@ -47,6 +49,10 @@ public class ServiceStatuesUtil {
     }
 
     public static Properties getProperties(String fileName) {
+        if (mCachedProperties.containsKey(fileName)) {
+            return mCachedProperties.get(fileName);
+        }
+
         File pFile = getPropFile(fileName);
 
         FileInputStream pInStream = null;
@@ -58,6 +64,8 @@ public class ServiceStatuesUtil {
 
             properties.loadFromXML(pInStream);
             properties.list(System.out);
+
+            mCachedProperties.put(fileName, properties);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

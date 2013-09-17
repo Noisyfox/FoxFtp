@@ -37,7 +37,7 @@ public class Util {
         }
         */
 
-        System.err.println("ClassPath:" + ServiceStatuesUtil.CLASS_PATH);
+        //System.err.println("ClassPath:" + ServiceStatuesUtil.CLASS_PATH);
 
         if (elements.length == 1 && elements[0].equals("/")) return "/";
 
