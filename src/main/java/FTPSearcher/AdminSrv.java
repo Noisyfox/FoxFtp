@@ -124,7 +124,7 @@ public class AdminSrv extends HttpServlet {
         } else if (adminRequest.equals(ADMIN_REQUEST_REINDEX)) {
             // 重建索引
             Date start = new Date();
-            FileIndexer fi = new FileIndexer(getServletContext());
+            FileIndexer fi = new FileIndexer();
             String result = fi.reIndex();
             if (!result.isEmpty()) {
                 msg(out, false, "重建索引失败！" + result);

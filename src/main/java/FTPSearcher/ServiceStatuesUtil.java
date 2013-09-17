@@ -34,8 +34,8 @@ public class ServiceStatuesUtil {
     public static final String CONFIG_DB_NAME = "DB_NAME";
     public static final String CONFIG_DB_TABLE_FTPSTATUS = "DB_TABLE_FTPSTATUS";
 
-    public static final String PROPERTIES_DIR = Util.pathConnect(new String[]{
-            ServiceStatuesUtil.class.getClassLoader().getResource("/").getPath(), "properties"});
+    public static final String CLASS_PATH = Util.pathConnect(new String[]{ServiceStatuesUtil.class.getClassLoader().getResource("/").getPath()});
+    public static final String PROPERTIES_DIR = Util.pathConnect(new String[]{CLASS_PATH, "properties"});
 
     public static String getPropDir() {
         return PROPERTIES_DIR;

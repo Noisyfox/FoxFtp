@@ -23,16 +23,16 @@ public class JobReindex implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
-        try {
-            ServletContext lServletContext =
-                    (ServletContext) jobExecutionContext.getScheduler().getContext().get("servletContext");
-            System.err.println("Reindex start!");
-            FileIndexer fi = new FileIndexer(lServletContext);
-            String result = fi.reIndex();
-            System.err.println("Reindex finish! Result:" + result);
-        } catch (SchedulerException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        //try {
+        //ServletContext lServletContext =
+        //        (ServletContext) jobExecutionContext.getScheduler().getContext().get("servletContext");
+        System.err.println("Reindex start!");
+        FileIndexer fi = new FileIndexer();
+        String result = fi.reIndex();
+        System.err.println("Reindex finish! Result:" + result);
+        //} catch (SchedulerException e) {
+        //    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        //}
 
     }
 }

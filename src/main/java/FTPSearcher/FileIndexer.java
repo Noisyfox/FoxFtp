@@ -35,15 +35,13 @@ public class FileIndexer {
     public static final String FIELD_ISDIR = "isDir";
     public static final String FIELD_PATH = "filePath";
 
-    ServletContext _context = null;
     String _ftpPath = null;
     String _indexPath = null;
 
     long _fileCount = 0;
     long _dirCount = 0;
 
-    public FileIndexer(ServletContext context) {
-        _context = context;
+    public FileIndexer() {
         Properties serviceStatues = ServiceStatuesUtil
                 .getServiceStatues();
         _ftpPath = serviceStatues.getProperty(
@@ -170,8 +168,9 @@ public class FileIndexer {
             iwriter = new IndexWriter(indexDir, iwc);
 
             // 准备调用python
-            String pyPath = _context.getRealPath(Util.pathConnect(new String[]{
-                    "WEB-INF", "classes", "lsAllfiles.py"}));
+            String pyPath = Util.pathConnect(new String[]{
+                    ServiceStatuesUtil.CLASS_PATH, "lsAllfiles.py"});
+            System.err.println(pyPath);
             Process process = Runtime.getRuntime().exec(
                     new String[]{"python", pyPath, _ftpPath, _indexPath,
                             "fileList"});
