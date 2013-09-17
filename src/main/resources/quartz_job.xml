@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quartz>
+    <job>
+        <job-detail>
+            <name>helloworld</name>
+            <group>group1</group>
+            <job-class>FTPSearcher.JobReindex</job-class>
+        </job-detail>
+        <trigger>
+            <cron>
+                <name>test</name>
+                <group>group1</group>
+                <job-name>helloworld</job-name>
+                <job-group>group1</job-group>
+                <cron-expression_r_r>0/1 * * * * ?</cron-expression_r_r>
+            </cron>
+        </trigger>
+    </job>
+</quartz>
