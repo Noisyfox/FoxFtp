@@ -95,7 +95,7 @@ public class FileIndexer {
                 // 备份
                 bkpFile.mkdirs();
                 Util.copy(_indexPath, bkpIndex);
-            }else{
+            } else {
                 System.out.println("Incomplete index found!");
             }
         }
@@ -117,7 +117,7 @@ public class FileIndexer {
         }
 
         //生成索引重建标记
-        if(!compFlag.exists()){
+        if (!compFlag.exists()) {
             try {
                 compFlag.createNewFile();
             } catch (IOException e) {
@@ -145,7 +145,7 @@ public class FileIndexer {
         currentProp.setProperty(ServiceStatuesUtil.STATUES_LAST_DOC_TIME,
                 sdf.format(new Date()));
 
-        if (!ServiceStatuesUtil.saveServiceStatues( currentProp)) {
+        if (!ServiceStatuesUtil.saveServiceStatues(currentProp)) {
             return "更新服务器状态失败！";
         }
         //清除索引重建标志

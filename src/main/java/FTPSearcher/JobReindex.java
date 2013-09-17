@@ -1,4 +1,5 @@
 package FTPSearcher;
+
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -14,9 +15,9 @@ import java.util.Date;
  * Time: 上午10:56
  * To change this template use File | Settings | File Templates.
  */
-public class JobReindex implements Job{
+public class JobReindex implements Job {
 
-    public JobReindex(){
+    public JobReindex() {
     }
 
     @Override
@@ -24,7 +25,7 @@ public class JobReindex implements Job{
 
         try {
             ServletContext lServletContext =
-                    (ServletContext)jobExecutionContext.getScheduler().getContext().get("servletContext");
+                    (ServletContext) jobExecutionContext.getScheduler().getContext().get("servletContext");
             System.err.println("Reindex start!");
             FileIndexer fi = new FileIndexer(lServletContext);
             String result = fi.reIndex();

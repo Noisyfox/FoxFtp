@@ -17,8 +17,6 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.servlet.ServletContext;
-
 public class ServiceStatuesUtil {
     public static final String STATUES_FTP_ID = "id";
     public static final String STATUES_FTP_NAME = "STATUES_FTP_NAME";
@@ -34,10 +32,10 @@ public class ServiceStatuesUtil {
     public static final String CONFIG_DB_PASSWD = "DB_PASSWD";
     public static final String CONFIG_DB_URL = "DB_URL";
     public static final String CONFIG_DB_NAME = "DB_NAME";
-    public static final String CONFIG_DB_TABLE_FTPSTATUES = "DB_TABLE_FTPSTATUES";
+    public static final String CONFIG_DB_TABLE_FTPSTATUS = "DB_TABLE_FTPSTATUS";
 
     public static final String PROPERTIES_DIR = Util.pathConnect(new String[]{
-            ServiceStatuesUtil.class.getClassLoader().getResource("/").getPath(),"properties"});
+            ServiceStatuesUtil.class.getClassLoader().getResource("/").getPath(), "properties"});
 
     public static String getPropDir() {
         return PROPERTIES_DIR;
@@ -90,7 +88,7 @@ public class ServiceStatuesUtil {
 
     private static void createDBifNotExists(Connection connection) {
         String table = getProperties("searcherConfig.xml")
-                .getProperty(CONFIG_DB_TABLE_FTPSTATUES, "");
+                .getProperty(CONFIG_DB_TABLE_FTPSTATUS, "");
 
         if (connection == null) {
             return;
@@ -155,7 +153,7 @@ public class ServiceStatuesUtil {
 
             Statement statement = conn.createStatement();
             String table = getProperties("searcherConfig.xml")
-                    .getProperty(CONFIG_DB_TABLE_FTPSTATUES, "");
+                    .getProperty(CONFIG_DB_TABLE_FTPSTATUS, "");
 
             Set<Entry<String, String>> dataSet = data.entrySet();
             for (Entry<String, String> entry : dataSet) {
@@ -201,7 +199,7 @@ public class ServiceStatuesUtil {
             Map<String, String> result = new HashMap<String, String>();
 
             String table = getProperties("searcherConfig.xml")
-                    .getProperty(CONFIG_DB_TABLE_FTPSTATUES, "");
+                    .getProperty(CONFIG_DB_TABLE_FTPSTATUS, "");
 
             Statement statement = conn.createStatement();
             StringBuilder sb = new StringBuilder();

@@ -7,6 +7,6 @@
 	<entry key="DB_PASSWD"/>
 	<entry key="DB_URL">localhost</entry>
 	<entry key="DB_NAME">foxftp</entry>
-	<entry key="DB_TABLE_FTPSTATUES">ftpstatues</entry>
+	<entry key="DB_TABLE_FTPSTATUS">ftpstatus</entry>
 
 </properties>

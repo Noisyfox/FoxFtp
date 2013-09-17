@@ -23,16 +23,14 @@ public class DBConnectionProvider {
         Properties serviceConfig = ServiceStatuesUtil.getProperties("searcherConfig.xml");
 
         String driver = "com.mysql.jdbc.Driver";
-        String dbName = serviceConfig.getProperty( ServiceStatuesUtil.CONFIG_DB_NAME, "");
-        // String tableName = serviceConfig.getProperty(
-        // CONFIG_DB_TABLE_FTPSTATUES, "");
+        String dbName = serviceConfig.getProperty(ServiceStatuesUtil.CONFIG_DB_NAME, "");
 
         String url = "jdbc:mysql://"
-                + serviceConfig.getProperty( ServiceStatuesUtil.CONFIG_DB_URL, "") + "/" + dbName;
+                + serviceConfig.getProperty(ServiceStatuesUtil.CONFIG_DB_URL, "") + "/" + dbName;
         // 数据库用户名
-        String userName = serviceConfig.getProperty( ServiceStatuesUtil.CONFIG_DB_USERNAME, "");
+        String userName = serviceConfig.getProperty(ServiceStatuesUtil.CONFIG_DB_USERNAME, "");
         // 密码
-        String userPasswd = serviceConfig.getProperty( ServiceStatuesUtil.CONFIG_DB_PASSWD, "");
+        String userPasswd = serviceConfig.getProperty(ServiceStatuesUtil.CONFIG_DB_PASSWD, "");
 
         DriverAdapterCPDS cpds = new DriverAdapterCPDS();
         try {
@@ -54,7 +52,7 @@ public class DBConnectionProvider {
         ds = tds;
     }
 
-    public static Connection getConnection(){
+    public static Connection getConnection() {
         try {
             return ds.getConnection();
         } catch (SQLException e) {
