@@ -38,7 +38,7 @@ public class AdminSrv extends HttpServlet {
 
     @Override
     public void destroy() {
-        ServiceStatuesUtil.unregisterDrivers();
+        ServiceStatusUtil.unregisterDrivers();
         super.destroy();
     }
 
@@ -97,30 +97,30 @@ public class AdminSrv extends HttpServlet {
         }
 
         if (adminRequest.equals(ADMIN_REQUEST_UPDATESETTINGS)) {
-            Properties currentProp = ServiceStatuesUtil
-                    .getServiceStatues();
+            Properties currentProp = ServiceStatusUtil
+                    .getServiceStatus();
 
             String path = completedFormFields.getProperty(
                     ADMIN_ARGUMENT_FTPDIR, "").trim();
             path = new File(path).getAbsolutePath();
             if (!path.isEmpty()) {
-                currentProp.setProperty(ServiceStatuesUtil.STATUES_FTP_PATH,
+                currentProp.setProperty(ServiceStatusUtil.STATUS_FTP_PATH,
                         path);
             }
             path = completedFormFields.getProperty(ADMIN_ARGUMENT_INDEXDIR, "")
                     .trim();
             path = new File(path).getAbsolutePath();
             if (!path.isEmpty()) {
-                currentProp.setProperty(ServiceStatuesUtil.STATUES_INDEX_PATH,
+                currentProp.setProperty(ServiceStatusUtil.STATUS_INDEX_PATH,
                         path);
             }
             path = completedFormFields
                     .getProperty(ADMIN_ARGUMENT_URLPREFIX, "").trim();
             if (!path.isEmpty()) {
-                currentProp.setProperty(ServiceStatuesUtil.STATUES_URL_PREFIX,
+                currentProp.setProperty(ServiceStatusUtil.STATUS_URL_PREFIX,
                         path);
             }
-            ServiceStatuesUtil.saveServiceStatues(currentProp);
+            ServiceStatusUtil.saveServiceStatus(currentProp);
         } else if (adminRequest.equals(ADMIN_REQUEST_REINDEX)) {
             // 重建索引
             Date start = new Date();

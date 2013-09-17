@@ -237,9 +237,9 @@
 <br/>
 <%
     }
-    Properties sp = ServiceStatuesUtil
-            .getServiceStatues();
-    String url_prefix = sp.getProperty(ServiceStatuesUtil.STATUES_URL_PREFIX,
+    Properties sp = ServiceStatusUtil
+            .getServiceStatus();
+    String url_prefix = sp.getProperty(ServiceStatusUtil.STATUS_URL_PREFIX,
             "").trim();
 %>
 <div align="center"><a href="<%=url_prefix%>">点此进入ftp文件浏览</a> </div>

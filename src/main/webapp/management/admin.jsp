@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
-         import="FTPSearcher.ServiceStatuesUtil,
+         import="FTPSearcher.ServiceStatusUtil,
                  java.util.Properties"
          pageEncoding="utf-8" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -86,30 +86,30 @@
 <a>状态：</a>
 <br/>
 <%
-    Properties serviceStatues = ServiceStatuesUtil
-            .getServiceStatues();
-        if (serviceStatues != null) {
+    Properties serviceStatus = ServiceStatusUtil
+            .getServiceStatus();
+        if (serviceStatus != null) {
 %>
-<a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已归档文件数：<%=serviceStatues.getProperty(
-        ServiceStatuesUtil.STATUES_FILE_TOTAL, "0")%>（<%=serviceStatues.getProperty(
-        ServiceStatuesUtil.STATUES_FILE_FILE, "0")%>文件，<%=serviceStatues.getProperty(
-        ServiceStatuesUtil.STATUES_FILE_DIR, "0")%>目录）
+<a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已归档文件数：<%=serviceStatus.getProperty(
+        ServiceStatusUtil.STATUS_FILE_TOTAL, "0")%>（<%=serviceStatus.getProperty(
+        ServiceStatusUtil.STATUS_FILE_FILE, "0")%>文件，<%=serviceStatus.getProperty(
+        ServiceStatusUtil.STATUS_FILE_DIR, "0")%>目录）
 </a>
 <br/>
-<a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上次归档统计时间：<%=serviceStatues.getProperty(
-        ServiceStatuesUtil.STATUES_LAST_DOC_TIME, "NULL")%>
+<a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上次归档统计时间：<%=serviceStatus.getProperty(
+        ServiceStatusUtil.STATUS_LAST_DOC_TIME, "NULL")%>
 </a>
 <br/>
-<a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ftp&nbsp;归档目录：<%=serviceStatues.getProperty(
-        ServiceStatuesUtil.STATUES_FTP_PATH, "NULL")%>
+<a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ftp&nbsp;归档目录：<%=serviceStatus.getProperty(
+        ServiceStatusUtil.STATUS_FTP_PATH, "NULL")%>
 </a>
 <br/>
-<a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ftp&nbsp;索引目录：<%=serviceStatues.getProperty(
-        ServiceStatuesUtil.STATUES_INDEX_PATH, "NULL")%>
+<a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ftp&nbsp;索引目录：<%=serviceStatus.getProperty(
+        ServiceStatusUtil.STATUS_INDEX_PATH, "NULL")%>
 </a>
 <br/>
-<a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ftp&nbsp;URL前缀：&nbsp;<%=serviceStatues.getProperty(
-        ServiceStatuesUtil.STATUES_URL_PREFIX, "NULL")%>
+<a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ftp&nbsp;URL前缀：&nbsp;<%=serviceStatus.getProperty(
+        ServiceStatusUtil.STATUS_URL_PREFIX, "NULL")%>
 </a>
 <br/>
 <%
@@ -124,18 +124,18 @@
 <br/>
 <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设置归档目录：</a>
 <input name="ftpdir" id="ftpdir"
-       value="<%=serviceStatues != null ? serviceStatues.getProperty(
-					ServiceStatuesUtil.STATUES_FTP_PATH, "") : ""%>"/>
+       value="<%=serviceStatus != null ? serviceStatus.getProperty(
+					ServiceStatusUtil.STATUS_FTP_PATH, "") : ""%>"/>
 <br/>
 <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设置索引目录：</a>
 <input name="indexdir" id="indexdir"
-       value="<%=serviceStatues != null ? serviceStatues.getProperty(
-					ServiceStatuesUtil.STATUES_INDEX_PATH, "") : ""%>"/>
+       value="<%=serviceStatus != null ? serviceStatus.getProperty(
+					ServiceStatusUtil.STATUS_INDEX_PATH, "") : ""%>"/>
 <br/>
 <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设置URL前缀：&nbsp;</a>
 <input name="urlprefix" id="urlprefix"
-       value="<%=serviceStatues != null ? serviceStatues.getProperty(
-					ServiceStatuesUtil.STATUES_URL_PREFIX, "") : ""%>"/>
+       value="<%=serviceStatus != null ? serviceStatus.getProperty(
+					ServiceStatusUtil.STATUS_URL_PREFIX, "") : ""%>"/>
 <br/>
 <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <button onclick="updateServerSettings()">

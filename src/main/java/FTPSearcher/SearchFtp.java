@@ -94,13 +94,13 @@ public class SearchFtp extends HttpServlet {
                 doCleanUp();
             }
 
-            Properties sp = ServiceStatuesUtil
-                    .getServiceStatues();
-            url_prefix = sp.getProperty(ServiceStatuesUtil.STATUES_URL_PREFIX,
+            Properties sp = ServiceStatusUtil
+                    .getServiceStatus();
+            url_prefix = sp.getProperty(ServiceStatusUtil.STATUS_URL_PREFIX,
                     "").trim();
 
             String indexPath = sp.getProperty(
-                    ServiceStatuesUtil.STATUES_INDEX_PATH, "").trim();
+                    ServiceStatusUtil.STATUS_INDEX_PATH, "").trim();
 
             if (indexPath.isEmpty()) {
                 return false;
@@ -148,7 +148,7 @@ public class SearchFtp extends HttpServlet {
     public void destroy() {
         System.out.println("onDestroy");
         doCleanUp();
-        ServiceStatuesUtil.unregisterDrivers();
+        ServiceStatusUtil.unregisterDrivers();
         System.gc();
         super.destroy();
     }

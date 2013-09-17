@@ -28,8 +28,6 @@ public class Util {
         String path = "";
         for (String e : elements) {
             e = e.trim();
-            e.replace("/", File.pathSeparator);
-            e.replace("\\", File.pathSeparator);
             if (e.startsWith(File.pathSeparator))
                 path += e;
             else
@@ -37,7 +35,7 @@ public class Util {
         }
         */
 
-        //System.err.println("ClassPath:" + ServiceStatuesUtil.CLASS_PATH);
+        //System.err.println("ClassPath:" + ServiceStatusUtil.CLASS_PATH);
 
         if (elements.length == 1 && elements[0].equals("/")) return "/";
 

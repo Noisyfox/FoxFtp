@@ -17,16 +17,16 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
-public class ServiceStatuesUtil {
-    public static final String STATUES_FTP_ID = "id";
-    public static final String STATUES_FTP_NAME = "STATUES_FTP_NAME";
-    public static final String STATUES_FILE_TOTAL = "STATUES_FILE_TOTAL";
-    public static final String STATUES_FILE_FILE = "STATUES_FILE_FILE";
-    public static final String STATUES_FILE_DIR = "STATUES_FILE_DIR";
-    public static final String STATUES_LAST_DOC_TIME = "STATUES_LAST_DOC_TIME";
-    public static final String STATUES_FTP_PATH = "STATUES_FTP_PATH";
-    public static final String STATUES_INDEX_PATH = "STATUES_INDEX_PATH";
-    public static final String STATUES_URL_PREFIX = "STATUES_URL_PREFIX";
+public class ServiceStatusUtil {
+    public static final String STATUS_FTP_ID = "id";
+    public static final String STATUS_FTP_NAME = "STATUS_FTP_NAME";
+    public static final String STATUS_FILE_TOTAL = "STATUS_FILE_TOTAL";
+    public static final String STATUS_FILE_FILE = "STATUS_FILE_FILE";
+    public static final String STATUS_FILE_DIR = "STATUS_FILE_DIR";
+    public static final String STATUS_LAST_DOC_TIME = "STATUS_LAST_DOC_TIME";
+    public static final String STATUS_FTP_PATH = "STATUS_FTP_PATH";
+    public static final String STATUS_INDEX_PATH = "STATUS_INDEX_PATH";
+    public static final String STATUS_URL_PREFIX = "STATUS_URL_PREFIX";
 
     public static final String CONFIG_DB_USERNAME = "DB_USERNAME";
     public static final String CONFIG_DB_PASSWD = "DB_PASSWD";
@@ -34,7 +34,7 @@ public class ServiceStatuesUtil {
     public static final String CONFIG_DB_NAME = "DB_NAME";
     public static final String CONFIG_DB_TABLE_FTPSTATUS = "DB_TABLE_FTPSTATUS";
 
-    public static final String CLASS_PATH = Util.pathConnect(new String[]{ServiceStatuesUtil.class.getClassLoader().getResource("/").getPath()});
+    public static final String CLASS_PATH = Util.pathConnect(new String[]{ServiceStatusUtil.class.getClassLoader().getResource("/").getPath()});
     public static final String PROPERTIES_DIR = Util.pathConnect(new String[]{CLASS_PATH, "properties"});
 
     public static final Map<String, Properties> mCachedProperties = new HashMap<String, Properties>();
@@ -109,25 +109,25 @@ public class ServiceStatuesUtil {
             sb.append("CREATE TABLE IF NOT EXISTS `");
             sb.append(table);
             sb.append("` (`");
-            sb.append(STATUES_FTP_ID);
+            sb.append(STATUS_FTP_ID);
             sb.append("` int NOT NULL auto_increment,`");
-            sb.append(STATUES_FTP_NAME);
+            sb.append(STATUS_FTP_NAME);
             sb.append("` text,`");
-            sb.append(STATUES_FTP_PATH);
+            sb.append(STATUS_FTP_PATH);
             sb.append("` text,`");
-            sb.append(STATUES_INDEX_PATH);
+            sb.append(STATUS_INDEX_PATH);
             sb.append("` text,`");
-            sb.append(STATUES_URL_PREFIX);
+            sb.append(STATUS_URL_PREFIX);
             sb.append("` text,`");
-            sb.append(STATUES_FILE_TOTAL);
+            sb.append(STATUS_FILE_TOTAL);
             sb.append("` bigint,`");
-            sb.append(STATUES_FILE_FILE);
+            sb.append(STATUS_FILE_FILE);
             sb.append("` bigint,`");
-            sb.append(STATUES_FILE_DIR);
+            sb.append(STATUS_FILE_DIR);
             sb.append("` bigint,`");
-            sb.append(STATUES_LAST_DOC_TIME);
+            sb.append(STATUS_LAST_DOC_TIME);
             sb.append("` datetime, PRIMARY KEY(`");
-            sb.append(STATUES_FTP_ID);
+            sb.append(STATUS_FTP_ID);
             sb.append("`)) ENGINE = MyISAM DEFAULT CHARSET=utf8;");
 
             String sql = sb.toString();
@@ -147,9 +147,9 @@ public class ServiceStatuesUtil {
 
     }
 
-    public static boolean saveServiceStatues_DB(int id, Map<String, String> data) {
-        // UPDATE `foxftp`.`ftpstatues` SET `name` = 'kkk' WHERE
-        // `ftpstatues`.`id` = 1
+    public static boolean saveServiceStatus_DB(int id, Map<String, String> data) {
+        // UPDATE `foxftp`.`ftpstatus` SET `name` = 'kkk' WHERE
+        // `ftpstatus`.`id` = 1
         Connection conn = null;
         try {
             conn = DBConnectionProvider.getConnection();
@@ -195,7 +195,7 @@ public class ServiceStatuesUtil {
         return true;
     }
 
-    public static Map<String, String> getServiceStatues_DB(int id) {
+    public static Map<String, String> getServiceStatus_DB(int id) {
         Connection conn = null;
         try {
             conn = DBConnectionProvider.getConnection();
@@ -246,16 +246,16 @@ public class ServiceStatuesUtil {
         }
     }
 
-    public static Properties getServiceStatues() {
+    public static Properties getServiceStatus() {
 
-        return Util.map2Properties(getServiceStatues_DB(1));
+        return Util.map2Properties(getServiceStatus_DB(1));
     }
 
-    public static boolean saveServiceStatues(Properties statues) {
+    public static boolean saveServiceStatus(Properties status) {
 
-        System.out.println("Updating Service statues.");
+        System.out.println("Updating Service status.");
 
-        if (saveServiceStatues_DB(1, Util.properties2Map(statues))) {
+        if (saveServiceStatus_DB(1, Util.properties2Map(status))) {
             System.out.println("Updating success!");
             return true;
         } else {

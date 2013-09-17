@@ -20,17 +20,17 @@ public class DBConnectionProvider {
     public static DataSource ds;
 
     static {
-        Properties serviceConfig = ServiceStatuesUtil.getProperties("searcherConfig.xml");
+        Properties serviceConfig = ServiceStatusUtil.getProperties("searcherConfig.xml");
 
         String driver = "com.mysql.jdbc.Driver";
-        String dbName = serviceConfig.getProperty(ServiceStatuesUtil.CONFIG_DB_NAME, "");
+        String dbName = serviceConfig.getProperty(ServiceStatusUtil.CONFIG_DB_NAME, "");
 
         String url = "jdbc:mysql://"
-                + serviceConfig.getProperty(ServiceStatuesUtil.CONFIG_DB_URL, "") + "/" + dbName;
+                + serviceConfig.getProperty(ServiceStatusUtil.CONFIG_DB_URL, "") + "/" + dbName;
         // 数据库用户名
-        String userName = serviceConfig.getProperty(ServiceStatuesUtil.CONFIG_DB_USERNAME, "");
+        String userName = serviceConfig.getProperty(ServiceStatusUtil.CONFIG_DB_USERNAME, "");
         // 密码
-        String userPasswd = serviceConfig.getProperty(ServiceStatuesUtil.CONFIG_DB_PASSWD, "");
+        String userPasswd = serviceConfig.getProperty(ServiceStatusUtil.CONFIG_DB_PASSWD, "");
 
         DriverAdapterCPDS cpds = new DriverAdapterCPDS();
         try {

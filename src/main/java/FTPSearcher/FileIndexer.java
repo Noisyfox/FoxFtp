@@ -12,8 +12,6 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import javax.servlet.ServletContext;
-
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -42,12 +40,12 @@ public class FileIndexer {
     long _dirCount = 0;
 
     public FileIndexer() {
-        Properties serviceStatues = ServiceStatuesUtil
-                .getServiceStatues();
-        _ftpPath = serviceStatues.getProperty(
-                ServiceStatuesUtil.STATUES_FTP_PATH, "");
-        _indexPath = serviceStatues.getProperty(
-                ServiceStatuesUtil.STATUES_INDEX_PATH, "");
+        Properties serviceStatus = ServiceStatusUtil
+                .getServiceStatus();
+        _ftpPath = serviceStatus.getProperty(
+                ServiceStatusUtil.STATUS_FTP_PATH, "");
+        _indexPath = serviceStatus.getProperty(
+                ServiceStatusUtil.STATUS_INDEX_PATH, "");
         _ftpPath = new File(_ftpPath).getAbsolutePath();
         _indexPath = new File(_indexPath).getAbsolutePath();
     }
@@ -130,20 +128,20 @@ public class FileIndexer {
         }
 
         // 更新服务器状态
-        Properties currentProp = ServiceStatuesUtil.getServiceStatues();
+        Properties currentProp = ServiceStatusUtil.getServiceStatus();
 
-        currentProp.setProperty(ServiceStatuesUtil.STATUES_FILE_DIR,
+        currentProp.setProperty(ServiceStatusUtil.STATUS_FILE_DIR,
                 String.valueOf(_dirCount));
-        currentProp.setProperty(ServiceStatuesUtil.STATUES_FILE_FILE,
+        currentProp.setProperty(ServiceStatusUtil.STATUS_FILE_FILE,
                 String.valueOf(_fileCount));
-        currentProp.setProperty(ServiceStatuesUtil.STATUES_FILE_TOTAL,
+        currentProp.setProperty(ServiceStatusUtil.STATUS_FILE_TOTAL,
                 String.valueOf(_fileCount + _dirCount));
 
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        currentProp.setProperty(ServiceStatuesUtil.STATUES_LAST_DOC_TIME,
+        currentProp.setProperty(ServiceStatusUtil.STATUS_LAST_DOC_TIME,
                 sdf.format(new Date()));
 
-        if (!ServiceStatuesUtil.saveServiceStatues(currentProp)) {
+        if (!ServiceStatusUtil.saveServiceStatus(currentProp)) {
             return "更新服务器状态失败！";
         }
         //清除索引重建标志
@@ -169,7 +167,7 @@ public class FileIndexer {
 
             // 准备调用python
             String pyPath = Util.pathConnect(new String[]{
-                    ServiceStatuesUtil.CLASS_PATH, "lsAllfiles.py"});
+                    ServiceStatusUtil.CLASS_PATH, "lsAllfiles.py"});
             //System.err.println(pyPath);
             Process process = Runtime.getRuntime().exec(
                     new String[]{"python", pyPath, _ftpPath, _indexPath,
