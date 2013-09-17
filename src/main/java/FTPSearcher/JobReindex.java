@@ -19,6 +19,6 @@ public class JobReindex  implements Job{
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        System.out.println("JobReindex!" + new Date());
+        System.err.println("JobReindex!" + new Date());
     }
 }

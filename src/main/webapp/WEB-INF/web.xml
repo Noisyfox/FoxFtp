@@ -6,25 +6,21 @@
 	<display-name>Fox FTP Searcher</display-name>
 
     <servlet>
-        <display-name>
-            Quartz Initializer Servlet
-        </display-name>
-        <servlet-name>
-            QuartzInitializer
-        </servlet-name>
-        <servlet-class>
-            org.quartz.ee.servlet.QuartzInitializerServlet
-        </servlet-class>
+        <servlet-name>QuartzInitializer</servlet-name>
+        <servlet-class>org.quartz.ee.servlet.QuartzInitializerServlet</servlet-class>
         <init-param>
-            <param-name>config-file</param-name>
-            <param-value>/quartz.properties</param-value>
-        </init-param>
-        <init-param>
+
             <param-name>shutdown-on-unload</param-name>
             <param-value>true</param-value>
         </init-param>
-        <load-on-startup>1</load-on-startup>
+        <load-on-startup>2</load-on-startup>
+
     </servlet>
+
+    <servlet-mapping>
+        <servlet-name>QuartzInitializer</servlet-name>
+        <url-pattern>/QuartzInitializer</url-pattern>
+    </servlet-mapping>
     <!--
     <servlet>
         <servlet-name>SearchFtp</servlet-name>
@@ -43,6 +39,7 @@
         <url-pattern>/management/AdminSrv</url-pattern>
     </servlet-mapping>
                      -->
+
     <welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 		<welcome-file>admin.jsp</welcome-file>
