@@ -45,7 +45,7 @@ public class FileIndexer {
     public FileIndexer(ServletContext context) {
         _context = context;
         Properties serviceStatues = ServiceStatuesUtil
-                .getServiceStatues(context);
+                .getServiceStatues();
         _ftpPath = serviceStatues.getProperty(
                 ServiceStatuesUtil.STATUES_FTP_PATH, "");
         _indexPath = serviceStatues.getProperty(
@@ -132,7 +132,7 @@ public class FileIndexer {
         }
 
         // 更新服务器状态
-        Properties currentProp = ServiceStatuesUtil.getServiceStatues(_context);
+        Properties currentProp = ServiceStatuesUtil.getServiceStatues();
 
         currentProp.setProperty(ServiceStatuesUtil.STATUES_FILE_DIR,
                 String.valueOf(_dirCount));
@@ -145,7 +145,7 @@ public class FileIndexer {
         currentProp.setProperty(ServiceStatuesUtil.STATUES_LAST_DOC_TIME,
                 sdf.format(new Date()));
 
-        if (!ServiceStatuesUtil.saveServiceStatues(_context, currentProp)) {
+        if (!ServiceStatuesUtil.saveServiceStatues( currentProp)) {
             return "更新服务器状态失败！";
         }
         //清除索引重建标志

@@ -37,20 +37,19 @@ public class ServiceStatuesUtil {
     public static final String CONFIG_DB_TABLE_FTPSTATUES = "DB_TABLE_FTPSTATUES";
 
     public static final String PROPERTIES_DIR = Util.pathConnect(new String[]{
-            "WEB-INF", "classes", "properties"});
+            ServiceStatuesUtil.class.getClassLoader().getResource("/").getPath(),"properties"});
 
-    public static String getPropDir(ServletContext context) {
-        return context.getRealPath(PROPERTIES_DIR);
+    public static String getPropDir() {
+        return PROPERTIES_DIR;
     }
 
-    public static File getPropFile(ServletContext context, String fileName) {
-        return new File(Util.pathConnect(new String[]{getPropDir(context),
+    public static File getPropFile(String fileName) {
+        return new File(Util.pathConnect(new String[]{getPropDir(),
                 fileName}));
     }
 
-    public static Properties getProperties(ServletContext context,
-                                           String fileName) {
-        File pFile = getPropFile(context, fileName);
+    public static Properties getProperties(String fileName) {
+        File pFile = getPropFile(fileName);
 
         FileInputStream pInStream = null;
 
@@ -89,48 +88,8 @@ public class ServiceStatuesUtil {
         }
     }
 
-    private static Connection getDBConnection(ServletContext context) {
-        Properties serviceConfig = getProperties(context, "searcherConfig.xml");
-
-        String driver = "com.mysql.jdbc.Driver";
-        String dbName = serviceConfig.getProperty(CONFIG_DB_NAME, "");
-        // String tableName = serviceConfig.getProperty(
-        // CONFIG_DB_TABLE_FTPSTATUES, "");
-
-        String url = "jdbc:mysql://"
-                + serviceConfig.getProperty(CONFIG_DB_URL, "") + "/" + dbName;
-        // 数据库用户名
-        String userName = serviceConfig.getProperty(CONFIG_DB_USERNAME, "");
-        // 密码
-        String userPasswd = serviceConfig.getProperty(CONFIG_DB_PASSWD, "");
-        try {
-            Class.forName(driver).newInstance();
-            Connection conn = DriverManager.getConnection(url, userName,
-                    userPasswd);
-            if (!conn.isClosed()) {
-                System.out.println("Succeeded connecting to the Database!");
-                return conn;
-            }
-        } catch (InstantiationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    private static void createDBifNotExists(ServletContext context,
-                                            Connection connection) {
-        String table = getProperties(context, "searcherConfig.xml")
+    private static void createDBifNotExists(Connection connection) {
+        String table = getProperties("searcherConfig.xml")
                 .getProperty(CONFIG_DB_TABLE_FTPSTATUES, "");
 
         if (connection == null) {
@@ -182,21 +141,20 @@ public class ServiceStatuesUtil {
 
     }
 
-    public static boolean saveServiceStatues_DB(ServletContext context,
-                                                int id, Map<String, String> data) {
+    public static boolean saveServiceStatues_DB(int id, Map<String, String> data) {
         // UPDATE `foxftp`.`ftpstatues` SET `name` = 'kkk' WHERE
         // `ftpstatues`.`id` = 1
         Connection conn = null;
         try {
-            conn = getDBConnection(context);
+            conn = DBConnectionProvider.getConnection();
             if (conn == null || conn.isClosed()) {
                 return false;
             }
 
-            createDBifNotExists(context, conn);
+            createDBifNotExists(conn);
 
             Statement statement = conn.createStatement();
-            String table = getProperties(context, "searcherConfig.xml")
+            String table = getProperties("searcherConfig.xml")
                     .getProperty(CONFIG_DB_TABLE_FTPSTATUES, "");
 
             Set<Entry<String, String>> dataSet = data.entrySet();
@@ -231,19 +189,18 @@ public class ServiceStatuesUtil {
         return true;
     }
 
-    public static Map<String, String> getServiceStatues_DB(
-            ServletContext context, int id) {
+    public static Map<String, String> getServiceStatues_DB(int id) {
         Connection conn = null;
         try {
-            conn = getDBConnection(context);
+            conn = DBConnectionProvider.getConnection();
             if (conn == null || conn.isClosed()) {
                 return null;
             }
-            createDBifNotExists(context, conn);
+            createDBifNotExists(conn);
 
             Map<String, String> result = new HashMap<String, String>();
 
-            String table = getProperties(context, "searcherConfig.xml")
+            String table = getProperties("searcherConfig.xml")
                     .getProperty(CONFIG_DB_TABLE_FTPSTATUES, "");
 
             Statement statement = conn.createStatement();
@@ -283,17 +240,16 @@ public class ServiceStatuesUtil {
         }
     }
 
-    public static Properties getServiceStatues(ServletContext context) {
+    public static Properties getServiceStatues() {
 
-        return Util.map2Properties(getServiceStatues_DB(context, 1));
+        return Util.map2Properties(getServiceStatues_DB(1));
     }
 
-    public static boolean saveServiceStatues(ServletContext context,
-                                             Properties statues) {
+    public static boolean saveServiceStatues(Properties statues) {
 
         System.out.println("Updating Service statues.");
 
-        if (saveServiceStatues_DB(context, 1, Util.properties2Map(statues))) {
+        if (saveServiceStatues_DB(1, Util.properties2Map(statues))) {
             System.out.println("Updating success!");
             return true;
         } else {

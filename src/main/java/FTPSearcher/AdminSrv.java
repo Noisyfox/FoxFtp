@@ -98,7 +98,7 @@ public class AdminSrv extends HttpServlet {
 
 		if (adminRequest.equals(ADMIN_REQUEST_UPDATESETTINGS)) {
 			Properties currentProp = ServiceStatuesUtil
-					.getServiceStatues(getServletContext());
+					.getServiceStatues();
 
 			String path = completedFormFields.getProperty(
 					ADMIN_ARGUMENT_FTPDIR, "").trim();
@@ -120,8 +120,7 @@ public class AdminSrv extends HttpServlet {
 				currentProp.setProperty(ServiceStatuesUtil.STATUES_URL_PREFIX,
 						path);
 			}
-			ServiceStatuesUtil.saveServiceStatues(getServletContext(),
-					currentProp);
+			ServiceStatuesUtil.saveServiceStatues(currentProp);
 		} else if (adminRequest.equals(ADMIN_REQUEST_REINDEX)) {
 			// 重建索引
 			Date start = new Date();

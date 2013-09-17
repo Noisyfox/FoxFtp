@@ -95,7 +95,7 @@ public class SearchFtp extends HttpServlet {
             }
 
             Properties sp = ServiceStatuesUtil
-                    .getServiceStatues(getServletContext());
+                    .getServiceStatues();
             url_prefix = sp.getProperty(ServiceStatuesUtil.STATUES_URL_PREFIX,
                     "").trim();
 

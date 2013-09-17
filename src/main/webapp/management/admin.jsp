@@ -87,8 +87,8 @@
 <br/>
 <%
     Properties serviceStatues = ServiceStatuesUtil
-            .getServiceStatues(getServletContext());
-    if (serviceStatues != null) {
+            .getServiceStatues();
+        if (serviceStatues != null) {
 %>
 <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已归档文件数：<%=serviceStatues.getProperty(
         ServiceStatuesUtil.STATUES_FILE_TOTAL, "0")%>（<%=serviceStatues.getProperty(

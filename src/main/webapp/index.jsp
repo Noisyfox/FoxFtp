@@ -238,7 +238,7 @@
 <%
     }
     Properties sp = ServiceStatuesUtil
-            .getServiceStatues(getServletContext());
+            .getServiceStatues();
     String url_prefix = sp.getProperty(ServiceStatuesUtil.STATUES_URL_PREFIX,
             "").trim();
 %>
