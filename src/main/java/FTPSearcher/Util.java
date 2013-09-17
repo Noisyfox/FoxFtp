@@ -24,15 +24,68 @@ public class Util {
         if (elements == null || elements.length == 0)
             return "";
 
+        /*
         String path = "";
         for (String e : elements) {
             e = e.trim();
+            e.replace("/", File.pathSeparator);
+            e.replace("\\", File.pathSeparator);
             if (e.startsWith(File.pathSeparator))
                 path += e;
             else
                 path += File.separator + e;
         }
-        return path;
+        */
+
+        System.err.println("ClassPath:" + ServiceStatuesUtil.CLASS_PATH);
+
+        if (elements.length == 1 && elements[0].equals("/")) return "/";
+
+        StringBuilder sb = new StringBuilder();
+
+        int length = elements.length;
+        if (File.separator.equals("/")) {
+            //Unix
+            for (int i = 0; i < length; i++) {
+                elements[i] = elements[i].trim();
+                elements[i] = elements[i].replace("\\", File.separator);
+            }
+
+            if (elements[0].endsWith(File.separator)) {
+                sb.append(elements[0], 0, elements[0].length() - 1);
+            } else {
+                sb.append(elements[0]);
+            }
+        } else {
+            //Windows
+            for (int i = 0; i < length; i++) {
+                elements[i] = elements[i].trim();
+                elements[i] = elements[i].replace("/", File.separator);
+            }
+            int start = 0, end = elements[0].length();
+            if (elements[0].endsWith(File.separator)) {
+                end--;
+            }
+            if (elements[0].startsWith(File.separator)) {
+                start++;
+            }
+            sb.append(elements[0], start, end);
+        }
+
+        for (int i = 1; i < length; i++) {
+            String e = elements[i];
+            int start = 0;
+            int end = e.length();
+            if (e.endsWith(File.separator)) {
+                end--;
+            }
+            if (e.startsWith(File.separator)) {
+                start++;
+            }
+            sb.append(File.separator);
+            sb.append(e, start, end);
+        }
+        return sb.toString();
     }
 
     public static boolean copy(String path, String copyPath) {
