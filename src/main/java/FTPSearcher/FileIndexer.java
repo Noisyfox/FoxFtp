@@ -28,6 +28,8 @@ import org.wltea.analyzer.lucene.IKAnalyzer;
 
 public class FileIndexer {
 
+    private static Object mSyncObj = new Object();
+
     public static final String FIELD_FILENAME = "fileName";
     public static final String FIELD_FILESIZE = "fileSize";
     public static final String FIELD_ISDIR = "isDir";
@@ -51,103 +53,104 @@ public class FileIndexer {
     }
 
     public final String reIndex() {
-
-        // 先创建备份文件
-        File indexFile = new File(_indexPath);
-        File compFlag = new File(indexFile, "_indexing");// 正在建立索引的标志
-        if (indexFile.exists()
-                && (!indexFile.isDirectory() || !indexFile.canRead() || !indexFile
-                .canWrite()))
-            return "指定的索引目录无法访问！";
-        if (indexFile.exists()) {
-            File roots[] = File.listRoots();
-            boolean isRoot = false;
-            for (File root : roots) {
-                if (indexFile.equals(root)) {
-                    isRoot = true;
-                    break;
-                }
-            }
-            if (isRoot) {
-                return "指定的索引目录为根目录，无法在上一级目录中创建备份！请更改索引目录！";
-            }
-            // 先验证原索引是否完整，通过检验目录中是否存在"_indexing"文件
-            // 如果原索引不完整则不进行备份
-            if (!compFlag.exists()) {
-                // 检验是否存在备份文件
-                String bkpIndex = _indexPath;
-                if (bkpIndex.endsWith(File.pathSeparator)) {
-                    int i = bkpIndex.lastIndexOf(File.pathSeparator);
-                    bkpIndex = bkpIndex.substring(0, i - 1);
-                }
-                bkpIndex += ".backup";
-                File bkpFile = new File(bkpIndex);
-                if (bkpFile.exists()) {
-                    // 删除备份文件
-                    if (!Util.delFolder(bkpIndex)) {
-                        return "删除备份文件失败！目录：" + bkpIndex;
+        synchronized (mSyncObj) {
+            // 先创建备份文件
+            File indexFile = new File(_indexPath);
+            File compFlag = new File(indexFile, "_indexing");// 正在建立索引的标志
+            if (indexFile.exists()
+                    && (!indexFile.isDirectory() || !indexFile.canRead() || !indexFile
+                    .canWrite()))
+                return "指定的索引目录无法访问！";
+            if (indexFile.exists()) {
+                File roots[] = File.listRoots();
+                boolean isRoot = false;
+                for (File root : roots) {
+                    if (indexFile.equals(root)) {
+                        isRoot = true;
+                        break;
                     }
                 }
-                // 备份
-                bkpFile.mkdirs();
-                Util.copy(_indexPath, bkpIndex);
-            } else {
-                System.out.println("Incomplete index found!");
+                if (isRoot) {
+                    return "指定的索引目录为根目录，无法在上一级目录中创建备份！请更改索引目录！";
+                }
+                // 先验证原索引是否完整，通过检验目录中是否存在"_indexing"文件
+                // 如果原索引不完整则不进行备份
+                if (!compFlag.exists()) {
+                    // 检验是否存在备份文件
+                    String bkpIndex = _indexPath;
+                    if (bkpIndex.endsWith(File.pathSeparator)) {
+                        int i = bkpIndex.lastIndexOf(File.pathSeparator);
+                        bkpIndex = bkpIndex.substring(0, i - 1);
+                    }
+                    bkpIndex += ".backup";
+                    File bkpFile = new File(bkpIndex);
+                    if (bkpFile.exists()) {
+                        // 删除备份文件
+                        if (!Util.delFolder(bkpIndex)) {
+                            return "删除备份文件失败！目录：" + bkpIndex;
+                        }
+                    }
+                    // 备份
+                    bkpFile.mkdirs();
+                    Util.copy(_indexPath, bkpIndex);
+                } else {
+                    System.out.println("Incomplete index found!");
+                }
             }
-        }
 
-        if (!indexFile.exists()) {
-            // 创建索引目录
-            if (!indexFile.mkdirs()) {
-                return "创建索引目录失败！目录：" + _indexPath;
+            if (!indexFile.exists()) {
+                // 创建索引目录
+                if (!indexFile.mkdirs()) {
+                    return "创建索引目录失败！目录：" + _indexPath;
+                }
             }
-        }
 
-        // 验证ftp目录
-        File ftpFile = new File(_ftpPath);
-        if (!ftpFile.exists() || !ftpFile.isDirectory()) {
-            return "Ftp目录不存在或指定路径是一个文件！目录：" + _ftpPath;
-        }
-        if (!ftpFile.canRead()) {
-            return "Ftp目录不可读！目录：" + _ftpPath;
-        }
-
-        //生成索引重建标记
-        if (!compFlag.exists()) {
-            try {
-                compFlag.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return "索引创建失败！无法建立\"_indexing\"标记！";
+            // 验证ftp目录
+            File ftpFile = new File(_ftpPath);
+            if (!ftpFile.exists() || !ftpFile.isDirectory()) {
+                return "Ftp目录不存在或指定路径是一个文件！目录：" + _ftpPath;
             }
+            if (!ftpFile.canRead()) {
+                return "Ftp目录不可读！目录：" + _ftpPath;
+            }
+
+            //生成索引重建标记
+            if (!compFlag.exists()) {
+                try {
+                    compFlag.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return "索引创建失败！无法建立\"_indexing\"标记！";
+                }
+            }
+            // 开始创建索引
+            String result = mkIndex();
+            if (!result.isEmpty()) {
+                return "索引创建失败！";
+            }
+
+            // 更新服务器状态
+            Properties currentProp = ServiceStatusUtil.getServiceStatus();
+
+            currentProp.setProperty(ServiceStatusUtil.STATUS_FILE_DIR,
+                    String.valueOf(_dirCount));
+            currentProp.setProperty(ServiceStatusUtil.STATUS_FILE_FILE,
+                    String.valueOf(_fileCount));
+            currentProp.setProperty(ServiceStatusUtil.STATUS_FILE_TOTAL,
+                    String.valueOf(_fileCount + _dirCount));
+
+            DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            currentProp.setProperty(ServiceStatusUtil.STATUS_LAST_DOC_TIME,
+                    sdf.format(new Date()));
+
+            if (!ServiceStatusUtil.saveServiceStatus(currentProp)) {
+                return "更新服务器状态失败！";
+            }
+            //清除索引重建标志
+            compFlag.delete();
+
+            return "";
         }
-        // 开始创建索引
-        String result = mkIndex();
-        if (!result.isEmpty()) {
-            return "索引创建失败！";
-        }
-
-        // 更新服务器状态
-        Properties currentProp = ServiceStatusUtil.getServiceStatus();
-
-        currentProp.setProperty(ServiceStatusUtil.STATUS_FILE_DIR,
-                String.valueOf(_dirCount));
-        currentProp.setProperty(ServiceStatusUtil.STATUS_FILE_FILE,
-                String.valueOf(_fileCount));
-        currentProp.setProperty(ServiceStatusUtil.STATUS_FILE_TOTAL,
-                String.valueOf(_fileCount + _dirCount));
-
-        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        currentProp.setProperty(ServiceStatusUtil.STATUS_LAST_DOC_TIME,
-                sdf.format(new Date()));
-
-        if (!ServiceStatusUtil.saveServiceStatus(currentProp)) {
-            return "更新服务器状态失败！";
-        }
-        //清除索引重建标志
-        compFlag.delete();
-
-        return "";
     }
 
     private String mkIndex() {
