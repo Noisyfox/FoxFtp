@@ -16,6 +16,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import FTPSearcher.Logger.InternalLogger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -120,22 +121,20 @@ public class Util {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            InternalLogger.logException(e);
             return false;
         } finally {
             if (read != null)
                 try {
                     read.close();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    InternalLogger.logException(e);
                 }
             if (write != null)
                 try {
                     write.close();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    InternalLogger.logException(e);
                 }
         }
         return true;
@@ -153,7 +152,7 @@ public class Util {
                 return false;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            InternalLogger.logException(e);
             return false;
         }
         return true;
@@ -216,9 +215,9 @@ public class Util {
             jsonObj.put("success", success);
             jsonObj.put("message", message);
             json = jsonObj.toString();
-            System.out.println(json);
+            InternalLogger.getLogger().info(json);
         } catch (JSONException e) {
-            e.printStackTrace();
+            InternalLogger.logException(e);
             message = message.replace("\\", "\\\\");
             String _json = "{\"success\":" + (success ? "true" : "false")
                     + ",\"message\":\"" + message + "\"}";
@@ -226,8 +225,7 @@ public class Util {
                 new JSONObject(_json);
                 json = _json;
             } catch (JSONException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
+                InternalLogger.logException(e);
             }
         }
         return json;
@@ -308,8 +306,7 @@ public class Util {
             s = s.replace("%5C", "\\");
             s = s.replace("+", "%20");
         } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            InternalLogger.logException(e);
         }
 
         return s;

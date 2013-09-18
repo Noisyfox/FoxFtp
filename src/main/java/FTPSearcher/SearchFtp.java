@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import FTPSearcher.Logger.FtpLogger;
+import FTPSearcher.Logger.InternalLogger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.document.Document;
@@ -68,8 +70,7 @@ public class SearchFtp extends HttpServlet {
                 try {
                     indexReader.close();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    InternalLogger.logException(e);
                 }
             }
 
@@ -77,8 +78,7 @@ public class SearchFtp extends HttpServlet {
                 try {
                     indexDir.close();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    InternalLogger.logException(e);
                 }
             }
 
@@ -121,8 +121,7 @@ public class SearchFtp extends HttpServlet {
                     indexSearcher = new IndexSearcher(_dr);
                     return true;
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    InternalLogger.logException(e);
                     doCleanUp();
                 }
             }
@@ -137,8 +136,7 @@ public class SearchFtp extends HttpServlet {
                 indexReader = DirectoryReader.open(indexDir);
                 indexSearcher = new IndexSearcher(indexReader);
             } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                InternalLogger.logException(e);
                 return false;
             }
             return true;
@@ -147,7 +145,7 @@ public class SearchFtp extends HttpServlet {
 
     @Override
     public void destroy() {
-        System.out.println("onDestroy");
+        InternalLogger.getLogger().info("onDestroy");
         doCleanUp();
         ServiceStatusUtil.unregisterDrivers();
         System.gc();
@@ -205,7 +203,7 @@ public class SearchFtp extends HttpServlet {
                 targetPage = Integer.valueOf(_targetPage);
             }
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            InternalLogger.logException(e);
         }
         if (targetPage <= 0) {
             targetPage = 1;
@@ -273,6 +271,11 @@ public class SearchFtp extends HttpServlet {
                     Util.genJSON(false, "Searcher not prepared!"));
         }
 
+        //记录搜索结果
+        FtpLogger.getLogger().info("Search result:Keyword:\"" + inputStr + "\";TotalResults:" +
+                searchResult.totalResults + ";TotalPages:" + searchResult.totalPages + ";TargetPage:" +
+                searchResult.currentPage);
+
         RequestDispatcher dispatcher = getServletContext()
                 .getRequestDispatcher("/index.jsp");
         dispatcher.forward(request, response);
@@ -327,8 +330,7 @@ public class SearchFtp extends HttpServlet {
                 }
             }
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            InternalLogger.logException(e);
             return null;
         }
         if (query == null) {
@@ -508,8 +510,7 @@ public class SearchFtp extends HttpServlet {
             }
             return newResult;
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            InternalLogger.logException(e);
         }
         return null;
     }
@@ -543,11 +544,9 @@ public class SearchFtp extends HttpServlet {
                     rd.displayName);
             return rd;
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            InternalLogger.logException(e);
         } catch (InvalidTokenOffsetsException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            InternalLogger.logException(e);
         }
         return null;
     }

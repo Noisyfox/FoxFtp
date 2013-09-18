@@ -1,5 +1,7 @@
 package FTPSearcher;
 
+import FTPSearcher.Logger.InternalLogger;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -63,18 +65,17 @@ public class ServiceStatusUtil {
             pInStream = new FileInputStream(pFile);
 
             properties.loadFromXML(pInStream);
-            properties.list(System.out);
+            InternalLogger.logProperties(properties);
 
             mCachedProperties.put(fileName, properties);
         } catch (IOException e) {
-            e.printStackTrace();
+            InternalLogger.logException(e);
         } finally {
             if (pInStream != null) {
                 try {
                     pInStream.close();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    InternalLogger.logException(e);
                 }
             }
         }
@@ -88,8 +89,7 @@ public class ServiceStatusUtil {
             try {
                 DriverManager.deregisterDriver(d.nextElement());
             } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                InternalLogger.logException(e);
             }
         }
     }
@@ -141,8 +141,7 @@ public class ServiceStatusUtil {
                 statement.execute("INSERT INTO `" + table + "` () VALUES ();");
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            InternalLogger.logException(e);
         }
 
     }
@@ -180,16 +179,14 @@ public class ServiceStatusUtil {
                 statement.executeUpdate(sql);
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            InternalLogger.logException(e);
             return false;
         } finally {
             try {
                 if (conn != null)
                     conn.close();
             } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                InternalLogger.logException(e);
             }
         }
         return true;
@@ -232,16 +229,14 @@ public class ServiceStatusUtil {
 
             return result;
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            InternalLogger.logException(e);
             return null;
         } finally {
             try {
                 if (conn != null)
                     conn.close();
             } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                InternalLogger.logException(e);
             }
         }
     }
@@ -253,10 +248,10 @@ public class ServiceStatusUtil {
 
     public static boolean saveServiceStatus(Properties status) {
 
-        System.out.println("Updating Service status.");
+        InternalLogger.getLogger().info("Updating Service status.");
 
         if (saveServiceStatus_DB(1, Util.properties2Map(status))) {
-            System.out.println("Updating success!");
+            InternalLogger.getLogger().info("Updating success!");
             return true;
         } else {
             return false;

@@ -1,5 +1,6 @@
 package FTPSearcher;
 
+import FTPSearcher.Logger.InternalLogger;
 import org.apache.commons.dbcp.cpdsadapter.DriverAdapterCPDS;
 import org.apache.commons.dbcp.datasources.SharedPoolDataSource;
 
@@ -37,7 +38,7 @@ public class DBConnectionProvider {
             cpds.setDriver(driver);
         } catch (ClassNotFoundException e) {
             String msg = "Could not find driver in the classpath ";
-            System.out.println(msg);
+            InternalLogger.getLogger().error(msg);
             throw new RuntimeException(msg);
         }
         cpds.setUrl(url);
@@ -56,7 +57,7 @@ public class DBConnectionProvider {
         try {
             return ds.getConnection();
         } catch (SQLException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            InternalLogger.logException(e);
             return null;
         }
     }

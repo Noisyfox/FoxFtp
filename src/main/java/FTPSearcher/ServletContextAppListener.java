@@ -6,6 +6,7 @@ package FTPSearcher; /**
  * To change this template use File | Settings | File Templates.
  */
 
+import FTPSearcher.Logger.InternalLogger;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.impl.StdSchedulerFactory;
@@ -30,16 +31,16 @@ public class ServletContextAppListener implements ServletContextListener {
             scheduler = StdSchedulerFactory.getDefaultScheduler();
             scheduler.getContext().put("servletContext", sce.getServletContext());
             scheduler.start();
-        } catch (SchedulerException pSchedulerException) {
-            pSchedulerException.printStackTrace();
+        } catch (SchedulerException e) {
+            InternalLogger.logException(e);
         }
     }
 
     public void contextDestroyed(ServletContextEvent sce) {
         try {
             scheduler.shutdown();
-        } catch (SchedulerException pSchedulerException) {
-            pSchedulerException.printStackTrace();
+        } catch (SchedulerException e) {
+            InternalLogger.logException(e);
         }
     }
 

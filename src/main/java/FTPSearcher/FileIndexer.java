@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import FTPSearcher.Logger.InternalLogger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -94,7 +95,7 @@ public class FileIndexer {
                     bkpFile.mkdirs();
                     Util.copy(_indexPath, bkpIndex);
                 } else {
-                    System.out.println("Incomplete index found!");
+                    InternalLogger.getLogger().info("Incomplete index found!");
                 }
             }
 
@@ -119,7 +120,7 @@ public class FileIndexer {
                 try {
                     compFlag.createNewFile();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    InternalLogger.logException(e);
                     return "索引创建失败！无法建立\"_indexing\"标记！";
                 }
             }
@@ -154,7 +155,7 @@ public class FileIndexer {
     }
 
     private String mkIndex() {
-        System.out.println("Indexing to directory '" + _indexPath + "'...");
+        InternalLogger.getLogger().info("Indexing to directory '" + _indexPath + "'...");
         Directory indexDir = null;
         IndexWriter iwriter = null;
         InputStream dataIn = null;
@@ -194,42 +195,37 @@ public class FileIndexer {
             iwriter.forceMerge(1);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            InternalLogger.logException(e);
             return e.getMessage();
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            InternalLogger.logException(e);
         } finally {
             if (iwriter != null) {
                 try {
                     iwriter.close();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    InternalLogger.logException(e);
                 }
             }
             if (indexDir != null) {
                 try {
                     indexDir.close();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    InternalLogger.logException(e);
                 }
             }
             if (br != null) {
                 try {
                     br.close();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    InternalLogger.logException(e);
                 }
             }
             if (dataIn != null) {
                 try {
                     dataIn.close();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    InternalLogger.logException(e);
                 }
             }
             // 删除临时文件
@@ -267,8 +263,7 @@ public class FileIndexer {
         try {
             writer.addDocument(doc);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            InternalLogger.logException(e);
             return false;
         }
 
