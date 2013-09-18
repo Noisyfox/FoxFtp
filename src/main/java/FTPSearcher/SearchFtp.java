@@ -23,6 +23,7 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.queryparser.classic.QueryParserBase;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
@@ -302,7 +303,7 @@ public class SearchFtp extends HttpServlet {
         Query query = null;
         Query fQuery;
         try {
-            fQuery = fileNameParser.parse(request.keyword);
+            fQuery = fileNameParser.parse(QueryParserBase.escape(request.keyword));
             switch (request.fileType) {
                 case SearchRequest.REQUEST_FILETYPE_ALL: {
                     query = fQuery;
