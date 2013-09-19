@@ -28,6 +28,7 @@ public class ServletContextAppListener implements ServletContextListener {
     // -------------------------------------------------------
     public void contextInitialized(ServletContextEvent sce) {
         try {
+            InternalLogger.getLogger().info("Scheduler start!");
             scheduler = StdSchedulerFactory.getDefaultScheduler();
             scheduler.getContext().put("servletContext", sce.getServletContext());
             scheduler.start();
@@ -38,6 +39,7 @@ public class ServletContextAppListener implements ServletContextListener {
 
     public void contextDestroyed(ServletContextEvent sce) {
         try {
+            InternalLogger.getLogger().info("Scheduler shutdown!");
             scheduler.shutdown();
         } catch (SchedulerException e) {
             InternalLogger.logException(e);

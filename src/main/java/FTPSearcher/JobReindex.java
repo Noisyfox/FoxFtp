@@ -19,17 +19,17 @@ public class JobReindex implements Job {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-
-        //try {
-        //ServletContext lServletContext =
-        //        (ServletContext) jobExecutionContext.getScheduler().getContext().get("servletContext");
-        InternalLogger.getLogger().info("Reindex start!");
-        FileIndexer fi = new FileIndexer();
-        String result = fi.reIndex();
-        InternalLogger.getLogger().info("Reindex finish! Result:" + result);
-        //} catch (SchedulerException e) {
-        //    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        //}
+            //try {
+            //ServletContext lServletContext =
+            //        (ServletContext) jobExecutionContext.getScheduler().getContext().get("servletContext");
+            InternalLogger.getLogger().info("Reindex start!");
+            //InternalLogger.getLogger().info(this.hashCode());
+            FileIndexer fi = new FileIndexer();
+            String result = fi.reIndex();
+            InternalLogger.getLogger().info("Reindex finish! Result:" + result);
+            //} catch (SchedulerException e) {
+            //    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            //}
 
     }
 }
