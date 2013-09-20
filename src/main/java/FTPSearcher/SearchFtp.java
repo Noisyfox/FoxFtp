@@ -159,6 +159,25 @@ public class SearchFtp extends HttpServlet {
     }
 
     /**
+     * 获取Ip地址
+     * @return
+     */
+    protected String getIpAddr(HttpServletRequest request) {
+        String ip = request.getHeader("x-forwarded-for");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
+    }
+
+
+    /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
      *      response)
      */
@@ -273,7 +292,7 @@ public class SearchFtp extends HttpServlet {
 
         if(searchResult != null){
             //记录搜索结果
-            FtpLogger.getLogger().info("Search result:Keyword:\"" + inputStr + "\";TotalResults:" +
+            FtpLogger.getLogger().info("IP:" + getIpAddr(request) + "--Search result:Keyword:\"" + inputStr + "\";TotalResults:" +
                     searchResult.totalResults + ";TotalPages:" + searchResult.totalPages + ";TargetPage:" +
                     searchResult.currentPage);
         }
