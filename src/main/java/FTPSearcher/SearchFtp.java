@@ -271,10 +271,12 @@ public class SearchFtp extends HttpServlet {
                     Util.genJSON(false, "Searcher not prepared!"));
         }
 
-        //记录搜索结果
-        FtpLogger.getLogger().info("Search result:Keyword:\"" + inputStr + "\";TotalResults:" +
-                searchResult.totalResults + ";TotalPages:" + searchResult.totalPages + ";TargetPage:" +
-                searchResult.currentPage);
+        if(searchResult != null){
+            //记录搜索结果
+            FtpLogger.getLogger().info("Search result:Keyword:\"" + inputStr + "\";TotalResults:" +
+                    searchResult.totalResults + ";TotalPages:" + searchResult.totalPages + ";TargetPage:" +
+                    searchResult.currentPage);
+        }
 
         RequestDispatcher dispatcher = getServletContext()
                 .getRequestDispatcher("/index.jsp");
