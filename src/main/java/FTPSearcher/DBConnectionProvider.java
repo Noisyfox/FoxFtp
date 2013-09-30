@@ -1,10 +1,10 @@
 package FTPSearcher;
 
 import FTPSearcher.Logger.InternalLogger;
-import org.apache.commons.dbcp.cpdsadapter.DriverAdapterCPDS;
-import org.apache.commons.dbcp.datasources.SharedPoolDataSource;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import javax.sql.DataSource;
+import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -33,24 +33,25 @@ public class DBConnectionProvider {
         // 密码
         String userPasswd = serviceConfig.getProperty(ServiceStatusUtil.CONFIG_DB_PASSWD, "");
 
-        DriverAdapterCPDS cpds = new DriverAdapterCPDS();
-        try {
-            cpds.setDriver(driver);
-        } catch (ClassNotFoundException e) {
-            String msg = "Could not find driver in the classpath ";
-            InternalLogger.getLogger().error(msg);
-            throw new RuntimeException(msg);
-        }
-        cpds.setUrl(url);
+        ComboPooledDataSource cpds = new ComboPooledDataSource();
         cpds.setUser(userName);
         cpds.setPassword(userPasswd);
+        cpds.setJdbcUrl(url);
+        try {
+            cpds.setDriverClass(driver);
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        }
+        cpds.setInitialPoolSize(30);
+        cpds.setMaxIdleTime(20);
+        cpds.setMaxPoolSize(100);
+        cpds.setMinPoolSize(10);
+        cpds.setIdleConnectionTestPeriod(60);
+        cpds.setBreakAfterAcquireFailure(false);
+        cpds.setAcquireRetryAttempts(10);
+        cpds.setAcquireRetryDelay(1000);
 
-        SharedPoolDataSource tds = new SharedPoolDataSource();
-        tds.setConnectionPoolDataSource(cpds);
-        tds.setMaxActive(20);
-        tds.setMaxWait(50);
-
-        ds = tds;
+        ds = cpds;
     }
 
     public static Connection getConnection() {
