@@ -359,4 +359,17 @@ public class Util {
             return String.format("%.1f %s", _s, sizeUnit[k]);
         }
     }
+
+    public static String generatePageUrl(String contextPath, String keyword, SearchResult result, int page){
+        StringBuilder sb = new StringBuilder();
+        sb.append(contextPath);
+        sb.append("/SearchFtp?page=");
+        sb.append(page);
+        sb.append("&keyword=");
+        sb.append(keyword);
+        sb.append("&fileType=");
+        sb.append(SearchRequest.getFileTypeString(result.currentRequest.fileType));
+
+        return sb.toString();
+    }
 }

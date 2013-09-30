@@ -1,0 +1,39 @@
+.typeicon {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	background: url(typeicon-16.png) no-repeat 0 0;
+	overflow: hidden;
+	vertical-align: text-bottom;
+}
+
+.typeiconTableCol {
+	width: 16px;
+    padding: 3px;
+}
+.ti-mp4 {background-position: -0px 0px;}
+.ti-rar {background-position: -32px 0px;}
+.ti-mp3 {background-position: -64px 0px;}
+.ti-file {background-position: -96px 0px;}
+.ti-ppt {background-position: -128px 0px;}
+.ti-txt {background-position: -160px 0px;}
+.ti-7z {background-position: -192px 0px;}
+.ti-img {background-position: -224px 0px;}
+.ti-chm {background-position: -256px 0px;}
+.ti-ttf {background-position: -288px 0px;}
+.ti-html {background-position: -320px 0px;}
+.ti-folder {background-position: -352px 0px;}
+.ti-reg {background-position: -384px 0px;}
+.ti-psd {background-position: -416px 0px;}
+.ti-js {background-position: -448px 0px;}
+.ti-sys {background-position: -480px 0px;}
+.ti-c {background-position: -512px 0px;}
+.ti-lib {background-position: -544px 0px;}
+.ti-h {background-position: -576px 0px;}
+.ti-iso {background-position: -608px 0px;}
+.ti-doc {background-position: -640px 0px;}
+.ti-cpp {background-position: -672px 0px;}
+.ti-pdf {background-position: -704px 0px;}
+.ti-xls {background-position: -736px 0px;}
+.ti-torrent {background-position: -768px 0px;}
+.ti-ini {background-position: -800px 0px;}

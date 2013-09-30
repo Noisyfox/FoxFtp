@@ -49,7 +49,7 @@ import org.wltea.analyzer.lucene.IKAnalyzer;
 public class SearchFtp extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    public static final int HIT_PER_PAGE = 40;
+    public static final int HIT_PER_PAGE = 20;
 
     final Object indexPrepareSync = new Object();
     File indexFile = null;
@@ -557,6 +557,9 @@ public class SearchFtp extends HttpServlet {
             rd.fatherUrl = Util.packUrlString(rd.displayFatherUrl);
 
             rd.isDir = Boolean.valueOf(doc.get(FileIndexer.FIELD_ISDIR));
+            if(rd.isDir){
+                rd.url += "/";
+            }
 
             TokenStream tokenStream = analyzer.tokenStream(
                     FileIndexer.FIELD_FILENAME,

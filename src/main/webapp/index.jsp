@@ -1,76 +1,25 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-         pageEncoding="utf-8"
-        %>
-<%@ page import="java.util.Properties" %>
-<%@ page import="FTPSearcher.*" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page import="FTPSearcher.ResultDocument" %>
+<%@ page import="FTPSearcher.SearchFtp" %>
+<%@ page import="FTPSearcher.SearchResult" %>
+<%@ page import="FTPSearcher.Util" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="utf-8" %>
+<%--
+  Created by IntelliJ IDEA.
+  User: Noisyfox
+  Date: 13-9-30
+  Time: 下午6:41
+  To change this template use File | Settings | File Templates.
+--%>
 <%
     request.setCharacterEncoding("utf-8");
 %>
+<!DOCTYPE html>
 <html>
 
 <%
     SearchResult searchResult = (SearchResult) request
             .getAttribute("searchResult");
-%>
 
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>计算中心FTP搜索 powered by FoxFtp</title>
-    <link rel="icon" href="images/ftp_icon.ico" type="image/x-icon"/>
-    <link rel="shortcut icon" href="images/ftp_icon.ico" type="image/x-icon"/>
-    <link rel="stylesheet" href="css/menu.css"/>
-    <link rel="stylesheet" href="css/main.css"/>
-
-    <script type="text/javascript" src="js/jquery-1.6.3.min.js"></script>
-    <script type="text/javascript" src="js/search.js"></script>
-    <script type="text/javascript" src="js/menu.js"></script>
-
-    <%if (searchResult != null) { %>
-    <link rel="stylesheet" href="css/searchresult.css"/>
-    <script type="text/javascript" src="js/result.js"></script>
-    <%} %>
-</head>
-
-<body <%if (searchResult == null || searchResult.totalResults == 0) {%>
-        onLoad="document.forms.inputform.keyword.focus()" <%}%>>
-<p style="border-bottom: 1px solid #F0F0F0; text-align: right;">
-    <a class=downlist id=ftp_more onMouseOver="MM_safe_mousein(1)"
-       onmouseout="MM_safe_mouseout(this,event,1)">FTP相关板块 </a>|<a
-        class=head href="./management/" target="_blank">FTP管理</a>
-</p>
-
-<div id=s_related_menu class=s_menu
-     style="visibility: hidden; right: 59px; + *right: 57px; _right: 56px;"
-     onMouseOver="MM_safe_mousein(1)"
-     onmouseout="MM_safe_mouseout(this,event,1)">
-
-    <a href="http://my.nuaa.edu.cn/forum-206-1.html" target="_blank">FTP讨论区</a> <a
-        href="http://my.nuaa.edu.cn/forum-167-1.html" target="_blank">FTP资源发布区</a> <a
-        href="http://my.nuaa.edu.cn/forum-168-1.html" target="_blank">FTP资源求助区</a> <a
-        class=sep style="overflow: hidden"
-        href="http://page.renren.com/601428879" target="_blank">人人主页</a>
-
-</div>
-<%
-    if (searchResult == null) {
-        for (int i = 0; i < 7; i++) {
-%>
-<br/>
-<%
-        }
-    }
-%>
-<div align="center">
-    <%
-        if (searchResult == null) {
-    %>
-    <img src="./images/ftp.png" alt=""/>
-    <%} else { %>
-    <a href="./"><img src="./images/ftp.png" alt="到搜索首页" title="到搜索首页"/></a>
-    <%} %>
-</div>
-<%
     //载入之前的内容
     String lInput = request.getParameter("keyword");
     if (lInput != null)
@@ -78,196 +27,211 @@
     else
         lInput = "";
 %>
-<div align="center">
-    <form name="inputform" id="form1" action="./SearchFtp" method="get">
-        <table cellpadding="0" cellspacing="0">
-            <tbody>
-            <tr>
-                <td class="td_head"></td>
-                <td class="td_text"><input type="text" class="inputtext" name="keyword" autocomplete="off"
-                        <%=lInput.isEmpty() ? "" : " value=\"" + lInput + "\" "%>/></td>
-                <td class="td_search">
-                    <button class="td_submit" type="submit">
-                        <strong>搜索</strong>
-                    </button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </form>
-</div>
-<%
-    if (searchResult != null) {
-%>
-<div class="resheader"></div>
-<div class="neck">
-    <div id="resultcounts">
-        <%
-            if (searchResult.totalResults == 0) {
-        %>
-        <a>抱歉，没有找到与<span style="color: #CC0000; "><%=Util.packHtmlString("\"") + lInput
-                + Util.packHtmlString("\"")%></span>相关的文件。
-        </a>
-        <%
-        } else {
-        %>
-        <a>共找到&nbsp;<span
-                style="color: #FF0000; "><%=searchResult.totalResults%></span>&nbsp;条结果，耗时&nbsp;<%=searchResult.totalMillisecond%>
-            &nbsp;毫秒
-        </a>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>计算中心 FTP 搜索</title>
+    <link rel="stylesheet" href="css/main.css"/>
+    <link rel="stylesheet" href="images/typeicon/typeicon-32.css"/>
+    <script type="text/javascript" src="js/jquery-1.9.0.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="images/typeicon/typeicon.js"></script>
+</head>
+<body <%if (searchResult == null || searchResult.totalResults == 0) {%>
+        onLoad="document.forms.inputform.keyword.focus()" <%}%>>
+<div id="wrapper">
+    <div id="content">
+        <div id="global-nav">
+            <ul class="MenuNav">
+                <li id="ftplink" class="dropdown">
+                    <a>
+                        <strong>FTP 相关模块</strong>
+                        <em class="icon-triangle-down-blue"></em>
+                    </a>
+                    <ul class="MenuItem">
+                        <li><a href="http://my.nuaa.edu.cn/forum-206-1.html" target="_blank">FTP 讨论区</a></li>
+                        <li><a href="http://my.nuaa.edu.cn/forum-167-1.html" target="_blank">FTP 资源发布区</a></li>
+                        <li><a href="http://my.nuaa.edu.cn/forum-168-1.html" target="_blank">FTP 资源求助区</a></li>
+                        <li class="split"><a href="http://page.renren.com/601428879" target="_blank">人人主页</a></li>
+                    </ul>
+                </li>
+                <li>|</li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/management/" target="_blank">FTP 管理</a>
+                </li>
+            </ul>
+        </div>
+
+        <div id="searchDiv">
+            <p id="lg">
+                <% if (searchResult != null) { %>
+                <a href="${pageContext.request.contextPath}/"><img src="images/ftp.png" alt="到搜索首页" title="到搜索首页"/></a>
+                <%} else {%>
+                <img src="images/ftp.png" alt=""/>
+                <%}%>
+            </p>
+
+            <form name="inputform" id="searchForm" action="${pageContext.request.contextPath}/SearchFtp" method="get">
+                <table>
+                    <tbody>
+                    <tr>
+                        <td class="boxLeftBorder"></td>
+                        <td class="boxMiddleBorder">
+                            <label>
+                                <input type="text" class="searchText" name="keyword" placeholder="搜点什么？"
+                                       value="<%=lInput%>"/>
+                            </label>
+                        </td>
+                        <td class="boxRightBorder">
+                            <button class="boxRightSearchButton" type="submit">
+                                <strong>搜索</strong>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <% if (searchResult != null) { %>
+        <!-- Begin Search Result -->
+        <div id="searchResultDiv">
+            <%
+                if (searchResult.totalResults == 0) {
+            %>
+            <div id="searchResultHeader">
+                <p>抱歉，没有找到与<span style="color: #CC0000; "><%=Util.packHtmlString("\"") + lInput
+                        + Util.packHtmlString("\"")%></span>相关的文件。</p>
+
+            </div>
+            <%} else {%>
+            <div id="searchResultHeader">
+                <p>共找到&nbsp;<span
+                        style="color: #FF0000; "><%=searchResult.totalResults%></span>&nbsp;条结果，耗时&nbsp;<%=searchResult.totalMillisecond%>
+                    &nbsp;毫秒</p>
+
+            </div>
+            <div id="searchResult">
+                <table id="searchResultTable">
+                    <thead>
+                    <tr>
+                        <th colspan="2" class="name">文件</th>
+                        <th class="size">大小</th>
+                        <th class="date">文件日期</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%
+                        for (int i = 0; i < SearchFtp.HIT_PER_PAGE; i++) {
+                            ResultDocument rd;
+                            if (i + searchResult.firstHitNum < SearchResult.CACHED_RESULT_COUNT) {
+                                if (i + searchResult.firstHitNum > searchResult.documents_forward
+                                        .size() - 1)
+                                    break;
+                                rd = searchResult.documents_forward.get(i
+                                        + searchResult.firstHitNum);
+                            } else if (i + searchResult.firstHitNum < SearchResult.CACHED_RESULT_COUNT * 2) {
+                                if (i + searchResult.firstHitNum
+                                        - SearchResult.CACHED_RESULT_COUNT > searchResult.documents_afterward
+                                        .size() - 1)
+                                    break;
+                                rd = searchResult.documents_afterward.get(i
+                                        + searchResult.firstHitNum
+                                        - SearchResult.CACHED_RESULT_COUNT);
+                            } else
+                                break;
+                    %>
+                    <tr>
+                        <td class="typeiconTableCol"><em class="typeicon ti-folder"></em></td>
+                        <td>
+                            <p><a class="file" href="<%=rd.url%>"><%=rd.displayName%>
+                            </a></p>
+
+                            <p><a class="dir" href="<%=rd.fatherUrl%>">位于:&nbsp;<%=rd.displayFatherUrl%>
+                            </a></p>
+                        </td>
+                        <td class="size"><%=rd.isDir ? "-" : Util.packFileSizeString(rd.fileSize)%>
+                        </td>
+                        <td class="date">-</td>
+                    </tr>
+                    <%
+                        }
+                    %>
+                    </tbody>
+                </table>
+
+                <%
+                    if (searchResult.totalPages > 1) {
+                        int first, last;
+                        if (searchResult.totalPages <= 10) {
+                            first = 1;
+                            last = searchResult.totalPages;
+                        } else {
+                            if (searchResult.currentPage <= 4) {
+                                first = 1;
+                                last = 10;
+                            } else if (searchResult.totalPages - searchResult.currentPage <= 5) {
+                                first = searchResult.totalPages - 9;
+                                last = searchResult.totalPages;
+                            } else {
+                                first = searchResult.currentPage - 4;
+                                last = first + 9;
+                            }
+                        }
+                %>
+                <div id="paging">
+                    <%if (searchResult.currentPage > 1) { %>
+                    <a href="<%=Util.generatePageUrl(request.getContextPath(), lInput, searchResult, searchResult.currentPage - 1)%>"><span
+                            class="pc text">&lt;上一页</span></a>
+                    <% } %>
+                    <%if (first != 1) { %>
+                    <a href="<%=Util.generatePageUrl(request.getContextPath(), lInput, searchResult, 1)%>"><span
+                            class="pc text">首页</span></a>
+                    <% } %>
+                    <%
+                        for (int i = first; i <= last; i++) {
+                            if (i != searchResult.currentPage) {
+                    %>
+                    <a href="<%=Util.generatePageUrl(request.getContextPath(), lInput, searchResult, i)%>"><span
+                            class="pc"><%=i%></span></a>
+                    <%
+                    } else {
+                    %>
+                    <strong><span class="pc"><%=i%></span></strong>
+                    <%
+                            }
+                        }
+                    %>
+                    <%if (last != searchResult.totalPages) {%>
+                    <a href="<%=Util.generatePageUrl(request.getContextPath(), lInput, searchResult, searchResult.totalPages)%>"><span
+                            class="pc text">尾页</span></a>
+                    <%}%>
+                    <%if (searchResult.currentPage < searchResult.totalPages) { %>
+                    <a href="<%=Util.generatePageUrl(request.getContextPath(), lInput, searchResult, searchResult.currentPage+1)%>"><span
+                            class="pc text">下一页&gt;</span></a>
+                    <%}%>
+                </div>
+                <%
+                    }
+                %>
+            </div>
+
+            <%}%>
+        </div>
+        <!-- End Search Result -->
         <%
             }
         %>
+
+        <div id="spaceholder"></div>
+    </div>
+
+    <div id="footDiv">
+        <div id="footDivCon">
+            <p>技术支持：<a href="http://my.nuaa.edu.cn/space-uid-339947.html" target="_blank">Noisyfox</a></p>
+
+            <p>站长信箱：<a href="mailto:jnccftp@nuaa.edu.cn">jnccftp@nuaa.edu.cn</a></p>
+        </div>
     </div>
 </div>
-<%
-    if (searchResult.totalResults != 0) {
-%>
-<div>
-    <table class="content" id="result" cellpadding="0" cellspacing="0">
-        <tr>
-            <th class="resultsHeader">文件名</th>
-            <th class="resultsHeader">大小</th>
-        </tr>
-        <%
-            for (int i = 0; i < SearchFtp.HIT_PER_PAGE; i++) {
-                ResultDocument rd;
-                if (i + searchResult.firstHitNum < SearchResult.CACHED_RESULT_COUNT) {
-                    if (i + searchResult.firstHitNum > searchResult.documents_forward
-                            .size() - 1)
-                        break;
-                    rd = searchResult.documents_forward.get(i
-                            + searchResult.firstHitNum);
-                } else if (i + searchResult.firstHitNum < SearchResult.CACHED_RESULT_COUNT * 2) {
-                    if (i + searchResult.firstHitNum
-                            - SearchResult.CACHED_RESULT_COUNT > searchResult.documents_afterward
-                            .size() - 1)
-                        break;
-                    rd = searchResult.documents_afterward.get(i
-                            + searchResult.firstHitNum
-                            - SearchResult.CACHED_RESULT_COUNT);
-                } else
-                    break;
-        %>
-        <tbody>
-        <tr class="resultsRow">
-            <td class="td" align="left">
-                <a href="<%=rd.url%>" target="_blank">
-                    <img src="<%=rd.isDir?"./images/diritem.gif":"./images/file.gif"%>" alt=""/>
-                    <%=rd.displayName%>
-                </a><br/>
-                <a class="dir" href="<%=rd.fatherUrl%>" target="_blank">
-                    <%="位于:" + rd.displayFatherUrl%>
-                </a>
-            </td>
-            <%if (rd.isDir) { %>
-            <td align="center">
-                --
-            </td>
-            <%} else { %>
-            <td align="right">
-                <%=Util.packFileSizeString(rd.fileSize)%>
-            </td>
-            <%} %>
-        </tr>
-        </tbody>
-        <%
-            }
-        %>
-    </table>
-    <%
-        if (searchResult.totalPages > 1) {
-            int first, last;
-            if (searchResult.totalPages <= 10) {
-                first = 1;
-                last = searchResult.totalPages;
-            } else {
-                if (searchResult.currentPage <= 4) {
-                    first = 1;
-                    last = 10;
-                } else if (searchResult.totalPages - searchResult.currentPage <= 5) {
-                    first = searchResult.totalPages - 9;
-                    last = searchResult.totalPages;
-                } else {
-                    first = searchResult.currentPage - 4;
-                    last = first + 9;
-                }
-            }
-    %>
-    <div class="paging">
-        <%if (searchResult.currentPage > 1) { %>
-        <a href="<%="SearchFtp?page="+(searchResult.currentPage-1)+"&keyword="+lInput+"&fileType="+SearchRequest.getFileTypeString(searchResult.currentRequest.fileType)%>">
-            &lt;上一页</a>
-        <%} %>
-        <%if (first != 1) {%>
-        <a href="<%="SearchFtp?page=1&keyword="+lInput+"&fileType="+SearchRequest.getFileTypeString(searchResult.currentRequest.fileType)%>">首页</a>
-        <%} %>
-        <%
-            for (int i = first; i <= last; i++) {
-                if (i == searchResult.currentPage) {
-        %>&nbsp;<span style="font-weight: bold;"><%=i%>
-    </span>&nbsp;<%
-    } else {
-    %><a href="<%="SearchFtp?page="+i+"&keyword="+lInput+"&fileType="+SearchRequest.getFileTypeString(searchResult.currentRequest.fileType)%>"
-         class="ah"><%=i%>
-    </a><%
-            }
-        }
-    %>
-        <%if (last != searchResult.totalPages) {%>
-        <a href="<%="SearchFtp?page="+searchResult.totalPages+"&keyword="+lInput+"&fileType="+SearchRequest.getFileTypeString(searchResult.currentRequest.fileType)%>">尾页</a>
-        <%} %>
-        <%if (searchResult.currentPage < searchResult.totalPages) { %>
-        <a href="<%="SearchFtp?page="+(searchResult.currentPage+1)+"&keyword="+lInput+"&fileType="+SearchRequest.getFileTypeString(searchResult.currentRequest.fileType)%>">下一页&gt;</a>
-        <%} %>
-    </div>
-    <%
-        }
-    %>
-
-
-</div>
-<%
-    }
-%>
-<%
-} else {
-    for (int i = 0; i < 5; i++) {
-%>
-<br/>
-<%
-    }
-    Properties sp = ServiceStatusUtil
-            .getServiceStatus();
-    String url_prefix = sp.getProperty(ServiceStatusUtil.STATUS_URL_PREFIX,
-            "").trim();
-%>
-<div align="center"><a href="<%=url_prefix%>">点此进入ftp文件浏览</a> </div>
-<%
-    for (int i = 0; i < 5; i++) {
-%>
-<br/>
-<%
-        }
-    }
-%>
-
-<div class="footer_r">
-    <br/> <br/><br/>
-    <hr/>
-    <div class="footer">
-        <p>
-            技术支持：<a
-                href="http://my.nuaa.edu.cn/space-uid-339947.html" target="_blank">Noisyfox</a>
-        </p>
-
-        <p>
-            站长邮箱：<a href="mailto://jnccftp@nuaa.edu.cn">jnccftp@nuaa.edu.cn</a>
-        </p>
-        <br/> <br/> <br/> <br/>
-    </div>
-</div>
-
 </body>
-
 </html>
