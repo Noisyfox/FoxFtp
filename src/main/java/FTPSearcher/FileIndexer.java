@@ -29,7 +29,7 @@ import org.wltea.analyzer.lucene.IKAnalyzer;
 
 public class FileIndexer {
 
-    private static Object mSyncObj = new Object();
+    private static final Object mSyncObj = new Object();
 
     public static final String FIELD_FILENAME = "fileName";
     public static final String FIELD_FILESIZE = "fileSize";

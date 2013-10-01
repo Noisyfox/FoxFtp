@@ -32,7 +32,7 @@
         }
 
         $(document).ready(function () {
-            str = getCookie("requireStatus");
+            var str = getCookie("requireStatus");
             if (str != null) {
                 var obj = JSON.parse(str);
                 showTopMessage(true, obj.success, obj.message);
@@ -123,17 +123,17 @@
 <a>设置：</a>
 <br/>
 <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设置归档目录：</a>
-<input name="ftpdir" id="ftpdir"
+<label for="ftpdir"></label><input name="ftpdir" id="ftpdir"
        value="<%=serviceStatus != null ? serviceStatus.getProperty(
 					ServiceStatusUtil.STATUS_FTP_PATH, "") : ""%>"/>
 <br/>
 <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设置索引目录：</a>
-<input name="indexdir" id="indexdir"
+<label for="indexdir"></label><input name="indexdir" id="indexdir"
        value="<%=serviceStatus != null ? serviceStatus.getProperty(
 					ServiceStatusUtil.STATUS_INDEX_PATH, "") : ""%>"/>
 <br/>
 <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设置URL前缀：&nbsp;</a>
-<input name="urlprefix" id="urlprefix"
+<label for="urlprefix"></label><input name="urlprefix" id="urlprefix"
        value="<%=serviceStatus != null ? serviceStatus.getProperty(
 					ServiceStatusUtil.STATUS_URL_PREFIX, "") : ""%>"/>
 <br/>

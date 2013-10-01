@@ -90,23 +90,19 @@ a {
     display: inline-block;
     width: 14px;
     height: 14px;
-    background-position: 0px 0px;
     background: url(../images/icon.png) no-repeat 0 0;
     overflow: hidden;
     vertical-align: middle;
 }
 
 .boxLeftBorder {
-    background: url(../images/icon.png) no-repeat -14px 0px;
+    background: url(../images/icon.png) no-repeat -14px 0;
     width: 11px;
     height: 35px;
     padding: 0;
 }
 
 /* Search box */
-#searchDiv {
-    padding-top: 40px;
-}
 .boxMiddleBorder {
     background: url(../images/search_2.png) repeat-x 0 0;
     width: 450px;
@@ -114,7 +110,7 @@ a {
 }
 
 .boxRightBorder {
-    background: url(../images/icon.png) no-repeat -31px 0px;
+    background: url(../images/icon.png) no-repeat -31px 0;
     width: 107px;
     height: 35px;
 }
@@ -127,11 +123,11 @@ a {
 }
 
 .boxRightBorder:hover {
-    background-position: -143px 0px;
+    background-position: -143px 0;
 }
 
 .boxRightBorder:active {
-    background-position: -255px 0px;
+    background-position: -255px 0;
 }
 
 .searchText {
@@ -141,19 +137,37 @@ a {
 }
 
 #searchDiv {
+    width: 572px;
     text-align: center;
-    width: 700px;
     margin: 0 auto;
-    padding-bottom: 20px;
+    padding-top: 40px;
+    padding-bottom: 10px;
 }
 
 #searchResultDiv {
-    margin: 0 auto;
     max-width: 1000px;
+    margin: 10px auto 0;
 }
 
 #searchForm table {
     margin: 0 auto;
+}
+
+#hotword {
+    text-align: left;
+    color: #999999;
+    padding-top: 2px;
+    padding-left: 5px;
+}
+
+#hotword a{
+    text-decoration: none;
+    color: #999999;
+    padding-left: 5px;
+}
+
+#hotword a:hover{
+    text-decoration: underline;
 }
 
 /* Footer */
@@ -172,8 +186,7 @@ body {
 }
 
 #content {
-    padding: 5px;
-    padding-bottom: 80px;
+    padding: 5px 5px 80px;
 }
 
 #footDiv {
@@ -304,3 +317,20 @@ body {
 #paging a .pc {
     border: 1px solid #e7ecf0;
 }
+/* End of Search Result */
+
+/* Index Information*/
+#indexInfoDiv{
+    text-align: center;
+}
+
+#browseFiles a{
+    color: #4B81C1;
+    font-size: x-large;
+    text-decoration: none;
+}
+
+#browseFiles a:hover{
+    text-decoration: underline;
+}
+/* End of Index Information*/
