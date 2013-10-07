@@ -55,7 +55,7 @@
         </li>
         <li>|</li>
         <li>
-            <a href="${pageContext.request.contextPath}/management/" target="_blank">FTP 管理</a>
+            <a href="./management/" target="_blank">FTP 管理</a>
         </li>
     </ul>
 </div>
@@ -63,13 +63,13 @@
 <div id="searchDiv">
     <p id="lg">
         <% if (searchResult != null) { %>
-        <a href="${pageContext.request.contextPath}/"><img src="images/ftp.png" alt="到搜索首页" title="到搜索首页"/></a>
+        <a href="./"><img src="images/ftp.png" alt="到搜索首页" title="到搜索首页"/></a>
         <%} else {%>
         <img src="images/ftp.png" alt=""/>
         <%}%>
     </p>
 
-    <form name="inputform" id="searchForm" action="${pageContext.request.contextPath}/SearchFtp" method="get">
+    <form name="inputform" id="searchForm" action="./SearchFtp" method="get">
         <table>
             <tbody>
             <tr>
@@ -153,10 +153,10 @@
             <tr>
                 <td class="typeiconTableCol"><em class="typeicon ti-folder"></em></td>
                 <td>
-                    <p><a class="file" href="<%=rd.url%>"><%=rd.displayName%>
+                    <p><a class="file" target="_blank" href="<%=rd.url%>"><%=rd.displayName%>
                     </a></p>
 
-                    <p><a class="dir" href="<%=rd.fatherUrl%>">位于:&nbsp;<%=rd.displayFatherUrl%>
+                    <p><a class="dir" target="_blank" href="<%=rd.fatherUrl%>">位于:&nbsp;<%=rd.displayFatherUrl%>
                     </a></p>
                 </td>
                 <td class="size"><%=rd.isDir ? "-" : Util.packFileSizeString(rd.fileSize)%>
@@ -190,18 +190,18 @@
         %>
         <div id="paging">
             <%if (searchResult.currentPage > 1) { %>
-            <a href="<%=Util.generatePageUrl(request.getContextPath(), lInput, searchResult, searchResult.currentPage - 1)%>"><span
+            <a href="<%=Util.generatePageUrl(".", lInput, searchResult, searchResult.currentPage - 1)%>"><span
                     class="pc text">&lt;上一页</span></a>
             <% } %>
             <%if (first != 1) { %>
-            <a href="<%=Util.generatePageUrl(request.getContextPath(), lInput, searchResult, 1)%>"><span
+            <a href="<%=Util.generatePageUrl(".", lInput, searchResult, 1)%>"><span
                     class="pc text">首页</span></a>
             <% } %>
             <%
                 for (int i = first; i <= last; i++) {
                     if (i != searchResult.currentPage) {
             %>
-            <a href="<%=Util.generatePageUrl(request.getContextPath(), lInput, searchResult, i)%>"><span
+            <a href="<%=Util.generatePageUrl(".", lInput, searchResult, i)%>"><span
                     class="pc"><%=i%></span></a>
             <%
             } else {
@@ -212,11 +212,11 @@
                 }
             %>
             <%if (last != searchResult.totalPages) {%>
-            <a href="<%=Util.generatePageUrl(request.getContextPath(), lInput, searchResult, searchResult.totalPages)%>"><span
+            <a href="<%=Util.generatePageUrl(".", lInput, searchResult, searchResult.totalPages)%>"><span
                     class="pc text">尾页</span></a>
             <%}%>
             <%if (searchResult.currentPage < searchResult.totalPages) { %>
-            <a href="<%=Util.generatePageUrl(request.getContextPath(), lInput, searchResult, searchResult.currentPage+1)%>"><span
+            <a href="<%=Util.generatePageUrl(".", lInput, searchResult, searchResult.currentPage+1)%>"><span
                     class="pc text">下一页&gt;</span></a>
             <%}%>
         </div>
