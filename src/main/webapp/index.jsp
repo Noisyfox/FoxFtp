@@ -80,11 +80,7 @@
                                value="<%=lInput%>"/>
                     </label>
                 </td>
-                <td class="boxRightBorder">
-                    <button class="boxRightSearchButton" type="submit">
-                        <strong>搜索</strong>
-                    </button>
-                </td>
+                <td class="boxRightBorder" onclick="submit();"></td>
             </tr>
             </tbody>
         </table>
@@ -240,6 +236,37 @@
     <div id="browseFiles">
         <a href="<%=url_prefix%>">&lt;只是想逛逛就戳我&gt;</a>
     </div>
+    <!--
+    <div id="fileChanges">
+        <table id="fileChangesTable">
+            <tr>
+                <td>
+                    <table id="newFilesTable">
+                        <thead>
+                        <tr>
+                            <th colspan="2">最近更新</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="newFileName"><a href="./">aaa.txt</a></td>
+                            <td class="newFileTime">2013-11-02</td>
+                        </tr>
+                        <tr>
+                            <td class="newFileName"><a href="./">aaa.txt</a></td>
+                            <td class="newFileTime">2013-11-02</td>
+                        </tr>
+                        <tr>
+                            <td class="newFileName"><a href="./">aaa.txt</a></td>
+                            <td class="newFileTime">2013-11-02</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+    -->
 </div>
 <!-- End Index Information -->
 <% } %>

@@ -36,6 +36,7 @@ typeicon_map = {
 	"js": "ti-js",
 	"sys": "ti-sys",
 	"c": "ti-c",
+	"exe": "ti-exe",
 	"lib": "ti-lib",
 	"h": "ti-h",
 	"iso": "ti-iso",

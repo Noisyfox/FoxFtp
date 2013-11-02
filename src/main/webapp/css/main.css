@@ -16,10 +16,6 @@ img {
     list-style: none;
 }
 
-a {
-    color: #00c;
-}
-
 ::selection {
     background: #b3d4fc;
     text-shadow: none;
@@ -42,6 +38,14 @@ a {
     float: right;
 }
 
+.MenuNav * {
+    transition: color linear 0.1s,background-color linear 0.1s;
+}
+
+.MenuNav a {
+    color: #537cc4;
+}
+
 .MenuNav li {
     float: left;
     padding: 0 4px 0 4px;
@@ -56,7 +60,7 @@ a {
 
 .MenuItem {
     visibility: hidden;
-    border: 1px solid #888;
+    border: 1px solid #bbb;
     top: 18px;
     right: 1px;
     position: absolute;
@@ -67,11 +71,12 @@ a {
 
 .MenuItem li {
     float: none;
-    height: 25px;
-    line-height: 25px;
+    /*height: 25px;
+    line-height: 25px;*/
     vertical-align: bottom; /* IE 6~7 Hack */
     background: #fff;
-    text-indent: 8px;
+    padding: 0;
+    /*text-indent: 8px;*/
     width: 100px;
     text-align: left;
 }
@@ -83,10 +88,11 @@ a {
 .MenuItem li a {
     text-decoration: none;
     display: block;
+    padding: 3px 6px 4px;
 }
 
 .MenuItem .split {
-    border-top: 1px solid #ccc;
+    border-top: 1px solid #ebebeb
 }
 
 /* Small blue triangle */
@@ -94,6 +100,7 @@ a {
     display: inline-block;
     width: 14px;
     height: 14px;
+    background-position: 0px 0px;
     background: url(../images/icon.png) no-repeat 0 0;
     overflow: hidden;
     vertical-align: middle;
@@ -117,13 +124,6 @@ a {
     background: url(../images/icon.png) no-repeat -31px 0;
     width: 107px;
     height: 35px;
-}
-
-.boxRightBorder button {
-    opacity: 0;
-    width: 100%;
-    height: 100%;
-    filter: alpha(opacity=0);
 }
 
 .boxRightBorder:hover {
@@ -287,6 +287,14 @@ body {
     background: #eee;
 }
 
+#searchResultTable a {
+    text-decoration: none;
+}
+
+#searchResultTable a:hover {
+    text-decoration: underline;
+}
+
 #paging {
     padding: 5px 0 0 0;
 }
@@ -326,7 +334,10 @@ body {
 /* Index Information*/
 #indexInfoDiv{
     text-align: center;
-    padding-top: 20px;
+}
+
+#indexInfoDiv div{
+    margin-top:20px;
 }
 
 #browseFiles a{
@@ -337,5 +348,59 @@ body {
 
 #browseFiles a:hover{
     text-decoration: underline;
+}
+
+#fileChanges{
+    min-width: 572px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#fileChangesTable{
+    width:100%
+}
+
+#fileChangesTable td{
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+#fileChangesTable table{
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 500px;
+    width:100%
+}
+
+#fileChangesTable table thead{
+    background-color:#dce2ee;
+}
+
+#fileChangesTable table tbody{
+    text-align: left;
+}
+
+#fileChangesTable table tbody tr:hover {
+    background: #eee;
+}
+
+#fileChangesTable table a{
+    text-decoration: none;
+    color: #4B81C1;
+    padding-left: 5px;
+}
+
+#fileChangesTable table a:hover{
+    text-decoration: underline;
+}
+
+.newFileTime{
+    width:80px;
+    text-align:center
+}
+
+.newFileName a{
+    display:block;
 }
 /* End of Index Information*/

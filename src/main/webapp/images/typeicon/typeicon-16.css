@@ -9,7 +9,7 @@
 
 .typeiconTableCol {
 	width: 16px;
-    padding: 3px;
+	padding: 3px;
 }
 .ti-mp4 {background-position: -0px 0px;}
 .ti-rar {background-position: -32px 0px;}
@@ -28,12 +28,13 @@
 .ti-js {background-position: -448px 0px;}
 .ti-sys {background-position: -480px 0px;}
 .ti-c {background-position: -512px 0px;}
-.ti-lib {background-position: -544px 0px;}
-.ti-h {background-position: -576px 0px;}
-.ti-iso {background-position: -608px 0px;}
-.ti-doc {background-position: -640px 0px;}
-.ti-cpp {background-position: -672px 0px;}
-.ti-pdf {background-position: -704px 0px;}
-.ti-xls {background-position: -736px 0px;}
-.ti-torrent {background-position: -768px 0px;}
-.ti-ini {background-position: -800px 0px;}
+.ti-exe {background-position: -544px 0px;}
+.ti-lib {background-position: -576px 0px;}
+.ti-h {background-position: -608px 0px;}
+.ti-iso {background-position: -640px 0px;}
+.ti-doc {background-position: -672px 0px;}
+.ti-cpp {background-position: -704px 0px;}
+.ti-pdf {background-position: -736px 0px;}
+.ti-xls {background-position: -768px 0px;}
+.ti-torrent {background-position: -800px 0px;}
+.ti-ini {background-position: -832px 0px;}
