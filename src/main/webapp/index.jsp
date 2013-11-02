@@ -36,7 +36,7 @@
     <script type="text/javascript" src="images/typeicon/typeicon.js"></script>
 </head>
 <body <%if (searchResult == null || searchResult.totalResults == 0) {%>
-        onLoad="document.forms.inputform.keyword.focus()" <%}%>>
+        onLoad="document.forms.inputform.keyword.select();" <%}%>>
 <div id="wrapper">
 <div id="content">
 <div id="global-nav">

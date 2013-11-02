@@ -44,7 +44,7 @@ $(document).ready(function() {
             $(this).css("background-position", "-143px 0px");
         });
     } else {
-        console.log("CSS3 patch bypassed");
+        //console.log("CSS3 patch bypassed");
     }
 	
 });
