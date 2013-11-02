@@ -80,7 +80,7 @@
                                value="<%=lInput%>"/>
                     </label>
                 </td>
-                <td class="boxRightBorder" onclick="submit();"></td>
+                <td class="boxRightBorder" onclick="document.inputform.submit();"></td>
             </tr>
             </tbody>
         </table>
