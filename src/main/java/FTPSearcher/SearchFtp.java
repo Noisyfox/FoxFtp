@@ -1,21 +1,5 @@
 package FTPSearcher;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Properties;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import FTPSearcher.Logger.FtpLogger;
 import FTPSearcher.Logger.InternalLogger;
 import org.apache.lucene.analysis.Analyzer;
@@ -26,21 +10,27 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.queryparser.classic.QueryParserBase;
-import org.apache.lucene.search.BooleanClause;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.search.highlight.Highlighter;
-import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
-import org.apache.lucene.search.highlight.QueryScorer;
-import org.apache.lucene.search.highlight.SimpleFragmenter;
-import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
+import org.apache.lucene.search.*;
+import org.apache.lucene.search.highlight.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.wltea.analyzer.lucene.IKAnalyzer;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Properties;
 
 /**
  * Servlet implementation class SearchFtp
@@ -160,6 +150,7 @@ public class SearchFtp extends HttpServlet {
 
     /**
      * 获取Ip地址
+     *
      * @return
      */
     protected String getIpAddr(HttpServletRequest request) {
@@ -290,7 +281,7 @@ public class SearchFtp extends HttpServlet {
                     Util.genJSON(false, "Searcher not prepared!"));
         }
 
-        if(searchResult != null){
+        if (searchResult != null) {
             //记录搜索结果
             FtpLogger.getLogger().info("IP:" + getIpAddr(request) + "--Search result:Keyword:\"" + inputStr + "\";TotalResults:" +
                     searchResult.totalResults + ";TotalPages:" + searchResult.totalPages + ";TargetPage:" +
@@ -557,7 +548,7 @@ public class SearchFtp extends HttpServlet {
             rd.fatherUrl = Util.packUrlString(rd.displayFatherUrl);
 
             rd.isDir = Boolean.valueOf(doc.get(FileIndexer.FIELD_ISDIR));
-            if(rd.isDir){
+            if (rd.isDir) {
                 rd.url += "/";
             }
 

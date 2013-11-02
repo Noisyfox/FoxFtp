@@ -16,18 +16,18 @@ import java.util.Properties;
 public final class FtpLogger {
     private static Logger mLogger = Logger.getLogger(FtpLogger.class);
 
-    public static Logger getLogger(){
+    public static Logger getLogger() {
         return mLogger;
     }
 
-    public static void logException(Exception e){
+    public static void logException(Exception e) {
         //StringWriter sw = new StringWriter();
         //e.printStackTrace(new PrintWriter(sw));
         //mLogger.error(sw.toString());
         mLogger.error(e.getMessage(), e);
     }
 
-    public static void logProperties(Properties prop){
+    public static void logProperties(Properties prop) {
         StringWriter sw = new StringWriter();
         prop.list(new PrintWriter(sw));
         mLogger.info(sw.toString());

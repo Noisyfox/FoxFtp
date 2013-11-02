@@ -1,17 +1,7 @@
 package FTPSearcher;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Properties;
-import java.util.StringTokenizer;
-
+import FTPSearcher.FileLister.FileDescription;
+import FTPSearcher.FileLister.FileLister;
 import FTPSearcher.Logger.InternalLogger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
@@ -23,9 +13,15 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.IOUtils;
 import org.apache.lucene.util.Version;
 import org.wltea.analyzer.lucene.IKAnalyzer;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Properties;
 
 public class FileIndexer {
 
@@ -158,8 +154,12 @@ public class FileIndexer {
         InternalLogger.getLogger().info("Indexing to directory '" + _indexPath + "'...");
         Directory indexDir = null;
         IndexWriter iwriter = null;
-        InputStream dataIn = null;
-        BufferedReader br = null;
+
+        FileLister fileLister = new PythonFileLister(Util.pathConnect(new String[]{
+                ServiceStatusUtil.CLASS_PATH, "lsAllfiles.py"}), _ftpPath, _indexPath, "fileList");
+
+        FileDescription fileDescription = new FileDescription();
+
         try {
             indexDir = FSDirectory.open(new File(_indexPath));
             Analyzer analyzer = new IKAnalyzer();
@@ -169,27 +169,11 @@ public class FileIndexer {
             iwc.setRAMBufferSizeMB(256.0);
             iwriter = new IndexWriter(indexDir, iwc);
 
-            // 准备调用python
-            String pyPath = Util.pathConnect(new String[]{
-                    ServiceStatusUtil.CLASS_PATH, "lsAllfiles.py"});
-            //System.err.println(pyPath);
-            Process process = Runtime.getRuntime().exec(
-                    new String[]{"python", pyPath, _ftpPath, _indexPath,
-                            "fileList"});
-            process.waitFor();
-
-            // 读取临时文件
-            dataIn = new FileInputStream(Util.pathConnect(new String[]{
-                    _indexPath, "fileList"}));
-            br = new BufferedReader(new InputStreamReader(dataIn,
-                    IOUtils.CHARSET_UTF_8));
-            String line = br.readLine();
-            while (line != null) {
-                line = line.trim();
-                if (!line.isEmpty()) {
-                    addEntry(iwriter, line);
-                }
-                line = br.readLine();
+            if (!fileLister.prepare()) {
+                return fileLister.getFailureMessage();
+            }
+            while (fileLister.next(fileDescription)) {
+                addEntry(iwriter, fileDescription);
             }
 
             iwriter.forceMerge(1);
@@ -197,8 +181,6 @@ public class FileIndexer {
         } catch (IOException e) {
             InternalLogger.logException(e);
             return e.getMessage();
-        } catch (InterruptedException e) {
-            InternalLogger.logException(e);
         } finally {
             if (iwriter != null) {
                 try {
@@ -214,34 +196,18 @@ public class FileIndexer {
                     InternalLogger.logException(e);
                 }
             }
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    InternalLogger.logException(e);
-                }
-            }
-            if (dataIn != null) {
-                try {
-                    dataIn.close();
-                } catch (IOException e) {
-                    InternalLogger.logException(e);
-                }
-            }
-            // 删除临时文件
-            new File(Util.pathConnect(new String[]{_indexPath, "fileList"}))
-                    .delete();
+            fileLister.cleanup();
         }
         return "";
     }
 
-    private boolean addEntry(IndexWriter writer, String fileDisc) {
+    private boolean addEntry(IndexWriter writer, FileDescription fileDescription) {
         Document doc = new Document();
         // parse row and create a document
-        StringTokenizer st = new StringTokenizer(fileDisc, "\t");
-        String filePath = st.nextToken();
-        String fileName = st.nextToken();
-        String fileSize = st.nextToken();
+        boolean isDir = fileDescription.isDirectory();
+        String filePath = fileDescription.getFilePath();
+        String fileName = fileDescription.getFileName();
+        String fileSize = String.valueOf(fileDescription.getFileSize());
 
         String recPath = Util.getRelativePath(_ftpPath,
                 new File(filePath).getAbsolutePath());
@@ -251,7 +217,7 @@ public class FileIndexer {
             return false;
 
         doc.add(new TextField(FIELD_FILENAME, fileName, Field.Store.YES));
-        if (fileSize.equals("-1")) {
+        if (isDir) {
             doc.add(new StringField(FIELD_FILESIZE, "0", Field.Store.YES));
             doc.add(new TextField(FIELD_ISDIR, "true", Field.Store.YES));
         } else {
@@ -267,7 +233,7 @@ public class FileIndexer {
             return false;
         }
 
-        if (fileSize.equals("-1")) {
+        if (isDir) {
             _dirCount++;
         } else {
             _fileCount++;

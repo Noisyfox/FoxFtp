@@ -1,24 +1,16 @@
 package FTPSearcher;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.Map.Entry;
-
 import FTPSearcher.Logger.InternalLogger;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.*;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.Set;
 
 public class Util {
     public static String pathConnect(String[] elements) {
@@ -360,7 +352,7 @@ public class Util {
         }
     }
 
-    public static String generatePageUrl(String contextPath, String keyword, SearchResult result, int page){
+    public static String generatePageUrl(String contextPath, String keyword, SearchResult result, int page) {
         StringBuilder sb = new StringBuilder();
         sb.append(contextPath);
         sb.append("/SearchFtp?page=");

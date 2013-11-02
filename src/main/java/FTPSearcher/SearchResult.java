@@ -1,9 +1,9 @@
 package FTPSearcher;
 
+import org.apache.lucene.search.ScoreDoc;
+
 import java.util.LinkedList;
 import java.util.List;
-
-import org.apache.lucene.search.ScoreDoc;
 
 public class SearchResult {
     public static final int CACHED_RESULT_COUNT = 200;
