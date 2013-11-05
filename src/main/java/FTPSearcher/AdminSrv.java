@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import static FTPSearcher.DBDefinition.*;
+
 /**
  * Servlet implementation class AdminSrv
  */
@@ -102,20 +104,20 @@ public class AdminSrv extends HttpServlet {
                     ADMIN_ARGUMENT_FTPDIR, "").trim();
             path = new File(path).getAbsolutePath();
             if (!path.isEmpty()) {
-                currentProp.setProperty(ServiceStatusUtil.STATUS_FTP_PATH,
+                currentProp.setProperty(STATUS_FTP_PATH,
                         path);
             }
             path = completedFormFields.getProperty(ADMIN_ARGUMENT_INDEXDIR, "")
                     .trim();
             path = new File(path).getAbsolutePath();
             if (!path.isEmpty()) {
-                currentProp.setProperty(ServiceStatusUtil.STATUS_INDEX_PATH,
+                currentProp.setProperty(STATUS_INDEX_PATH,
                         path);
             }
             path = completedFormFields
                     .getProperty(ADMIN_ARGUMENT_URLPREFIX, "").trim();
             if (!path.isEmpty()) {
-                currentProp.setProperty(ServiceStatusUtil.STATUS_URL_PREFIX,
+                currentProp.setProperty(STATUS_URL_PREFIX,
                         path);
             }
             ServiceStatusUtil.saveServiceStatus(currentProp);

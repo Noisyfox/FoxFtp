@@ -2,6 +2,7 @@
          import="FTPSearcher.ServiceStatusUtil,
                  java.util.Properties"
          pageEncoding="utf-8" %>
+<%@ page import="FTPSearcher.DBDefinition" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%
     //session.setAttribute("user_admin", "true");
@@ -91,25 +92,25 @@
         if (serviceStatus != null) {
 %>
 <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已归档文件数：<%=serviceStatus.getProperty(
-        ServiceStatusUtil.STATUS_FILE_TOTAL, "0")%>（<%=serviceStatus.getProperty(
-        ServiceStatusUtil.STATUS_FILE_FILE, "0")%>文件，<%=serviceStatus.getProperty(
-        ServiceStatusUtil.STATUS_FILE_DIR, "0")%>目录）
+        DBDefinition.STATUS_FILE_TOTAL, "0")%>（<%=serviceStatus.getProperty(
+        DBDefinition.STATUS_FILE_FILE, "0")%>文件，<%=serviceStatus.getProperty(
+        DBDefinition.STATUS_FILE_DIR, "0")%>目录）
 </a>
 <br/>
 <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上次归档统计时间：<%=serviceStatus.getProperty(
-        ServiceStatusUtil.STATUS_LAST_DOC_TIME, "NULL")%>
+        DBDefinition.STATUS_LAST_DOC_TIME, "NULL")%>
 </a>
 <br/>
 <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ftp&nbsp;归档目录：<%=serviceStatus.getProperty(
-        ServiceStatusUtil.STATUS_FTP_PATH, "NULL")%>
+        DBDefinition.STATUS_FTP_PATH, "NULL")%>
 </a>
 <br/>
 <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ftp&nbsp;索引目录：<%=serviceStatus.getProperty(
-        ServiceStatusUtil.STATUS_INDEX_PATH, "NULL")%>
+        DBDefinition.STATUS_INDEX_PATH, "NULL")%>
 </a>
 <br/>
 <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ftp&nbsp;URL前缀：&nbsp;<%=serviceStatus.getProperty(
-        ServiceStatusUtil.STATUS_URL_PREFIX, "NULL")%>
+        DBDefinition.STATUS_URL_PREFIX, "NULL")%>
 </a>
 <br/>
 <%
@@ -125,17 +126,17 @@
 <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设置归档目录：</a>
 <label for="ftpdir"></label><input name="ftpdir" id="ftpdir"
        value="<%=serviceStatus != null ? serviceStatus.getProperty(
-					ServiceStatusUtil.STATUS_FTP_PATH, "") : ""%>"/>
+					DBDefinition.STATUS_FTP_PATH, "") : ""%>"/>
 <br/>
 <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设置索引目录：</a>
 <label for="indexdir"></label><input name="indexdir" id="indexdir"
        value="<%=serviceStatus != null ? serviceStatus.getProperty(
-					ServiceStatusUtil.STATUS_INDEX_PATH, "") : ""%>"/>
+					DBDefinition.STATUS_INDEX_PATH, "") : ""%>"/>
 <br/>
 <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设置URL前缀：&nbsp;</a>
 <label for="urlprefix"></label><input name="urlprefix" id="urlprefix"
        value="<%=serviceStatus != null ? serviceStatus.getProperty(
-					ServiceStatusUtil.STATUS_URL_PREFIX, "") : ""%>"/>
+					DBDefinition.STATUS_URL_PREFIX, "") : ""%>"/>
 <br/>
 <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <button onclick="updateServerSettings()">

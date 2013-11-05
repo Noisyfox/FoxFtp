@@ -9,22 +9,9 @@ import java.sql.*;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class ServiceStatusUtil {
-    public static final String STATUS_FTP_ID = "id";
-    public static final String STATUS_FTP_NAME = "STATUS_FTP_NAME";
-    public static final String STATUS_FILE_TOTAL = "STATUS_FILE_TOTAL";
-    public static final String STATUS_FILE_FILE = "STATUS_FILE_FILE";
-    public static final String STATUS_FILE_DIR = "STATUS_FILE_DIR";
-    public static final String STATUS_LAST_DOC_TIME = "STATUS_LAST_DOC_TIME";
-    public static final String STATUS_FTP_PATH = "STATUS_FTP_PATH";
-    public static final String STATUS_INDEX_PATH = "STATUS_INDEX_PATH";
-    public static final String STATUS_URL_PREFIX = "STATUS_URL_PREFIX";
+import static FTPSearcher.DBDefinition.*;
 
-    public static final String CONFIG_DB_USERNAME = "DB_USERNAME";
-    public static final String CONFIG_DB_PASSWD = "DB_PASSWD";
-    public static final String CONFIG_DB_URL = "DB_URL";
-    public static final String CONFIG_DB_NAME = "DB_NAME";
-    public static final String CONFIG_DB_TABLE_FTPSTATUS = "DB_TABLE_FTPSTATUS";
+public class ServiceStatusUtil {
 
     public static final String CLASS_PATH = Util.pathConnect(new String[]{ServiceStatusUtil.class.getClassLoader().getResource("/").getPath()});
     public static final String PROPERTIES_DIR = Util.pathConnect(new String[]{CLASS_PATH, "properties"});
@@ -85,7 +72,7 @@ public class ServiceStatusUtil {
     }
 
     private static void createDBifNotExists(Connection connection) {
-        String table = getProperties("searcherConfig.xml")
+        String table = getProperties(CONFIG_FILE)
                 .getProperty(CONFIG_DB_TABLE_FTPSTATUS, "");
 
         if (connection == null) {
@@ -149,7 +136,7 @@ public class ServiceStatusUtil {
             createDBifNotExists(conn);
 
             Statement statement = conn.createStatement();
-            String table = getProperties("searcherConfig.xml")
+            String table = getProperties(CONFIG_FILE)
                     .getProperty(CONFIG_DB_TABLE_FTPSTATUS, "");
 
             Set<Entry<String, String>> dataSet = data.entrySet();
@@ -193,7 +180,7 @@ public class ServiceStatusUtil {
 
             Map<String, String> result = new HashMap<String, String>();
 
-            String table = getProperties("searcherConfig.xml")
+            String table = getProperties(CONFIG_FILE)
                     .getProperty(CONFIG_DB_TABLE_FTPSTATUS, "");
 
             Statement statement = conn.createStatement();

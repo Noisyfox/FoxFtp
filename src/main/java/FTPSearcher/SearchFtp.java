@@ -32,6 +32,9 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import static FTPSearcher.DBDefinition.STATUS_INDEX_PATH;
+import static FTPSearcher.DBDefinition.STATUS_URL_PREFIX;
+
 /**
  * Servlet implementation class SearchFtp
  */
@@ -87,11 +90,11 @@ public class SearchFtp extends HttpServlet {
 
             Properties sp = ServiceStatusUtil
                     .getServiceStatus();
-            url_prefix = sp.getProperty(ServiceStatusUtil.STATUS_URL_PREFIX,
+            url_prefix = sp.getProperty(STATUS_URL_PREFIX,
                     "").trim();
 
             String indexPath = sp.getProperty(
-                    ServiceStatusUtil.STATUS_INDEX_PATH, "").trim();
+                    STATUS_INDEX_PATH, "").trim();
 
             if (indexPath.isEmpty()) {
                 return false;

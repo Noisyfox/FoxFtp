@@ -3,6 +3,7 @@ package FTPSearcher;
 import FTPSearcher.FileLister.FileDescription;
 import FTPSearcher.FileLister.FileLister;
 import FTPSearcher.Logger.InternalLogger;
+import FTPSearcher.Statistics.LatestFiles;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -23,6 +24,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
+import static FTPSearcher.DBDefinition.*;
+
 public class FileIndexer {
 
     private static final Object mSyncObj = new Object();
@@ -42,9 +45,9 @@ public class FileIndexer {
         Properties serviceStatus = ServiceStatusUtil
                 .getServiceStatus();
         _ftpPath = serviceStatus.getProperty(
-                ServiceStatusUtil.STATUS_FTP_PATH, "");
+                STATUS_FTP_PATH, "");
         _indexPath = serviceStatus.getProperty(
-                ServiceStatusUtil.STATUS_INDEX_PATH, "");
+                STATUS_INDEX_PATH, "");
         _ftpPath = new File(_ftpPath).getAbsolutePath();
         _indexPath = new File(_indexPath).getAbsolutePath();
     }
@@ -129,15 +132,15 @@ public class FileIndexer {
             // 更新服务器状态
             Properties currentProp = ServiceStatusUtil.getServiceStatus();
 
-            currentProp.setProperty(ServiceStatusUtil.STATUS_FILE_DIR,
+            currentProp.setProperty(STATUS_FILE_DIR,
                     String.valueOf(_dirCount));
-            currentProp.setProperty(ServiceStatusUtil.STATUS_FILE_FILE,
+            currentProp.setProperty(STATUS_FILE_FILE,
                     String.valueOf(_fileCount));
-            currentProp.setProperty(ServiceStatusUtil.STATUS_FILE_TOTAL,
+            currentProp.setProperty(STATUS_FILE_TOTAL,
                     String.valueOf(_fileCount + _dirCount));
 
             DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            currentProp.setProperty(ServiceStatusUtil.STATUS_LAST_DOC_TIME,
+            currentProp.setProperty(STATUS_LAST_DOC_TIME,
                     sdf.format(new Date()));
 
             if (!ServiceStatusUtil.saveServiceStatus(currentProp)) {
@@ -172,9 +175,13 @@ public class FileIndexer {
             if (!fileLister.prepare()) {
                 return fileLister.getFailureMessage();
             }
+
+            LatestFiles.Editor e = LatestFiles.getInstance().edit();
             while (fileLister.next(fileDescription)) {
                 addEntry(iwriter, fileDescription);
+                e.record(fileDescription);
             }
+            e.commit();
 
             iwriter.forceMerge(1);
 

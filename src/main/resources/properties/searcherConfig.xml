@@ -8,5 +8,7 @@
 	<entry key="DB_URL">localhost</entry>
 	<entry key="DB_NAME">foxftp</entry>
 	<entry key="DB_TABLE_FTPSTATUS">ftpstatus</entry>
+    <entry key="DB_TABLE_LATESTFILES">latestfiles</entry>
+    <entry key="DB_TABLE_RECORDEDFILES">recordedfiles</entry>
 
 </properties>

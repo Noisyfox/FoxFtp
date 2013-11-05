@@ -1,5 +1,6 @@
 <%@ page import="FTPSearcher.*" %>
 <%@ page import="java.util.Properties" %>
+<%@ page import="FTPSearcher.Statistics.LatestFiles" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="utf-8" %>
 <%--
   Created by IntelliJ IDEA.
@@ -228,15 +229,15 @@
 } else {
     Properties sp = ServiceStatusUtil
             .getServiceStatus();
-    String url_prefix = sp.getProperty(ServiceStatusUtil.STATUS_URL_PREFIX,
+    String url_prefix = sp.getProperty(DBDefinition.STATUS_URL_PREFIX,
             "").trim();
+    LatestFiles.NewFile[] newFiles = LatestFiles.getInstance().getNewFiles();
 %>
 <!-- Begin Index Information -->
 <div id="indexInfoDiv">
     <div id="browseFiles">
         <a href="<%=url_prefix%>">&lt;只是想逛逛就戳我&gt;</a>
     </div>
-    <!--
     <div id="fileChanges">
         <table id="fileChangesTable">
             <tr>
@@ -248,25 +249,18 @@
                         </tr>
                         </thead>
                         <tbody>
+                        <% for(LatestFiles.NewFile f : newFiles){%>
                         <tr>
-                            <td class="newFileName"><a href="./">aaa.txt</a></td>
-                            <td class="newFileTime">2013-11-02</td>
+                            <td class="newFileName"><a href="./SearchFtp?keyword=<%=f.fileName%>"><%=f.fileName%></a></td>
+                            <td class="newFileTime"><%=f.updateTime%></td>
                         </tr>
-                        <tr>
-                            <td class="newFileName"><a href="./">aaa.txt</a></td>
-                            <td class="newFileTime">2013-11-02</td>
-                        </tr>
-                        <tr>
-                            <td class="newFileName"><a href="./">aaa.txt</a></td>
-                            <td class="newFileTime">2013-11-02</td>
-                        </tr>
+                        <% } %>
                         </tbody>
                     </table>
                 </td>
             </tr>
         </table>
     </div>
-    -->
 </div>
 <!-- End Index Information -->
 <% } %>

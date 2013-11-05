@@ -7,6 +7,7 @@ package FTPSearcher; /**
  */
 
 import FTPSearcher.Logger.InternalLogger;
+import FTPSearcher.Statistics.LatestFiles;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.impl.StdSchedulerFactory;
@@ -35,6 +36,9 @@ public class ServletContextAppListener implements ServletContextListener {
         } catch (SchedulerException e) {
             InternalLogger.logException(e);
         }
+
+        LatestFiles.getInstance().initialize();
+        LatestFiles.getInstance().startCommitter();
     }
 
     public void contextDestroyed(ServletContextEvent sce) {
@@ -44,6 +48,8 @@ public class ServletContextAppListener implements ServletContextListener {
         } catch (SchedulerException e) {
             InternalLogger.logException(e);
         }
+        LatestFiles.getInstance().saveLatestFiles();
+        LatestFiles.getInstance().stopCommitter();
     }
 
 }
