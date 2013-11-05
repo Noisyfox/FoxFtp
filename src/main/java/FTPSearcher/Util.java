@@ -6,6 +6,9 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.net.URLEncoder;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -363,5 +366,25 @@ public class Util {
         sb.append(SearchRequest.getFileTypeString(result.currentRequest.fileType));
 
         return sb.toString();
+    }
+
+    public static void closeStatement(Statement statement) {
+        if (statement != null) {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                InternalLogger.logException(e);
+            }
+        }
+    }
+
+    public static void closeConnection(Connection conn) {
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                InternalLogger.logException(e);
+            }
+        }
     }
 }

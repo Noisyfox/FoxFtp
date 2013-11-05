@@ -10,6 +10,8 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import static FTPSearcher.DBDefinition.*;
+import static FTPSearcher.Util.closeConnection;
+import static FTPSearcher.Util.closeStatement;
 
 public class ServiceStatusUtil {
 
@@ -78,9 +80,9 @@ public class ServiceStatusUtil {
         if (connection == null) {
             return;
         }
-
+        Statement statement = null;
         try {
-            Statement statement = connection.createStatement();
+            statement = connection.createStatement();
 
             StringBuilder sb = new StringBuilder();
             sb.append("CREATE TABLE IF NOT EXISTS `");
@@ -119,6 +121,8 @@ public class ServiceStatusUtil {
             }
         } catch (SQLException e) {
             InternalLogger.logException(e);
+        } finally {
+            closeStatement(statement);
         }
 
     }
@@ -127,6 +131,7 @@ public class ServiceStatusUtil {
         // UPDATE `foxftp`.`ftpstatus` SET `name` = 'kkk' WHERE
         // `ftpstatus`.`id` = 1
         Connection conn = null;
+        Statement statement = null;
         try {
             conn = DBConnectionProvider.getConnection();
             if (conn == null || conn.isClosed()) {
@@ -135,7 +140,7 @@ public class ServiceStatusUtil {
 
             createDBifNotExists(conn);
 
-            Statement statement = conn.createStatement();
+            statement = conn.createStatement();
             String table = getProperties(CONFIG_FILE)
                     .getProperty(CONFIG_DB_TABLE_FTPSTATUS, "");
 
@@ -159,18 +164,15 @@ public class ServiceStatusUtil {
             InternalLogger.logException(e);
             return false;
         } finally {
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException e) {
-                InternalLogger.logException(e);
-            }
+            closeStatement(statement);
+            closeConnection(conn);
         }
         return true;
     }
 
     public static Map<String, String> getServiceStatus_DB(int id) {
         Connection conn = null;
+        Statement statement = null;
         try {
             conn = DBConnectionProvider.getConnection();
             if (conn == null || conn.isClosed()) {
@@ -183,7 +185,7 @@ public class ServiceStatusUtil {
             String table = getProperties(CONFIG_FILE)
                     .getProperty(CONFIG_DB_TABLE_FTPSTATUS, "");
 
-            Statement statement = conn.createStatement();
+            statement = conn.createStatement();
             StringBuilder sb = new StringBuilder();
             sb.append("SELECT * FROM `").append(table).append("` WHERE `")
                     .append(table).append("`.`id` = ").append(id);
@@ -209,12 +211,8 @@ public class ServiceStatusUtil {
             InternalLogger.logException(e);
             return null;
         } finally {
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException e) {
-                InternalLogger.logException(e);
-            }
+            closeStatement(statement);
+            closeConnection(conn);
         }
     }
 

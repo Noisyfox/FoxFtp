@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static FTPSearcher.DBDefinition.*;
+import static FTPSearcher.Util.closeConnection;
+import static FTPSearcher.Util.closeStatement;
 
 /**
  * Created with IntelliJ IDEA.
@@ -76,11 +78,7 @@ public class LatestFiles {
                 //loadRecordedFiles_DB(conn);
                 loadLatestFiles_DB(conn);
 
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    InternalLogger.logException(e);
-                }
+                closeConnection(conn);
             }
         }
     }
@@ -92,11 +90,7 @@ public class LatestFiles {
                 createDBifNotExists(conn);
                 saveLatestFiles_DB(conn);
 
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    InternalLogger.logException(e);
-                }
+                closeConnection(conn);
             }
         }
     }
@@ -162,18 +156,22 @@ public class LatestFiles {
             return;
         }
 
+        Statement statement = null;
         try {
-            Statement statement = connection.createStatement();
+            statement = connection.createStatement();
             statement.executeUpdate(mSql_createTable_latest);
             statement.executeUpdate(mSql_createTable_recorded);
         } catch (SQLException e) {
             InternalLogger.logException(e);
+        } finally {
+            closeStatement(statement);
         }
 
     }
 
     private void loadRecordedFiles_DB(Connection conn) {
         synchronized (mSyncObj) {
+            Statement statement = null;
             try {
                 if (conn == null || conn.isClosed()) {
                     return;
@@ -181,7 +179,7 @@ public class LatestFiles {
 
                 mRecordedFiles.clear();
 
-                Statement statement = conn.createStatement();
+                statement = conn.createStatement();
 
                 StringBuilder sb = new StringBuilder();
                 sb.append("SELECT * FROM `").append(mTableName_recorded);
@@ -206,14 +204,16 @@ public class LatestFiles {
                     String v = result.get(RECORDED_NAME);
                     mRecordedFiles.put(v, v);
                 }
-
             } catch (SQLException e) {
                 InternalLogger.logException(e);
+            } finally {
+                closeStatement(statement);
             }
         }
     }
 
     private void loadLatestFiles_DB(Connection conn) {
+        Statement statement = null;
         synchronized (mSyncObj) {
             try {
                 if (conn == null || conn.isClosed()) {
@@ -223,7 +223,7 @@ public class LatestFiles {
 
                 Map<String, String> result = new HashMap<String, String>();
 
-                Statement statement = conn.createStatement();
+                statement = conn.createStatement();
 
                 StringBuilder sb = new StringBuilder();
                 sb.append("SELECT * FROM `").append(mTableName_latest).append("` WHERE `")
@@ -257,50 +257,58 @@ public class LatestFiles {
 
             } catch (SQLException e) {
                 InternalLogger.logException(e);
+            } finally {
+                closeStatement(statement);
             }
         }
     }
 
     private void saveLatestFiles_DB(Connection conn) {
         synchronized (mSyncObj) {
+            Statement statement = null;
             try {
                 if (conn == null || conn.isClosed()) {
                     return;
                 }
 
-                Statement statement = conn.createStatement();
+                statement = conn.createStatement();
                 //先清空表
                 statement.execute("TRUNCATE " + mTableName_latest);
                 //写入数据
                 int k = 1;
                 for (int i = mNewFilesPointer; i < mNewFilesPointer + mNewFilesCount; i++, k++) {
                     NewFile nf = mNewFiles[i % SHOW_NEW_FILE_COUNT];
-                    String sql = String.format(mSqlFormatter_saveLatestFiles, k, nf.fileName, nf.updateTime);
+                    String sql = String.format(mSqlFormatter_saveLatestFiles, k, nf.fileName.replace("'", "''"), nf.updateTime);
                     statement.execute(sql);
                 }
 
             } catch (SQLException e) {
                 InternalLogger.logException(e);
+            } finally {
+                closeStatement(statement);
             }
         }
     }
 
     public void saveFileRecord_DB(Connection conn, List<String> fileList) {
         synchronized (mSyncObj) {
+            Statement statement = null;
             try {
                 if (conn == null || conn.isClosed()) {
                     return;
                 }
 
-                Statement statement = conn.createStatement();
+                statement = conn.createStatement();
                 //先清空表
                 statement.execute("TRUNCATE " + mTableName_recorded);
                 for (String f : fileList) {
-                    String sql = String.format(mSqlFormatter_addFileRecord, f);
+                    String sql = String.format(mSqlFormatter_addFileRecord, f.replace("'", "''"));
                     statement.execute(sql);
                 }
             } catch (SQLException e) {
                 InternalLogger.logException(e);
+            } finally {
+                closeStatement(statement);
             }
         }
     }
@@ -347,11 +355,7 @@ public class LatestFiles {
             if (conn != null) {
                 loadRecordedFiles_DB(conn);
                 saveFileRecord_DB(conn, mRecordedFilesList);
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    InternalLogger.logException(e);
-                }
+                closeConnection(conn);
             }
 
             List<String> newFileList = new ArrayList<String>();
